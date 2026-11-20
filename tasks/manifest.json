@@ -1,0 +1,41 @@
+{
+  "schema_version": 1,
+  "tasks": [
+    {
+      "id": "t01-search",
+      "title": "Task search with selection preservation",
+      "category": "normal-plus-state",
+      "prompt_file": "t01-search.md",
+      "hidden_tests": 2
+    },
+    {
+      "id": "t02-modal-priority",
+      "title": "Editable priority in the task modal",
+      "category": "keyboard-and-cancel-boundary",
+      "prompt_file": "t02-modal-priority.md",
+      "hidden_tests": 2
+    },
+    {
+      "id": "t03-sync-retry",
+      "title": "Recoverable asynchronous error state",
+      "category": "failure-recovery",
+      "prompt_file": "t03-sync-retry.md",
+      "hidden_tests": 2
+    },
+    {
+      "id": "t04-responsive-nav",
+      "title": "Responsive navigation destination and active state",
+      "category": "responsive-boundary",
+      "prompt_file": "t04-responsive-nav.md",
+      "hidden_tests": 2
+    },
+    {
+      "id": "t05-form-due-date",
+      "title": "Due-date validation with durable draft",
+      "category": "validation-and-persistence",
+      "prompt_file": "t05-form-due-date.md",
+      "hidden_tests": 2
+    }
+  ]
+}
+
