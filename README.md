@@ -27,7 +27,7 @@ Dev-QA
 
 1. 独立角色提示将 QA 注意力限定在旧功能和遗漏状态。
 2. QA 为只读角色，不能用重写实现来掩盖诊断质量。
-3. QA 只有 3k token，且仅在 FAIL 时触发一次 3k 修复，控制协作开销。
+3. QA 单次上限为 6k token，且仅在 FAIL 时触发一次上限 18k 的修复；三阶段顺序共享 48k 全局池，控制协作开销。
 
 如果复杂状态任务改善、简单任务持平或变慢，说明收益来自回归检查机制而非“多调用一次模型必然更强”。如果没有改善，则要检查同模型错误相关性、交接信息不足和预算切分损失。
 
@@ -143,4 +143,6 @@ python scripts/summarize_results.py
 - 正式 18-run 矩阵已具备执行条件但尚未启动，避免未经确认产生大额 API 消耗。
 - 框架 issue 草稿、离线最小复现和项目侧状态传播改进已经完成；GitHub issue 链接和正式实验结论尚未产生。
 
-开跑前记录见 [docs/preflight-report.md](docs/preflight-report.md)。
+开跑前记录见 [docs/preflight-report.md](docs/preflight-report.md)，研究依据与
+OpenCollab benchmark 适配分析见
+[docs/research-basis-and-benchmark-fit.md](docs/research-basis-and-benchmark-fit.md)。
