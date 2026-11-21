@@ -51,11 +51,11 @@ def test_cli_json_extraction_prefers_final_payload():
     assert _extract_json(text) == {"status": "ok", "tokens_spent": 42}
 
 
-def test_qa_tool_bundle_has_no_write_tool():
+def test_qa_verdict_requires_explicit_first_line_marker():
     module = _workflow_module()
-    names = {tool.name for tool in module._qa_tools(True)}
-    assert names == {"bash", "file_read", "grep", "git_diff"}
-    assert "apply_patch" not in names
+    assert module._qa_verdict("VERDICT: PASS\nNo supported regression.") == "PASS"
+    assert module._qa_verdict("VERDICT: FAIL\nMajor: focus is lost.") == "FAIL"
+    assert module._qa_verdict("Looks good") is None
 
 
 def test_developer_uses_targeted_write_tool_instead_of_unified_patch():
@@ -105,9 +105,8 @@ class FakeContext:
 async def test_dev_qa_skips_repair_on_pass(monkeypatch):
     module = _workflow_module()
     monkeypatch.setattr(module, "_developer_tools", lambda _allow: ())
-    monkeypatch.setattr(module, "_qa_tools", lambda _allow: ())
     developer = "Implemented and ran npm test"
-    qa = {"verdict": "PASS", "findings": [], "checks_run": [], "coverage_note": "checked"}
+    qa = "VERDICT: PASS\nNo supported regression."
     context = FakeContext([developer, qa])
 
     result = await module.frontend_dev_qa(
@@ -117,21 +116,15 @@ async def test_dev_qa_skips_repair_on_pass(monkeypatch):
 
     assert result["repair"] is None
     assert [call["label"] for call in context.calls] == ["frontend-developer", "regression-qa"]
-    assert [call["budget"] for call in context.calls] == [24_000, 8_000]
+    assert [call["budget"] for call in context.calls] == [30_000, 6_000]
 
 
 @pytest.mark.asyncio
 async def test_dev_qa_uses_one_bounded_repair_on_fail(monkeypatch):
     module = _workflow_module()
     monkeypatch.setattr(module, "_developer_tools", lambda _allow: ())
-    monkeypatch.setattr(module, "_qa_tools", lambda _allow: ())
     developer = "Implemented and ran npm test"
-    qa = {
-        "verdict": "FAIL",
-        "findings": [{"severity": "major", "behavior": "x", "evidence": "y", "reproduction": "z", "suggested_fix": "w"}],
-        "checks_run": [],
-        "coverage_note": "checked",
-    }
+    qa = "VERDICT: FAIL\nMajor: x; evidence y; reproduce z; fix w."
     repair = "Fixed and ran npm test"
     context = FakeContext([developer, qa, repair])
 
@@ -144,7 +137,7 @@ async def test_dev_qa_uses_one_bounded_repair_on_fail(monkeypatch):
     assert [call["label"] for call in context.calls] == [
         "frontend-developer", "regression-qa", "frontend-developer-repair"
     ]
-    assert [call["budget"] for call in context.calls] == [24_000, 8_000, 12_000]
+    assert [call["budget"] for call in context.calls] == [30_000, 6_000, 18_000]
 
 
 @pytest.mark.asyncio

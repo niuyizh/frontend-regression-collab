@@ -17,7 +17,7 @@
 | 协议 | Responses |
 | thinking | false（第二轮校准起固定；减少工具任务中的推理开销） |
 | reasoning effort | 不适用（thinking=false） |
-| 每次全局预算 | 36,000 token；初始 16,000 已被真实 smoke 否决 |
+| 每次全局预算 | 48,000 token；16k 全局与 24k Developer 子上限均被真实 smoke 否决 |
 | 并发 | 1 |
 | Agent isolation | shared；每次运行使用独立 Git 仓库副本 |
 | 前端依赖 | `package-lock.json` 固定 |
@@ -30,17 +30,17 @@
 
 ### Single
 
-一个 Frontend Developer 通过状态可见的 `agent_run()` 获得编码工具、任务说明和 36k 全局上限。任务给出主文件但不提供实现答案，两组收到相同提示。Developer 使用 `file_read`、`file_write(str_replace)`、`git_diff` 和只运行固定 build/public suite 的 `verify_frontend`，不提供任意 shell，避免目录漫游和不合规范的 unified diff；自由文本最终报告避免了与代码正确性无关的结构化输出纠正会话。
+一个 Frontend Developer 通过状态可见的 `agent_run()` 获得编码工具、任务说明和 48k 全局上限。任务给出主文件但不提供实现答案，两组收到相同提示。Developer 使用 `file_read`、`file_write(str_replace)`、`git_diff` 和只运行固定 build/public suite 的 `verify_frontend`，不提供任意 shell，避免目录漫游和不合规范的 unified diff；自由文本最终报告避免了与代码正确性无关的结构化输出纠正会话。
 
 ### Dev-QA
 
-- Developer 使用 `agent_run()`，单次上限 24k。
-- Regression QA 使用结构化 verdict，单次上限 8k。
-- Repair Developer 使用 `agent_run()`，仅在 QA FAIL 时启动，单次上限 12k。
+- Developer 使用 `agent_run()`，单次上限 30k。
+- Regression QA 使用一次无工具 `agent_run()` 审查完整 diff，单次上限 6k；首行必须是 `VERDICT: PASS|FAIL`。
+- Repair Developer 使用 `agent_run()`，仅在 QA FAIL 时启动，单次上限 18k。
 - Regression QA 始终保持只读工具；读取 Developer 报告与 diff，避免重复已完成检查，聚焦回归面。
 - Repair Developer 仅在 QA 返回 FAIL 时运行，最多一轮。
 
-两种条件使用相同的 36k 全局上限。三个角色顺序共享总池，所以 24k/8k/12k 是各调用上限而不是可同时花费的 44k；后续调用会被全局剩余额度进一步截断。Dev-QA 在 QA PASS 时不会为了用满预算而运行无意义修复。
+两种条件使用相同的 48k 全局上限。三个角色顺序共享总池，所以 30k/6k/18k 是各调用上限而不是可同时花费的 54k；后续调用会被全局剩余额度进一步截断。Dev-QA 在 QA PASS 时不会为了用满预算而运行无意义修复。
 
 ## 4. 任务
 
@@ -105,6 +105,6 @@ T01、T02、T05 的单次结果用于覆盖面和失败案例描述，不用于�
 - [x] OpenCollab 发现自定义 workflow。
 - [x] 运行矩阵默认 dry-run，付费调用需要 `--execute`。
 - [x] 执行首个 Single 真实预算 smoke 并审计轨迹：16k 在实现前停止，详见 `failure-cases.md`。
-- [x] 修订并冻结待 smoke 验证的公平总预算与角色调用上限。
+- [x] 修订为共同 48k 总预算及 30k/6k/18k 角色调用上限，待 Dev-QA smoke 验证。
 - [ ] 在修订预算下执行一对 Single/Dev-QA smoke。
 - [ ] smoke 通过后执行正式 18-run 矩阵。

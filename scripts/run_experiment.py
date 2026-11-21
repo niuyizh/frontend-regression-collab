@@ -74,7 +74,7 @@ def run_one(
         "--args",
         json.dumps({"allow_unisolated_shell": True}),
         "--budget",
-        "36000",
+        "48000",
         "--concurrency",
         "1",
         "--task-concurrency",
@@ -90,7 +90,7 @@ def run_one(
         "condition": condition,
         "repetition": repetition,
         "workflow": workflow,
-        "budget": 36_000,
+        "budget": 48_000,
         "workspace": str(workspace.resolve()),
         "command": command,
     }

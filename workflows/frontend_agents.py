@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-import json
+import re
 from typing import Any
 
 from opencollab import workflow
@@ -10,38 +10,11 @@ from opencollab.tools import builtin_tools
 from opencollab.workflows import WorkflowContext
 
 from .frontend_verify import FrontendVerifyTool
-from .status_aware_agent import run_structured_agent_checked
 
-TOTAL_BUDGET = 36_000
-DEVELOPER_BUDGET = 24_000
-QA_BUDGET = 8_000
-REPAIR_BUDGET = 12_000
-
-QA_SCHEMA: dict[str, Any] = {
-    "type": "object",
-    "required": ["verdict", "findings", "checks_run", "coverage_note"],
-    "properties": {
-        "verdict": {"type": "string", "enum": ["PASS", "FAIL"]},
-        "findings": {
-            "type": "array",
-            "items": {
-                "type": "object",
-                "required": ["severity", "behavior", "evidence", "reproduction", "suggested_fix"],
-                "properties": {
-                    "severity": {"type": "string", "enum": ["blocking", "major", "minor"]},
-                    "behavior": {"type": "string"},
-                    "evidence": {"type": "string"},
-                    "reproduction": {"type": "string"},
-                    "suggested_fix": {"type": "string"},
-                },
-                "additionalProperties": False,
-            },
-        },
-        "checks_run": {"type": "array", "items": {"type": "string"}},
-        "coverage_note": {"type": "string"},
-    },
-    "additionalProperties": False,
-}
+TOTAL_BUDGET = 48_000
+DEVELOPER_BUDGET = 30_000
+QA_BUDGET = 6_000
+REPAIR_BUDGET = 18_000
 
 DEVELOPER_SYSTEM_PROMPT = """\
 You are Frontend Developer. Work as an engineer, not as a commentator: inspect the existing
@@ -57,11 +30,20 @@ mode=str_replace with an exact, unique old_str for existing files. After editing
 once; it runs the fixed build and public regression suite.
 """
 
-QA_PROMPT = """\
-You are Regression QA. The developer has already implemented and checked the new requirement.
-Your job is not to repeat the developer's completed checks. Inspect the current diff and focus on old
-behaviors that the change may have affected, untested UI states, keyboard/focus behavior, cancellation,
+QA_SYSTEM_PROMPT = """\
+You are Regression QA performing a bounded independent diff review. The developer already implemented
+the new requirement and ran the public checks. Do not repeat those checks. Focus on old behavior the
+diff may affect and UI states that the developer report did not cover: keyboard/focus, cancellation,
 persistence, responsive boundaries, and loading/error/empty transitions as relevant.
+
+Your first line must be exactly `VERDICT: PASS` or `VERDICT: FAIL`. Choose FAIL only for a concrete,
+repairable regression or unmet acceptance criterion supported by the supplied diff. For each FAIL
+finding name severity, affected behavior, exact diff evidence, reproduction, and a bounded fix. Choose
+PASS when no such finding is supported; do not invent findings to justify your role.
+"""
+
+QA_PROMPT = """\
+Review this handoff without tools.
 
 Task:
 {goal}
@@ -72,10 +54,6 @@ Developer report:
 Current diff:
 {diff}
 
-You have read-only source and shell tools. Do not edit files. Run only targeted checks that add evidence
-beyond the developer's listed commands. A finding must name an affected behavior, concrete evidence,
-reproduction steps, and a bounded fix. Return PASS when you found no reproducible regression or unmet
-acceptance criterion after those targeted checks; do not invent findings to justify your role.
 """
 
 REPAIR_SYSTEM_PROMPT = """\
@@ -118,14 +96,6 @@ def _developer_tools(allow_shell: bool) -> tuple[Any, ...]:
     return (*tools, FrontendVerifyTool())
 
 
-def _qa_tools(allow_shell: bool) -> tuple[Any, ...]:
-    return builtin_tools(
-        "bash", "file_read", "grep", "git_diff",
-        headless=not allow_shell,
-        allow_file_creation=False,
-    )
-
-
 def _agent_run_record(run: Any) -> dict[str, Any]:
     return {
         "status": str(run.status),
@@ -145,6 +115,14 @@ def _agent_run_ok(run: Any) -> bool:
         and bool(run.cleanup_complete)
         and bool(run.workspace_ready)
     )
+
+
+def _qa_verdict(output: Any) -> str | None:
+    if not isinstance(output, str):
+        return None
+    first_line = output.splitlines()[0].strip() if output.splitlines() else ""
+    match = re.fullmatch(r"VERDICT:\s*(PASS|FAIL)", first_line, flags=re.IGNORECASE)
+    return match.group(1).upper() if match else None
 
 
 @workflow(
@@ -230,30 +208,31 @@ async def frontend_dev_qa(ctx: WorkflowContext, args: dict[str, Any]) -> dict[st
     first_diff = await ctx.diff() or "(no diff available)"
 
     await ctx.phase("regression-review")
-    qa_run = await run_structured_agent_checked(
-        ctx,
+    qa_run = await ctx.agent_run(
         QA_PROMPT.format(
             goal=goal,
             developer_report=developer,
             diff=first_diff,
         ),
-        schema=QA_SCHEMA,
         label="regression-qa",
-        tools=_qa_tools(allow_shell),
+        tools=(),
         isolation="shared",
         budget=QA_BUDGET,
         timeout=360,
+        max_steps=1,
+        system_prompt=QA_SYSTEM_PROMPT,
     )
-    qa = qa_run.output
-    if not qa_run.ok:
+    verdict = _qa_verdict(qa_run.output)
+    qa = {"verdict": verdict, "report": qa_run.output} if verdict else None
+    if not _agent_run_ok(qa_run) or qa is None:
         return {
             "status": "incomplete",
             "condition": "dev-qa",
-            "error": qa_run.reason or "regression QA returned no structured report",
+            "error": qa_run.reason or "regression QA returned no parseable verdict",
             "developer": developer,
             "developer_outcome": _agent_run_record(developer_run),
             "qa": qa,
-            "qa_outcome": qa_run.as_dict(),
+            "qa_outcome": _agent_run_record(qa_run),
             "repair": None,
             "tokens_spent": ctx.tokens_spent(),
             "diff": await ctx.diff(),
@@ -261,12 +240,12 @@ async def frontend_dev_qa(ctx: WorkflowContext, args: dict[str, Any]) -> dict[st
         }
 
     repair = None
-    if isinstance(qa, dict) and qa.get("verdict") == "FAIL":
+    if qa["verdict"] == "FAIL":
         await ctx.phase("repair")
         repair_run = await ctx.agent_run(
             REPAIR_PROMPT.format(
                 goal=goal,
-                qa_report=json.dumps(qa, ensure_ascii=False, indent=2),
+                qa_report=qa["report"],
                 diff=await ctx.diff() or "(no diff available)",
             ),
             label="frontend-developer-repair",
@@ -282,11 +261,11 @@ async def frontend_dev_qa(ctx: WorkflowContext, args: dict[str, Any]) -> dict[st
             return {
                 "status": "incomplete",
                 "condition": "dev-qa",
-                "error": repair_run.reason or "repair developer returned no structured report",
+                "error": repair_run.reason or "repair developer did not complete with a report",
                 "developer": developer,
                 "developer_outcome": _agent_run_record(developer_run),
                 "qa": qa,
-                "qa_outcome": qa_run.as_dict(),
+                "qa_outcome": _agent_run_record(qa_run),
                 "repair": repair,
                 "repair_outcome": _agent_run_record(repair_run),
                 "tokens_spent": ctx.tokens_spent(),
@@ -300,7 +279,7 @@ async def frontend_dev_qa(ctx: WorkflowContext, args: dict[str, Any]) -> dict[st
         "developer": developer,
         "developer_outcome": _agent_run_record(developer_run),
         "qa": qa,
-        "qa_outcome": qa_run.as_dict(),
+        "qa_outcome": _agent_run_record(qa_run),
         "repair": repair,
         "repair_outcome": _agent_run_record(repair_run) if repair is not None else None,
         "tokens_spent": ctx.tokens_spent(),

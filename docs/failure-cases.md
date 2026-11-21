@@ -58,6 +58,18 @@ budget exhausted before model call: conservative input reservation requires
 分类：模型/工具适配与实验配置问题，不作为新的框架 bug。OpenCollab 正确把 `agent_run()` 标记为 `stopped`，证明状态可见 API 能防止误收该结果。
 
 协议修订：关闭 thinking；任务提示加入主文件；明确禁止离开当前工作目录；要求第三次响应前首次编辑；Developer 写工具从 `apply_patch` 改为更易稳定调用的 `file_write(str_replace)`；最大 step 从 12 降到 8。修订后仍需一次 Single smoke，未通过前不运行 Dev-QA。
+
+修订后的 36k Single 随后成功：28,218 token、8 step，构建、6/6 公开测试和 2/2 隐藏测试通过。
+
+## FC-03：24k Developer 子上限在正确实现后阻止 QA 启动
+
+实验性质：Dev-QA 角色切分校准，不计入正式对照。
+
+结果：Developer 在 5 step、19,186 token 时已经写出通过构建、全部公开测试和 2/2 隐藏测试的实现；但剩余 4,814 token 小于下一调用所需的 8,979 token 输入预留，`agent_run` 返回 stopped，工作流按协议没有启动 QA。
+
+分类：角色预算配置错误，不是框架问题或模型能力失败。状态传播和外部有效性门槛正确拒绝了该运行。
+
+协议修订：两组共同全局上限改为 48k；Dev-QA 的 Developer/QA/Repair 调用上限改为 30k/6k/18k。QA 直接审查任务、Developer 报告与完整 diff，只做一次无工具调用，不重复公开测试或仓库探索；这样将 token 留给真正的独立审查和必要修复。
 4. 正式汇总器只接受 `agent_run_valid=true` 的运行。
 
 完整原始轨迹保留在本地忽略目录 `runs/calibration/`，提交 issue 前仅导出脱敏的最小复现和必要日志。
