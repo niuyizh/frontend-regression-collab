@@ -152,6 +152,16 @@ async def frontend_single(ctx: WorkflowContext, args: dict[str, Any]) -> dict[st
         budget=TOTAL_BUDGET,
         timeout=900,
     )
+    if not isinstance(report, dict):
+        return {
+            "status": "incomplete",
+            "condition": "single",
+            "error": "developer returned no structured report",
+            "developer": report,
+            "tokens_spent": ctx.tokens_spent(),
+            "diff": await ctx.diff(),
+            "agent_failures": list(ctx.agent_failures),
+        }
     return {
         "status": "ok",
         "condition": "single",
@@ -183,6 +193,18 @@ async def frontend_dev_qa(ctx: WorkflowContext, args: dict[str, Any]) -> dict[st
         budget=DEVELOPER_BUDGET,
         timeout=720,
     )
+    if not isinstance(developer, dict):
+        return {
+            "status": "incomplete",
+            "condition": "dev-qa",
+            "error": "developer returned no structured report; QA was not started",
+            "developer": developer,
+            "qa": None,
+            "repair": None,
+            "tokens_spent": ctx.tokens_spent(),
+            "diff": await ctx.diff(),
+            "agent_failures": list(ctx.agent_failures),
+        }
     first_diff = await ctx.diff() or "(no diff available)"
 
     await ctx.phase("regression-review")
@@ -199,6 +221,18 @@ async def frontend_dev_qa(ctx: WorkflowContext, args: dict[str, Any]) -> dict[st
         budget=QA_BUDGET,
         timeout=360,
     )
+    if not isinstance(qa, dict):
+        return {
+            "status": "incomplete",
+            "condition": "dev-qa",
+            "error": "regression QA returned no structured report",
+            "developer": developer,
+            "qa": qa,
+            "repair": None,
+            "tokens_spent": ctx.tokens_spent(),
+            "diff": await ctx.diff(),
+            "agent_failures": list(ctx.agent_failures),
+        }
 
     repair = None
     if isinstance(qa, dict) and qa.get("verdict") == "FAIL":
@@ -216,6 +250,18 @@ async def frontend_dev_qa(ctx: WorkflowContext, args: dict[str, Any]) -> dict[st
             budget=REPAIR_BUDGET,
             timeout=360,
         )
+        if not isinstance(repair, dict):
+            return {
+                "status": "incomplete",
+                "condition": "dev-qa",
+                "error": "repair developer returned no structured report",
+                "developer": developer,
+                "qa": qa,
+                "repair": repair,
+                "tokens_spent": ctx.tokens_spent(),
+                "diff": await ctx.diff(),
+                "agent_failures": list(ctx.agent_failures),
+            }
 
     return {
         "status": "ok",
@@ -230,4 +276,3 @@ async def frontend_dev_qa(ctx: WorkflowContext, args: dict[str, Any]) -> dict[st
 
 
 __all__ = ["frontend_single", "frontend_dev_qa"]
-

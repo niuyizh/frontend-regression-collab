@@ -122,3 +122,18 @@ async def test_dev_qa_uses_one_bounded_repair_on_fail(monkeypatch):
     ]
     assert [call["budget"] for call in context.calls] == [10_000, 3_000, 3_000]
 
+
+@pytest.mark.asyncio
+async def test_single_marks_missing_agent_report_incomplete(monkeypatch):
+    module = _workflow_module()
+    monkeypatch.setattr(module, "_developer_tools", lambda _allow: ())
+    context = FakeContext([None])
+
+    result = await module.frontend_single(
+        context,
+        {"goal": "Implement feature", "allow_unisolated_shell": True},
+    )
+
+    assert result["status"] == "incomplete"
+    assert result["developer"] is None
+    assert result["tokens_spent"] == 321

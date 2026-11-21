@@ -17,7 +17,7 @@
 | 协议 | Responses |
 | thinking | true |
 | reasoning effort | low |
-| 每次全局预算 | 16,000 token |
+| 每次全局预算 | 待重新校准；初始 16,000 已被真实 smoke 否决 |
 | 并发 | 1 |
 | Agent isolation | shared；每次运行使用独立 Git 仓库副本 |
 | 前端依赖 | `package-lock.json` 固定 |
@@ -30,15 +30,15 @@
 
 ### Single
 
-一个 Frontend Developer 获得最多 16k token、完整编码工具和任务说明。提示词明确要求实现、验证并保护相邻状态，因此基线不是故意削弱的 Agent。
+一个 Frontend Developer 获得完整编码工具和任务说明。提示词明确要求实现、验证并保护相邻状态，因此基线不是故意削弱的 Agent。初始 16k 方案不足，正式上限需在不改变任务和提示的条件下重新冻结。
 
 ### Dev-QA
 
-- Developer：10k，负责编码和公开验证。
-- Regression QA：3k，只读工具；读取 Developer 报告与 diff，避免重复已完成检查，聚焦回归面。
-- Repair Developer：仅 QA 返回 FAIL 时运行，3k；最多一轮。
+- Developer、Regression QA 和 Repair Developer 的正式切分待校准；初始 10k/3k/3k 已失效。
+- Regression QA 始终保持只读工具；读取 Developer 报告与 diff，避免重复已完成检查，聚焦回归面。
+- Repair Developer 仅在 QA 返回 FAIL 时运行，最多一轮。
 
-两种条件的全局上限同为 16k。Dev-QA 在 QA PASS 时不会为了用满预算而运行无意义修复。
+两种条件最终必须使用相同全局上限。Dev-QA 在 QA PASS 时不会为了用满预算而运行无意义修复。
 
 ## 4. 任务
 
@@ -102,6 +102,7 @@ T01、T02、T05 的单次结果用于覆盖面和失败案例描述，不用于�
 - [x] 五项 oracle 最小解均能通过构建、公开与隐藏测试。
 - [x] OpenCollab 发现自定义 workflow。
 - [x] 运行矩阵默认 dry-run，付费调用需要 `--execute`。
-- [ ] 执行一对 Single/Dev-QA 真实 smoke 并审计轨迹。
+- [x] 执行首个 Single 真实预算 smoke 并审计轨迹：16k 在实现前停止，详见 `failure-cases.md`。
+- [ ] 重新校准并冻结公平总预算与角色切分。
+- [ ] 在修订预算下执行一对 Single/Dev-QA smoke。
 - [ ] smoke 通过后执行正式 18-run 矩阵。
-

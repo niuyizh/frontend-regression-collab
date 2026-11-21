@@ -95,12 +95,28 @@ def evaluate(task_id: str, condition: str, repetition: int) -> dict[str, Any]:
         path.startswith("tests/") or path in {"playwright.config.ts", "package.json"}
         for path in changed
     )
+    agent_path = output_dir / "agent.json"
+    agent_valid: bool | None = None
+    if agent_path.exists():
+        agent_record = json.loads(agent_path.read_text(encoding="utf-8"))
+        workflow_result = agent_record.get("workflow_result")
+        agent_valid = bool(
+            agent_record.get("returncode") == 0
+            and isinstance(workflow_result, dict)
+            and workflow_result.get("status") == "ok"
+            and isinstance(workflow_result.get("developer"), dict)
+            and (
+                condition == "single"
+                or isinstance(workflow_result.get("qa"), dict)
+            )
+        )
     complete = (
         build["returncode"] == 0
         and public["returncode"] == 0
         and hidden["returncode"] == 0
         and hidden_counts["passed"] == task["hidden_tests"]
         and not test_tampering
+        and agent_valid is not False
     )
     result = {
         "schema_version": 1,
@@ -109,6 +125,7 @@ def evaluate(task_id: str, condition: str, repetition: int) -> dict[str, Any]:
         "condition": condition,
         "repetition": repetition,
         "task_complete": complete,
+        "agent_run_valid": agent_valid,
         "build_passed": build["returncode"] == 0,
         "public_regression_passed": public["returncode"] == 0,
         "hidden": hidden_counts,

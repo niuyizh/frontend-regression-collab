@@ -9,17 +9,17 @@
 Frontend Developer 往往优先完成当前需求和可见测试，而修改周围的旧交互、键盘路径、响应式边界、异步失败态和本地持久化容易遗漏。本项目比较两个条件：
 
 ```text
-Single
-任务 → Frontend Developer（最多 16k token）→ 评分
+Single（初始预算方案，校准后需修订）
+任务 → Frontend Developer（初始 16k token）→ 评分
 
 Dev-QA
 任务 → Frontend Developer（10k）
-     → Regression QA（3k，只读）
-     → 有证据失败时 Developer 修复（3k）
+     → Regression QA（初始 3k，只读）
+     → 有证据失败时 Developer 修复（初始 3k）
      → 评分
 ```
 
-两个条件使用相同模型、任务、初始仓库、工具范围、16k 总预算上限和外部评分器。QA 不具有写文件工具；它必须检查 Developer 没有覆盖的旧行为，并给出可复现证据，不能为了体现角色价值而虚构问题。
+两个条件必须使用相同模型、任务、初始仓库、工具范围、总预算上限和外部评分器。首次真实校准证明 16k 不足以完成一个结构化 coding session，因此正式预算尚未冻结，矩阵执行已在代码中暂停。QA 不具有写文件工具；它必须检查 Developer 没有覆盖的旧行为，并给出可复现证据，不能为了体现角色价值而虚构问题。
 
 ## 为什么需要多智能体
 
@@ -116,7 +116,7 @@ python scripts/run_experiment.py t03-sync-retry single --repetition 1 --execute
 python scripts/run_experiment.py t03-sync-retry dev-qa --repetition 1 --execute
 ```
 
-smoke 通过后才执行预注册的 18 次矩阵：
+预算重新校准、文档更新且 smoke 通过后，才能解除脚本中的保护并执行预注册的 18 次矩阵：
 
 ```bash
 python scripts/run_matrix.py --execute
@@ -138,7 +138,7 @@ python scripts/summarize_results.py
 - 5 个任务均经过临时 oracle 可解性验证：各自构建、公开测试和 2/2 隐藏测试通过。
 - harness 单测通过，OpenCollab 能发现两个自定义工作流。
 - API 鉴权和模型可见性已验证。
-- 正式模型实验、框架 issue、改进补丁及前后对比尚未完成，不能提前填写结论或链接。
+- 首次 16k 真实预算校准在实现前停止；失败轨迹已保留于本地，分析见 [docs/failure-cases.md](docs/failure-cases.md)。
+- 正式矩阵已暂停，等待重新确定公平预算；框架 issue、改进补丁及前后对比尚未完成，不能提前填写结论或链接。
 
 开跑前记录见 [docs/preflight-report.md](docs/preflight-report.md)。
-

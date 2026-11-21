@@ -135,7 +135,8 @@ def run_one(
             dirs_exist_ok=True,
         )
     evaluation = evaluate(task_id, condition, repetition)
-    return {"status": "completed", "agent": agent_record, "evaluation": evaluation}
+    final_status = "completed" if evaluation["agent_run_valid"] else "invalid-agent-run"
+    return {"status": final_status, "agent": agent_record, "evaluation": evaluation}
 
 
 def main() -> None:

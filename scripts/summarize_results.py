@@ -23,6 +23,7 @@ def rows() -> list[dict[str, Any]]:
                 "condition": evaluation["condition"],
                 "repetition": evaluation["repetition"],
                 "task_complete": evaluation["task_complete"],
+                "agent_run_valid": evaluation.get("agent_run_valid"),
                 "build_passed": evaluation["build_passed"],
                 "public_regression_passed": evaluation["public_regression_passed"],
                 "hidden_passed": evaluation["hidden"]["passed"],
@@ -41,7 +42,7 @@ def main() -> None:
     output_csv = PROJECT_ROOT / "results" / "runs.csv"
     output_json = PROJECT_ROOT / "results" / "summary.json"
     fields = [
-        "run_id", "task_id", "condition", "repetition", "task_complete", "build_passed",
+        "run_id", "task_id", "condition", "repetition", "task_complete", "agent_run_valid", "build_passed",
         "public_regression_passed", "hidden_passed", "hidden_expected", "test_tampering",
         "agent_seconds", "evaluation_seconds", "tokens",
     ]
