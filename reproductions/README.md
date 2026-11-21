@@ -10,5 +10,7 @@
 - 已有 issue 检索结果和最终 issue 链接；
 - 改进方案、代价、回归测试和前后对比。
 
-当前还没有用预设结论填充 issue；问题必须来自真实运行证据。
+当前复现：
 
+- `budget-terminal-status/`：真实 16k 校准触发、离线脚本可重复的 schema-bound
+  child budget-stop 状态丢失问题。Issue 草稿见 `docs/issue-draft.md`。

@@ -4,12 +4,14 @@ import importlib.util
 import json
 import sys
 from pathlib import Path
+from types import SimpleNamespace
 
 import pytest
 
 ROOT = Path(__file__).resolve().parents[1]
 SCRIPTS = ROOT / "scripts"
 sys.path.insert(0, str(SCRIPTS))
+sys.path.insert(0, str(ROOT))
 
 from common import task_record  # noqa: E402
 from run_experiment import _extract_json  # noqa: E402
@@ -18,7 +20,7 @@ from run_matrix import matrix  # noqa: E402
 
 def _workflow_module():
     path = ROOT / "workflows" / "frontend_agents.py"
-    spec = importlib.util.spec_from_file_location("frontend_agents_under_test", path)
+    spec = importlib.util.spec_from_file_location("workflows.frontend_agents_under_test", path)
     assert spec and spec.loader
     module = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(module)
@@ -62,6 +64,7 @@ class FakeContext:
         self.calls = []
         self.phases = []
         self.agent_failures = ()
+        self.sessions = []
 
     async def phase(self, name):
         self.phases.append(name)
@@ -137,3 +140,36 @@ async def test_single_marks_missing_agent_report_incomplete(monkeypatch):
     assert result["status"] == "incomplete"
     assert result["developer"] is None
     assert result["tokens_spent"] == 321
+
+
+@pytest.mark.asyncio
+async def test_status_aware_extension_preserves_budget_stop_reason(monkeypatch):
+    module = _workflow_module()
+    monkeypatch.setattr(module, "_developer_tools", lambda _allow: ())
+
+    class StoppedContext(FakeContext):
+        async def agent(self, prompt, **kwargs):
+            result = await super().agent(prompt, **kwargs)
+            self.sessions.append(
+                SimpleNamespace(
+                    state=SimpleNamespace(
+                        phase=SimpleNamespace(value="stopped"),
+                        terminal_reason="budget exhausted before model call",
+                    )
+                )
+            )
+            return result
+
+    result = await module.frontend_single(
+        StoppedContext([None]),
+        {"goal": "Implement feature", "allow_unisolated_shell": True},
+    )
+
+    assert result["status"] == "incomplete"
+    assert result["error"] == "budget exhausted before model call"
+    assert result["developer_outcome"] == {
+        "output": None,
+        "status": "stopped",
+        "reason": "budget exhausted before model call",
+        "sessions_started": 1,
+    }
