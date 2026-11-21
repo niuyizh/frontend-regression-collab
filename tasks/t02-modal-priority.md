@@ -13,3 +13,4 @@ Acceptance criteria:
 
 Do not modify or delete existing public tests. Check keyboard and cancellation paths, not only saving.
 
+Primary source files: `src/components/TaskModal.tsx`, `src/App.tsx`, and `src/types.ts`. Read these directly; the shell already starts at the task repository root.

@@ -58,6 +58,13 @@ def test_qa_tool_bundle_has_no_write_tool():
     assert "apply_patch" not in names
 
 
+def test_developer_uses_targeted_write_tool_instead_of_unified_patch():
+    module = _workflow_module()
+    names = {tool.name for tool in module._developer_tools(True)}
+    assert names == {"bash", "file_read", "file_write", "git_diff"}
+    assert "apply_patch" not in names
+
+
 class FakeContext:
     def __init__(self, replies):
         self.replies = iter(replies)

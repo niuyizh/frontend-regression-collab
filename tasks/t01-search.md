@@ -13,3 +13,4 @@ Acceptance criteria:
 
 Do not modify or delete existing public tests. Inspect the surrounding UI states instead of optimizing only for the obvious happy path.
 
+Primary source files: `src/components/TaskList.tsx` and `src/App.tsx`. Read these directly; the shell already starts at the task repository root.

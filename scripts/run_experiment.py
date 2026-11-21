@@ -102,6 +102,7 @@ def run_one(
     output_dir.mkdir(parents=True, exist_ok=True)
     env = os.environ.copy()
     env["OPENCOLLAB_WORKFLOWS_DIR"] = str((PROJECT_ROOT / "workflows").resolve())
+    env["OPENCOLLAB_THINKING"] = "false"
     started = time.monotonic()
     completed = subprocess.run(
         command,

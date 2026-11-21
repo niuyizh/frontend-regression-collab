@@ -13,3 +13,4 @@ Acceptance criteria:
 
 Do not modify or delete existing public tests. Treat loading, error, success, cleanup, and unrelated page state as separate regression surfaces.
 
+Primary source file: `src/components/AsyncPanel.tsx`; existing button styles are in `src/styles.css`. Read these directly; the shell already starts at the task repository root.

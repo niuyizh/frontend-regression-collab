@@ -49,6 +49,11 @@ coherent source change, and verify it. You may run the public build and tests. D
 skip, or rewrite existing tests. Do not inspect paths outside this task workspace. Preserve existing
 accessibility and adjacent UI states. In the final response, concisely list the change, exact commands
 actually run, and any remaining risks. Do not claim a check you did not run.
+
+The shell already starts in the exact task repository: never cd to an absolute path. TASK.md names the
+primary source files; read those directly instead of listing or dumping the whole repository. Land the
+first targeted edit no later than your third response. Prefer file_write mode=str_replace with an exact,
+unique old_str for existing files. Keep inspection and verification commands narrowly scoped.
 """
 
 QA_PROMPT = """\
@@ -107,7 +112,7 @@ def _allow_shell(args: dict[str, Any]) -> bool:
 
 def _developer_tools(allow_shell: bool) -> tuple[Any, ...]:
     return builtin_tools(
-        "apply_patch", "bash", "file_read", "grep", "git_diff",
+        "bash", "file_read", "file_write", "git_diff",
         headless=not allow_shell,
     )
 
@@ -159,7 +164,7 @@ async def frontend_single(ctx: WorkflowContext, args: dict[str, Any]) -> dict[st
         isolation="shared",
         budget=TOTAL_BUDGET,
         timeout=900,
-        max_steps=12,
+        max_steps=8,
         system_prompt=DEVELOPER_SYSTEM_PROMPT,
     )
     report = developer_run.output
@@ -204,7 +209,7 @@ async def frontend_dev_qa(ctx: WorkflowContext, args: dict[str, Any]) -> dict[st
         isolation="shared",
         budget=DEVELOPER_BUDGET,
         timeout=720,
-        max_steps=12,
+        max_steps=8,
         system_prompt=DEVELOPER_SYSTEM_PROMPT,
     )
     developer = developer_run.output

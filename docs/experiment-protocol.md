@@ -15,8 +15,8 @@
 | 框架 | OpenCollab 0.9.6，revision `78ca8e374181f621e70e8d5436199182f8295cbf` |
 | 模型 | `deepseek-flash`（DeepSeek V4.1 Flash 服务别名） |
 | 协议 | Responses |
-| thinking | true |
-| reasoning effort | low |
+| thinking | false（第二轮校准起固定；减少工具任务中的推理开销） |
+| reasoning effort | 不适用（thinking=false） |
 | 每次全局预算 | 36,000 token；初始 16,000 已被真实 smoke 否决 |
 | 并发 | 1 |
 | Agent isolation | shared；每次运行使用独立 Git 仓库副本 |
@@ -30,7 +30,7 @@
 
 ### Single
 
-一个 Frontend Developer 通过状态可见的 `agent_run()` 获得完整编码工具、任务说明和 36k 全局上限。提示词明确要求实现、验证并保护相邻状态，因此基线不是故意削弱的 Agent。自由文本最终报告避免了与代码正确性无关的结构化输出纠正会话。
+一个 Frontend Developer 通过状态可见的 `agent_run()` 获得编码工具、任务说明和 36k 全局上限。任务给出主文件但不提供实现答案，两组收到相同提示。Developer 使用 `file_write(str_replace)`，避免模型生成不合规范的 unified diff；自由文本最终报告避免了与代码正确性无关的结构化输出纠正会话。
 
 ### Dev-QA
 

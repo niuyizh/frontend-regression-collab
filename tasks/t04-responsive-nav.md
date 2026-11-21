@@ -13,3 +13,4 @@ Acceptance criteria:
 
 Do not modify or delete existing public tests. Check both sides of the responsive breakpoint.
 
+Primary source files: `src/components/ResponsiveNav.tsx` and `src/styles.css`. Read these directly; the shell already starts at the task repository root.

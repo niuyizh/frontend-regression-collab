@@ -14,3 +14,4 @@ Acceptance criteria:
 
 Do not modify or delete existing public tests. Pay attention to validation, persistence, and successful cleanup as distinct states.
 
+Primary source files: `src/components/NewTaskForm.tsx`, `src/App.tsx`, and `src/types.ts`. Read these directly; the shell already starts at the task repository root.
