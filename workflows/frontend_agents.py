@@ -9,6 +9,7 @@ from opencollab import workflow
 from opencollab.tools import builtin_tools
 from opencollab.workflows import WorkflowContext
 
+from .frontend_verify import FrontendVerifyTool
 from .status_aware_agent import run_structured_agent_checked
 
 TOTAL_BUDGET = 36_000
@@ -50,10 +51,10 @@ skip, or rewrite existing tests. Do not inspect paths outside this task workspac
 accessibility and adjacent UI states. In the final response, concisely list the change, exact commands
 actually run, and any remaining risks. Do not claim a check you did not run.
 
-The shell already starts in the exact task repository: never cd to an absolute path. TASK.md names the
-primary source files; read those directly instead of listing or dumping the whole repository. Land the
-first targeted edit no later than your third response. Prefer file_write mode=str_replace with an exact,
-unique old_str for existing files. Keep inspection and verification commands narrowly scoped.
+TASK.md names the primary source files; read those directly instead of listing or dumping the whole
+repository. Land the first targeted edit no later than your third response. Prefer file_write
+mode=str_replace with an exact, unique old_str for existing files. After editing, call verify_frontend
+once; it runs the fixed build and public regression suite.
 """
 
 QA_PROMPT = """\
@@ -111,10 +112,10 @@ def _allow_shell(args: dict[str, Any]) -> bool:
 
 
 def _developer_tools(allow_shell: bool) -> tuple[Any, ...]:
-    return builtin_tools(
-        "bash", "file_read", "file_write", "git_diff",
-        headless=not allow_shell,
+    tools = builtin_tools(
+        "file_read", "file_write", "git_diff", headless=not allow_shell,
     )
+    return (*tools, FrontendVerifyTool())
 
 
 def _qa_tools(allow_shell: bool) -> tuple[Any, ...]:

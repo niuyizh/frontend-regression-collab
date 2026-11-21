@@ -30,7 +30,7 @@
 
 ### Single
 
-一个 Frontend Developer 通过状态可见的 `agent_run()` 获得编码工具、任务说明和 36k 全局上限。任务给出主文件但不提供实现答案，两组收到相同提示。Developer 使用 `file_write(str_replace)`，避免模型生成不合规范的 unified diff；自由文本最终报告避免了与代码正确性无关的结构化输出纠正会话。
+一个 Frontend Developer 通过状态可见的 `agent_run()` 获得编码工具、任务说明和 36k 全局上限。任务给出主文件但不提供实现答案，两组收到相同提示。Developer 使用 `file_read`、`file_write(str_replace)`、`git_diff` 和只运行固定 build/public suite 的 `verify_frontend`，不提供任意 shell，避免目录漫游和不合规范的 unified diff；自由文本最终报告避免了与代码正确性无关的结构化输出纠正会话。
 
 ### Dev-QA
 

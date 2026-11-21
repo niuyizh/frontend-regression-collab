@@ -61,7 +61,8 @@ def test_qa_tool_bundle_has_no_write_tool():
 def test_developer_uses_targeted_write_tool_instead_of_unified_patch():
     module = _workflow_module()
     names = {tool.name for tool in module._developer_tools(True)}
-    assert names == {"bash", "file_read", "file_write", "git_diff"}
+    assert names == {"file_read", "file_write", "git_diff", "verify_frontend"}
+    assert "bash" not in names
     assert "apply_patch" not in names
 
 
@@ -226,3 +227,32 @@ async def test_status_aware_extension_preserves_structured_budget_stop_reason():
         "reason": "budget exhausted before model call",
         "sessions_started": 1,
     }
+
+
+@pytest.mark.asyncio
+async def test_frontend_verifier_runs_only_fixed_checks():
+    from workflows.frontend_verify import FrontendVerifyTool
+
+    class Environment:
+        command = None
+
+        async def exec_cmd(self, command, timeout):
+            self.command = (command, timeout)
+            return SimpleNamespace(
+                returncode=0,
+                stdout="build passed\n6 passed",
+                stderr="",
+                timed_out=False,
+            )
+
+    environment = Environment()
+    output = await FrontendVerifyTool().execute_with_runtime(
+        {},
+        SimpleNamespace(environment=environment, observations=None),
+    )
+
+    assert environment.command == (
+        "npm run build && npm run test:public",
+        300.0,
+    )
+    assert output == "Exit code: 0\nbuild passed\n6 passed"
