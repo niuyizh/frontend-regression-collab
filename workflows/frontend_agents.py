@@ -11,21 +11,10 @@ from opencollab.workflows import WorkflowContext
 
 from .status_aware_agent import run_structured_agent_checked
 
-TOTAL_BUDGET = 16_000
-DEVELOPER_BUDGET = 10_000
-QA_BUDGET = 3_000
-REPAIR_BUDGET = 3_000
-
-DEVELOPER_SCHEMA: dict[str, Any] = {
-    "type": "object",
-    "required": ["summary", "tests_run", "known_risks"],
-    "properties": {
-        "summary": {"type": "string"},
-        "tests_run": {"type": "array", "items": {"type": "string"}},
-        "known_risks": {"type": "array", "items": {"type": "string"}},
-    },
-    "additionalProperties": False,
-}
+TOTAL_BUDGET = 36_000
+DEVELOPER_BUDGET = 24_000
+QA_BUDGET = 8_000
+REPAIR_BUDGET = 12_000
 
 QA_SCHEMA: dict[str, Any] = {
     "type": "object",
@@ -53,19 +42,13 @@ QA_SCHEMA: dict[str, Any] = {
     "additionalProperties": False,
 }
 
-REPAIR_SCHEMA = DEVELOPER_SCHEMA
-
-DEVELOPER_PROMPT = """\
-You are Frontend Developer. Implement the requested change in the repository you can access.
-
-Task:
-{goal}
-
-Work as an engineer, not as a commentator: inspect the existing implementation, make the smallest
+DEVELOPER_SYSTEM_PROMPT = """\
+You are Frontend Developer. Work as an engineer, not as a commentator: inspect the existing
+implementation, make the smallest
 coherent source change, and verify it. You may run the public build and tests. Do not delete, weaken,
 skip, or rewrite existing tests. Do not inspect paths outside this task workspace. Preserve existing
-accessibility and adjacent UI states. In the final structured response, list exact commands actually
-run and any remaining risks. Do not claim a check you did not run.
+accessibility and adjacent UI states. In the final response, concisely list the change, exact commands
+actually run, and any remaining risks. Do not claim a check you did not run.
 """
 
 QA_PROMPT = """\
@@ -89,10 +72,14 @@ reproduction steps, and a bounded fix. Return PASS when you found no reproducibl
 acceptance criterion after those targeted checks; do not invent findings to justify your role.
 """
 
+REPAIR_SYSTEM_PROMPT = """\
+You are Frontend Developer returning for one bounded repair round. Reproduce valid Regression QA
+findings, repair them without weakening tests, and rerun the smallest sufficient verification. Do not
+add unrelated features. In the final response, list only commands actually run.
+"""
+
 REPAIR_PROMPT = """\
-You are Frontend Developer returning for one bounded repair round. The Regression QA agent found
-evidence after your initial implementation. Reproduce the valid findings, repair them without weakening
-tests, and rerun the smallest sufficient verification.
+The Regression QA agent found evidence after your initial implementation.
 
 Task:
 {goal}
@@ -103,8 +90,7 @@ QA report:
 Current diff:
 {diff}
 
-If a finding is not reproducible, preserve correct behavior and explain that in known_risks. Do not add
-unrelated features. In the final structured response, list only commands actually run.
+If a finding is not reproducible, preserve correct behavior and explain why.
 """
 
 
@@ -134,6 +120,27 @@ def _qa_tools(allow_shell: bool) -> tuple[Any, ...]:
     )
 
 
+def _agent_run_record(run: Any) -> dict[str, Any]:
+    return {
+        "status": str(run.status),
+        "reason": str(run.reason) if run.reason else None,
+        "tokens": int(run.tokens),
+        "steps": int(run.steps),
+        "cleanup_complete": bool(run.cleanup_complete),
+        "workspace_ready": bool(run.workspace_ready),
+    }
+
+
+def _agent_run_ok(run: Any) -> bool:
+    return (
+        run.status == "completed"
+        and isinstance(run.output, str)
+        and bool(run.output.strip())
+        and bool(run.cleanup_complete)
+        and bool(run.workspace_ready)
+    )
+
+
 @workflow(
     name="frontend-single",
     description="One frontend developer with the full fixed budget",
@@ -145,24 +152,24 @@ async def frontend_single(ctx: WorkflowContext, args: dict[str, Any]) -> dict[st
         return {"status": "error", "error": 'missing "goal"'}
     allow_shell = _allow_shell(args)
     await ctx.phase("implement")
-    developer_run = await run_structured_agent_checked(
-        ctx,
-        DEVELOPER_PROMPT.format(goal=goal),
-        schema=DEVELOPER_SCHEMA,
+    developer_run = await ctx.agent_run(
+        goal,
         label="frontend-developer",
         tools=_developer_tools(allow_shell),
         isolation="shared",
         budget=TOTAL_BUDGET,
         timeout=900,
+        max_steps=12,
+        system_prompt=DEVELOPER_SYSTEM_PROMPT,
     )
     report = developer_run.output
-    if not developer_run.ok:
+    if not _agent_run_ok(developer_run):
         return {
             "status": "incomplete",
             "condition": "single",
-            "error": developer_run.reason or "developer returned no structured report",
+            "error": developer_run.reason or "developer did not complete with a report",
             "developer": report,
-            "developer_outcome": developer_run.as_dict(),
+            "developer_outcome": _agent_run_record(developer_run),
             "tokens_spent": ctx.tokens_spent(),
             "diff": await ctx.diff(),
             "agent_failures": list(ctx.agent_failures),
@@ -171,7 +178,7 @@ async def frontend_single(ctx: WorkflowContext, args: dict[str, Any]) -> dict[st
         "status": "ok",
         "condition": "single",
         "developer": report,
-        "developer_outcome": developer_run.as_dict(),
+        "developer_outcome": _agent_run_record(developer_run),
         "tokens_spent": ctx.tokens_spent(),
         "diff": await ctx.diff(),
         "agent_failures": list(ctx.agent_failures),
@@ -190,24 +197,24 @@ async def frontend_dev_qa(ctx: WorkflowContext, args: dict[str, Any]) -> dict[st
     allow_shell = _allow_shell(args)
 
     await ctx.phase("implement")
-    developer_run = await run_structured_agent_checked(
-        ctx,
-        DEVELOPER_PROMPT.format(goal=goal),
-        schema=DEVELOPER_SCHEMA,
+    developer_run = await ctx.agent_run(
+        goal,
         label="frontend-developer",
         tools=_developer_tools(allow_shell),
         isolation="shared",
         budget=DEVELOPER_BUDGET,
         timeout=720,
+        max_steps=12,
+        system_prompt=DEVELOPER_SYSTEM_PROMPT,
     )
     developer = developer_run.output
-    if not developer_run.ok:
+    if not _agent_run_ok(developer_run):
         return {
             "status": "incomplete",
             "condition": "dev-qa",
-            "error": developer_run.reason or "developer returned no structured report; QA was not started",
+            "error": developer_run.reason or "developer did not complete; QA was not started",
             "developer": developer,
-            "developer_outcome": developer_run.as_dict(),
+            "developer_outcome": _agent_run_record(developer_run),
             "qa": None,
             "repair": None,
             "tokens_spent": ctx.tokens_spent(),
@@ -221,7 +228,7 @@ async def frontend_dev_qa(ctx: WorkflowContext, args: dict[str, Any]) -> dict[st
         ctx,
         QA_PROMPT.format(
             goal=goal,
-            developer_report=json.dumps(developer, ensure_ascii=False, indent=2),
+            developer_report=developer,
             diff=first_diff,
         ),
         schema=QA_SCHEMA,
@@ -238,7 +245,7 @@ async def frontend_dev_qa(ctx: WorkflowContext, args: dict[str, Any]) -> dict[st
             "condition": "dev-qa",
             "error": qa_run.reason or "regression QA returned no structured report",
             "developer": developer,
-            "developer_outcome": developer_run.as_dict(),
+            "developer_outcome": _agent_run_record(developer_run),
             "qa": qa,
             "qa_outcome": qa_run.as_dict(),
             "repair": None,
@@ -250,32 +257,32 @@ async def frontend_dev_qa(ctx: WorkflowContext, args: dict[str, Any]) -> dict[st
     repair = None
     if isinstance(qa, dict) and qa.get("verdict") == "FAIL":
         await ctx.phase("repair")
-        repair_run = await run_structured_agent_checked(
-            ctx,
+        repair_run = await ctx.agent_run(
             REPAIR_PROMPT.format(
                 goal=goal,
                 qa_report=json.dumps(qa, ensure_ascii=False, indent=2),
                 diff=await ctx.diff() or "(no diff available)",
             ),
-            schema=REPAIR_SCHEMA,
             label="frontend-developer-repair",
             tools=_developer_tools(allow_shell),
             isolation="shared",
             budget=REPAIR_BUDGET,
             timeout=360,
+            max_steps=8,
+            system_prompt=REPAIR_SYSTEM_PROMPT,
         )
         repair = repair_run.output
-        if not repair_run.ok:
+        if not _agent_run_ok(repair_run):
             return {
                 "status": "incomplete",
                 "condition": "dev-qa",
                 "error": repair_run.reason or "repair developer returned no structured report",
                 "developer": developer,
-                "developer_outcome": developer_run.as_dict(),
+                "developer_outcome": _agent_run_record(developer_run),
                 "qa": qa,
                 "qa_outcome": qa_run.as_dict(),
                 "repair": repair,
-                "repair_outcome": repair_run.as_dict(),
+                "repair_outcome": _agent_run_record(repair_run),
                 "tokens_spent": ctx.tokens_spent(),
                 "diff": await ctx.diff(),
                 "agent_failures": list(ctx.agent_failures),
@@ -285,11 +292,11 @@ async def frontend_dev_qa(ctx: WorkflowContext, args: dict[str, Any]) -> dict[st
         "status": "ok",
         "condition": "dev-qa",
         "developer": developer,
-        "developer_outcome": developer_run.as_dict(),
+        "developer_outcome": _agent_run_record(developer_run),
         "qa": qa,
         "qa_outcome": qa_run.as_dict(),
         "repair": repair,
-        "repair_outcome": repair_run.as_dict() if repair is not None else None,
+        "repair_outcome": _agent_run_record(repair_run) if repair is not None else None,
         "tokens_spent": ctx.tokens_spent(),
         "diff": await ctx.diff(),
         "agent_failures": list(ctx.agent_failures),

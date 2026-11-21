@@ -9,17 +9,17 @@
 Frontend Developer 往往优先完成当前需求和可见测试，而修改周围的旧交互、键盘路径、响应式边界、异步失败态和本地持久化容易遗漏。本项目比较两个条件：
 
 ```text
-Single（初始预算方案，校准后需修订）
-任务 → Frontend Developer（初始 16k token）→ 评分
+Single（修订校准方案）
+任务 → Frontend Developer（全局上限 36k token）→ 评分
 
 Dev-QA
-任务 → Frontend Developer（10k）
-     → Regression QA（初始 3k，只读）
-     → 有证据失败时 Developer 修复（初始 3k）
+任务 → Frontend Developer（单次上限 24k）
+     → Regression QA（单次上限 8k，只读）
+     → 有证据失败时 Developer 修复（单次上限 12k）
      → 评分
 ```
 
-两个条件必须使用相同模型、任务、初始仓库、工具范围、总预算上限和外部评分器。首次真实校准证明 16k 不足以完成一个结构化 coding session，因此正式预算尚未冻结，矩阵执行已在代码中暂停。QA 不具有写文件工具；它必须检查 Developer 没有覆盖的旧行为，并给出可复现证据，不能为了体现角色价值而虚构问题。
+两个条件使用相同模型、任务、初始仓库、工具范围、36k 全局预算上限和外部评分器。Dev-QA 的角色上限之和可以超过 36k，但它们顺序共享同一个全局池，后续角色只能使用前序实际未消耗的额度。Developer 和 Repair 使用状态可见的自由文本 `agent_run()`，避免仅为 JSON 报告启动额外纠正会话；QA 保留结构化 verdict。QA 不具有写文件工具；它必须检查 Developer 没有覆盖的旧行为，并给出可复现证据，不能为了体现角色价值而虚构问题。
 
 ## 为什么需要多智能体
 
@@ -116,7 +116,7 @@ python scripts/run_experiment.py t03-sync-retry single --repetition 1 --execute
 python scripts/run_experiment.py t03-sync-retry dev-qa --repetition 1 --execute
 ```
 
-预算重新校准、文档更新且 smoke 通过后，才能解除脚本中的保护并执行预注册的 18 次矩阵：
+36k 修订方案 smoke 通过后，才能解除脚本中的保护并执行预注册的 18 次矩阵：
 
 ```bash
 python scripts/run_matrix.py --execute
@@ -139,6 +139,7 @@ python scripts/summarize_results.py
 - harness 单测通过，OpenCollab 能发现两个自定义工作流。
 - API 鉴权和模型可见性已验证。
 - 首次 16k 真实预算校准在实现前停止；失败轨迹已保留于本地，分析见 [docs/failure-cases.md](docs/failure-cases.md)。
-- 正式矩阵已暂停，等待重新确定公平预算；框架 issue、改进补丁及前后对比尚未完成，不能提前填写结论或链接。
+- 36k 公平总预算和状态可见的低开销 Developer 调用已经写入代码；正式矩阵仍暂停，等待一对新 smoke 验证。
+- 框架 issue 草稿、离线最小复现和项目侧状态传播改进已经完成；GitHub issue 链接和正式实验结论尚未产生。
 
 开跑前记录见 [docs/preflight-report.md](docs/preflight-report.md)。

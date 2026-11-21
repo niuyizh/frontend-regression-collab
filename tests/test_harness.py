@@ -73,6 +73,19 @@ class FakeContext:
         self.calls.append({"prompt": prompt, **kwargs})
         return next(self.replies)
 
+    async def agent_run(self, prompt, **kwargs):
+        self.calls.append({"prompt": prompt, **kwargs})
+        output = next(self.replies)
+        return SimpleNamespace(
+            output=output,
+            status="completed" if isinstance(output, str) else "stopped",
+            reason=None if isinstance(output, str) else "budget exhausted before model call",
+            tokens=100,
+            steps=2,
+            cleanup_complete=True,
+            workspace_ready=True,
+        )
+
     async def diff(self):
         return "diff --git a/src/App.tsx b/src/App.tsx"
 
@@ -85,7 +98,7 @@ async def test_dev_qa_skips_repair_on_pass(monkeypatch):
     module = _workflow_module()
     monkeypatch.setattr(module, "_developer_tools", lambda _allow: ())
     monkeypatch.setattr(module, "_qa_tools", lambda _allow: ())
-    developer = {"summary": "done", "tests_run": [], "known_risks": []}
+    developer = "Implemented and ran npm test"
     qa = {"verdict": "PASS", "findings": [], "checks_run": [], "coverage_note": "checked"}
     context = FakeContext([developer, qa])
 
@@ -96,7 +109,7 @@ async def test_dev_qa_skips_repair_on_pass(monkeypatch):
 
     assert result["repair"] is None
     assert [call["label"] for call in context.calls] == ["frontend-developer", "regression-qa"]
-    assert [call["budget"] for call in context.calls] == [10_000, 3_000]
+    assert [call["budget"] for call in context.calls] == [24_000, 8_000]
 
 
 @pytest.mark.asyncio
@@ -104,14 +117,14 @@ async def test_dev_qa_uses_one_bounded_repair_on_fail(monkeypatch):
     module = _workflow_module()
     monkeypatch.setattr(module, "_developer_tools", lambda _allow: ())
     monkeypatch.setattr(module, "_qa_tools", lambda _allow: ())
-    developer = {"summary": "done", "tests_run": [], "known_risks": []}
+    developer = "Implemented and ran npm test"
     qa = {
         "verdict": "FAIL",
         "findings": [{"severity": "major", "behavior": "x", "evidence": "y", "reproduction": "z", "suggested_fix": "w"}],
         "checks_run": [],
         "coverage_note": "checked",
     }
-    repair = {"summary": "fixed", "tests_run": ["npm test"], "known_risks": []}
+    repair = "Fixed and ran npm test"
     context = FakeContext([developer, qa, repair])
 
     result = await module.frontend_dev_qa(
@@ -123,7 +136,7 @@ async def test_dev_qa_uses_one_bounded_repair_on_fail(monkeypatch):
     assert [call["label"] for call in context.calls] == [
         "frontend-developer", "regression-qa", "frontend-developer-repair"
     ]
-    assert [call["budget"] for call in context.calls] == [10_000, 3_000, 3_000]
+    assert [call["budget"] for call in context.calls] == [24_000, 8_000, 12_000]
 
 
 @pytest.mark.asyncio
@@ -143,13 +156,13 @@ async def test_single_marks_missing_agent_report_incomplete(monkeypatch):
 
 
 @pytest.mark.asyncio
-async def test_status_aware_extension_preserves_budget_stop_reason(monkeypatch):
+async def test_native_agent_run_preserves_budget_stop_reason(monkeypatch):
     module = _workflow_module()
     monkeypatch.setattr(module, "_developer_tools", lambda _allow: ())
 
     class StoppedContext(FakeContext):
-        async def agent(self, prompt, **kwargs):
-            result = await super().agent(prompt, **kwargs)
+        async def agent_run(self, prompt, **kwargs):
+            result = await super().agent_run(prompt, **kwargs)
             self.sessions.append(
                 SimpleNamespace(
                     state=SimpleNamespace(
@@ -168,6 +181,39 @@ async def test_status_aware_extension_preserves_budget_stop_reason(monkeypatch):
     assert result["status"] == "incomplete"
     assert result["error"] == "budget exhausted before model call"
     assert result["developer_outcome"] == {
+        "status": "stopped",
+        "reason": "budget exhausted before model call",
+        "tokens": 100,
+        "steps": 2,
+        "cleanup_complete": True,
+        "workspace_ready": True,
+    }
+
+
+@pytest.mark.asyncio
+async def test_status_aware_extension_preserves_structured_budget_stop_reason():
+    from workflows.status_aware_agent import run_structured_agent_checked
+
+    class StructuredStoppedContext(FakeContext):
+        async def agent(self, prompt, **kwargs):
+            result = await super().agent(prompt, **kwargs)
+            self.sessions.append(
+                SimpleNamespace(
+                    state=SimpleNamespace(
+                        phase=SimpleNamespace(value="stopped"),
+                        terminal_reason="budget exhausted before model call",
+                    )
+                )
+            )
+            return result
+
+    outcome = await run_structured_agent_checked(
+        StructuredStoppedContext([None]),
+        "Review regression risk",
+        schema={"type": "object"},
+    )
+
+    assert outcome.as_dict() == {
         "output": None,
         "status": "stopped",
         "reason": "budget exhausted before model call",

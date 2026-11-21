@@ -35,9 +35,9 @@ The workflow returns `status: incomplete` and records an outcome shaped as:
 ## Verification
 
 The regression test
-`test_status_aware_extension_preserves_budget_stop_reason` injects the same
+`test_status_aware_extension_preserves_structured_budget_stop_reason` injects the same
 terminal condition without an API call. It verifies the exact status and reason
-propagation. The complete project harness currently passes 8 tests, and Ruff
+propagation. A second test checks the native status-bearing Developer path. The complete project harness currently passes 9 tests, and Ruff
 passes.
 
 ## Trade-offs and applicability

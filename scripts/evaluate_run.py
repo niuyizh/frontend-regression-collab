@@ -104,7 +104,8 @@ def evaluate(task_id: str, condition: str, repetition: int) -> dict[str, Any]:
             agent_record.get("returncode") == 0
             and isinstance(workflow_result, dict)
             and workflow_result.get("status") == "ok"
-            and isinstance(workflow_result.get("developer"), dict)
+            and isinstance(workflow_result.get("developer"), str)
+            and bool(workflow_result.get("developer", "").strip())
             and (
                 condition == "single"
                 or isinstance(workflow_result.get("qa"), dict)
