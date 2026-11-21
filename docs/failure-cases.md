@@ -70,6 +70,8 @@ budget exhausted before model call: conservative input reservation requires
 分类：角色预算配置错误，不是框架问题或模型能力失败。状态传播和外部有效性门槛正确拒绝了该运行。
 
 协议修订：两组共同全局上限改为 48k；Dev-QA 的 Developer/QA/Repair 调用上限改为 30k/6k/18k。QA 直接审查任务、Developer 报告与完整 diff，只做一次无工具调用，不重复公开测试或仓库探索；这样将 token 留给真正的独立审查和必要修复。
+
+最终 48k Dev-QA smoke 成功：Developer 25,824 token，QA 3,511 token，总计 29,335 token；构建、6/6 公开测试与 2/2 隐藏测试通过，QA 返回 PASS，未启动修复。对应 Single smoke 为 28,218 token。两者都属于协议校准，不能纳入正式完成率或多智能体收益结论。
 4. 正式汇总器只接受 `agent_run_valid=true` 的运行。
 
 完整原始轨迹保留在本地忽略目录 `runs/calibration/`，提交 issue 前仅导出脱敏的最小复现和必要日志。

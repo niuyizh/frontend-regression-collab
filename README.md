@@ -116,7 +116,7 @@ python scripts/run_experiment.py t03-sync-retry single --repetition 1 --execute
 python scripts/run_experiment.py t03-sync-retry dev-qa --repetition 1 --execute
 ```
 
-48k 修订方案 Dev-QA smoke 通过后，才能解除脚本中的保护并执行预注册的 18 次矩阵：
+48k 修订方案的 Single 与 Dev-QA smoke 均已通过。确认付费运行后执行预注册的 18 次矩阵：
 
 ```bash
 python scripts/run_matrix.py --execute
@@ -139,7 +139,8 @@ python scripts/summarize_results.py
 - harness 单测通过，OpenCollab 能发现两个自定义工作流。
 - API 鉴权和模型可见性已验证。
 - 首次 16k 真实预算校准在实现前停止；失败轨迹已保留于本地，分析见 [docs/failure-cases.md](docs/failure-cases.md)。
-- 36k Single smoke 已通过；24k Developer 子上限的 Dev-QA smoke 虽产生正确代码并通过隐藏测试，但在 QA 前停止，因此已修订为共同 48k 总上限。正式矩阵仍暂停，等待新 Dev-QA smoke。
+- 48k 最终 smoke：Single 使用 28,218 token、23.6 秒，Dev-QA 使用 29,335 token、37.4 秒；两者构建、6/6 公开测试和 2/2 隐藏测试均通过。该校准任务只证明协议可运行，不计入正式比较。
+- 正式 18-run 矩阵已具备执行条件但尚未启动，避免未经确认产生大额 API 消耗。
 - 框架 issue 草稿、离线最小复现和项目侧状态传播改进已经完成；GitHub issue 链接和正式实验结论尚未产生。
 
 开跑前记录见 [docs/preflight-report.md](docs/preflight-report.md)。

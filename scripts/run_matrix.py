@@ -33,11 +33,6 @@ def main() -> None:
     parser.add_argument("--force", action="store_true")
     parser.add_argument("--opencollab-root", type=Path, default=DEFAULT_OPENCOLLAB_ROOT)
     args = parser.parse_args()
-    if args.execute:
-        raise SystemExit(
-            "formal matrix is suspended: the 16k calibration run stopped before implementation; "
-            "revise and preregister equal budgets before enabling paid matrix execution"
-        )
     results = []
     for task_id, condition, repetition in matrix():
         result = run_one(

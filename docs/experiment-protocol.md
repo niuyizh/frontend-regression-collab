@@ -105,6 +105,6 @@ T01、T02、T05 的单次结果用于覆盖面和失败案例描述，不用于�
 - [x] OpenCollab 发现自定义 workflow。
 - [x] 运行矩阵默认 dry-run，付费调用需要 `--execute`。
 - [x] 执行首个 Single 真实预算 smoke 并审计轨迹：16k 在实现前停止，详见 `failure-cases.md`。
-- [x] 修订为共同 48k 总预算及 30k/6k/18k 角色调用上限，待 Dev-QA smoke 验证。
-- [ ] 在修订预算下执行一对 Single/Dev-QA smoke。
+- [x] 冻结共同 48k 总预算及 30k/6k/18k 角色调用上限。
+- [x] 最终 Single/Dev-QA smoke 均通过；校准结果不计入正式比较。
 - [ ] smoke 通过后执行正式 18-run 矩阵。
