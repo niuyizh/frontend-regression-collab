@@ -7,7 +7,8 @@
     "dev": "vite",
     "build": "tsc --noEmit && vite build",
     "test": "playwright test",
-    "test:public": "playwright test"
+    "test:public": "playwright test",
+    "verify:agent": "npm run build && npm run test:public"
   },
   "dependencies": {
     "@vitejs/plugin-react": "6.3.0",

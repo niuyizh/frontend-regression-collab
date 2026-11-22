@@ -245,7 +245,7 @@ async def test_frontend_verifier_runs_only_fixed_checks():
     )
 
     assert environment.command == (
-        "npm run build && npm run test:public",
+        "npm run verify:agent",
         300.0,
     )
     assert output == "Exit code: 0\nbuild passed\n6 passed"

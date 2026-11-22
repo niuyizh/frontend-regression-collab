@@ -8,8 +8,7 @@ from typing import Any
 class FrontendVerifyTool:
     name = "verify_frontend"
     description = (
-        "Run the fixed frontend verification command: "
-        "`npm run build && npm run test:public`. Use once after editing."
+        "Run the task workspace's fixed `npm run verify:agent` check once after editing."
     )
     parameters = {"type": "object", "properties": {}, "additionalProperties": False}
     default_timeout = 300.0
@@ -30,7 +29,7 @@ class FrontendVerifyTool:
         if environment is None:
             return "Error: no execution environment available."
         result = await environment.exec_cmd(
-            "npm run build && npm run test:public",
+            "npm run verify:agent",
             timeout=self.default_timeout,
         )
         observations = getattr(runtime, "observations", None)

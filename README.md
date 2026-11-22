@@ -46,6 +46,14 @@ docs/                 实验协议和开跑前检查
 runs/                 临时任务工作区，不提交 Git
 ```
 
+除自建固定应用外，仓库还接入了一个无需 Docker 的 DesignBench React
+外部验证子集。五题清单与固定上游 revision 位于
+`benchmark/designbench/manifest.json`，逐题说明位于
+`benchmark/designbench/prompts/`。下载后的题目资源保存在
+`benchmark/designbench/data/`，上游 checkout 当前位于相邻目录
+`../benchmarks/DesignBench`；两者都不提交 Git。适配器的完整说明见
+[`benchmark/designbench/README.md`](benchmark/designbench/README.md)。
+
 ## 环境
 
 本次确认的环境：
@@ -125,6 +133,34 @@ python scripts/summarize_results.py
 
 每次运行从 `benchmark/base-app` 复制干净仓库，提交初始 Git 快照，保存 OpenCollab transcript/trace、模型输出、代码差异、构建日志、公开测试和隐藏评分。`results/runs.csv` 与 `results/summary.json` 只从真实原始结果生成。
 
+### DesignBench 外部五题
+
+首次下载选定题目并准备依赖：
+
+```bash
+conda activate node22
+python3 scripts/fetch_designbench_subset.py
+npm --prefix ../benchmarks/DesignBench/web/my-react-app ci
+```
+
+生成一个不含 gold 答案的工作区并做页面渲染 smoke：
+
+```bash
+python3 scripts/prepare_designbench.py db-e11 --condition dev-qa --repetition 1 --force
+npm --prefix runs/designbench/db-e11/dev-qa/r1 run verify:agent
+```
+
+下面的命令默认只打印 OpenCollab 运行计划，不调用模型 API；只有显式加入
+`--execute --force` 才会产生付费调用：
+
+```bash
+python3 scripts/run_designbench_experiment.py db-e11 dev-qa --repetition 1
+```
+
+当前外部适配器已验证题目准备、答案隔离和 Next.js 页面启动。它还没有实现
+DesignBench 的任务级功能/视觉评分，因此暂时只适合验证执行链路，不能把
+`render_passed` 当作任务完成率。正式 Single 与 Dev-QA 对比应在补齐评分器后再跑。
+
 ## 任务与指标
 
 5 个任务覆盖搜索/空状态、模态框键盘与取消路径、异步失败恢复、响应式导航、表单校验与持久化。详细协议见 [docs/experiment-protocol.md](docs/experiment-protocol.md)。
@@ -141,6 +177,9 @@ python scripts/summarize_results.py
 - 首次 16k 真实预算校准在实现前停止；失败轨迹已保留于本地，分析见 [docs/failure-cases.md](docs/failure-cases.md)。
 - 48k 最终 smoke：Single 使用 28,218 token、23.6 秒，Dev-QA 使用 29,335 token、37.4 秒；两者构建、6/6 公开测试和 2/2 隐藏测试均通过。该校准任务只证明协议可运行，不计入正式比较。
 - 正式 18-run 矩阵已具备执行条件但尚未启动，避免未经确认产生大额 API 消耗。
+- DesignBench 五题已下载并接入；五个 gold 页面均可渲染，四个 edit/repair
+  初始页面可渲染，compile 题的初始页面按预期因缺少 Client Component 边界返回
+  HTTP 500，修复后的 gold 页面返回 HTTP 200。尚未进行该子集的付费 Agent 实验。
 - 框架 issue 草稿、离线最小复现和项目侧状态传播改进已经完成；GitHub issue 链接和正式实验结论尚未产生。
 
 开跑前记录见 [docs/preflight-report.md](docs/preflight-report.md)，研究依据与

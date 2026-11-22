@@ -1,0 +1,50 @@
+{
+  "schema_version": 1,
+  "benchmark": "WebPAI/DesignBench",
+  "revision": "a1e58d66ecbf1f77848bc5529ee7bbbe33bc25ba",
+  "dataset": "whale99/DesignBench",
+  "dataset_revision": "a04022a331a8ad385dbbf26a1da9ca4a26a2628d",
+  "framework": "react",
+  "tasks": [
+    {
+      "id": "db-e01",
+      "title": "Split full name into first and last name fields",
+      "kind": "edit",
+      "source_id": 1,
+      "category": "normal-edit",
+      "prompt_file": "prompts/db-e01.md"
+    },
+    {
+      "id": "db-e11",
+      "title": "Conditional delivery schedule field",
+      "kind": "edit",
+      "source_id": 11,
+      "category": "interactive-boundary",
+      "prompt_file": "prompts/db-e11.md"
+    },
+    {
+      "id": "db-e27",
+      "title": "Fixed email toolbar and aligned dates",
+      "kind": "edit",
+      "source_id": 27,
+      "category": "complex-layout-edit",
+      "prompt_file": "prompts/db-e27.md"
+    },
+    {
+      "id": "db-r20",
+      "title": "Repair compound visual defects",
+      "kind": "repair",
+      "source_id": 20,
+      "category": "compound-display-failure",
+      "prompt_file": "prompts/db-r20.md"
+    },
+    {
+      "id": "db-c06",
+      "title": "Repair missing Client Component boundary",
+      "kind": "compile",
+      "source_id": 6,
+      "category": "compile-boundary-negative-control",
+      "prompt_file": "prompts/db-c06.md"
+    }
+  ]
+}

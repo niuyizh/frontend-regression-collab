@@ -3,6 +3,8 @@ playwright-report/
 test-results/
 runs/*
 !runs/.gitkeep
+benchmark/designbench/data/
+benchmark/designbench/upstream/
 .opencollab/
 __pycache__/
 *.pyc
