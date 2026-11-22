@@ -1,0 +1,363 @@
+== implement
+-- SessionRuntimeEvent(type='user_message_appended', data={})
+-- SessionRuntimeEvent(type='step_start', data={'step': 1, 'aid': 0})
+-- SessionRuntimeEvent(type='text_delta', data={'content': "I'll start by 
+reading the primary source files.", 'aid': 0})
+-- SessionRuntimeEvent(type='tool_start', data={'tool': 'file_read', 'args': 
+{'path': 'src/components/NewTaskForm.tsx'}, 'tool_call_id': 
+'call_00_ET_p9yEbJA3bfKgysj1HcKt1112', 'aid': 0})
+-- SessionRuntimeEvent(type='tool_end', data={'tool': 'file_read', 'latency': 
+0.0006108507513999939, 'tool_call_id': 'call_00_ET_p9yEbJA3bfKgysj1HcKt1112', 
+'aid': 0})
+-- SessionRuntimeEvent(type='tool_start', data={'tool': 'file_read', 'args': 
+{'path': 'src/App.tsx'}, 'tool_call_id': 'call_01_ET_UK5YZ5Y6DGWTyxt8euDE7737', 
+'aid': 0})
+-- SessionRuntimeEvent(type='tool_end', data={'tool': 'file_read', 'latency': 
+0.00041629374027252197, 'tool_call_id': 'call_01_ET_UK5YZ5Y6DGWTyxt8euDE7737', 
+'aid': 0})
+-- SessionRuntimeEvent(type='tool_start', data={'tool': 'file_read', 'args': 
+{'path': 'src/types.ts'}, 'tool_call_id': 'call_02_ET_rHqPbTNG2BPEIAN7cKPy4250',
+'aid': 0})
+-- SessionRuntimeEvent(type='tool_end', data={'tool': 'file_read', 'latency': 
+0.00037392228841781616, 'tool_call_id': 'call_02_ET_rHqPbTNG2BPEIAN7cKPy4250', 
+'aid': 0})
+-- SessionRuntimeEvent(type='step_end', data={'step': 1, 'latency': 
+1.4162214193493128, 'aid': 0})
+-- SessionRuntimeEvent(type='step_start', data={'step': 2, 'aid': 0})
+-- SessionRuntimeEvent(type='tool_start', data={'tool': 'git_diff', 'args': 
+{'stat_only': True}, 'tool_call_id': 'call_00_wduSKemYZvQLg7iuAz5G1409', 'aid': 
+0})
+-- SessionRuntimeEvent(type='tool_end', data={'tool': 'git_diff', 'latency': 
+0.04815233312547207, 'tool_call_id': 'call_00_wduSKemYZvQLg7iuAz5G1409', 'aid': 
+0})
+-- SessionRuntimeEvent(type='tool_start', data={'tool': 'file_read', 'args': 
+{'path': 'package.json'}, 'tool_call_id': 'call_01_GOBUhIdjimF5RaTz0fNm0337', 
+'aid': 0})
+-- SessionRuntimeEvent(type='tool_end', data={'tool': 'file_read', 'latency': 
+0.0006616115570068359, 'tool_call_id': 'call_01_GOBUhIdjimF5RaTz0fNm0337', 
+'aid': 0})
+-- SessionRuntimeEvent(type='step_end', data={'step': 2, 'latency': 
+0.8712808191776276, 'aid': 0})
+-- SessionRuntimeEvent(type='step_start', data={'step': 3, 'aid': 0})
+-- SessionRuntimeEvent(type='tool_start', data={'tool': 'file_read', 'args': 
+{'path': 'tests'}, 'tool_call_id': 'call_00_adMDMkHsBmaA2mImRMgp4380', 'aid': 
+0})
+-- SessionRuntimeEvent(type='tool_end', data={'tool': 'file_read', 'latency': 
+0.0004484318196773529, 'tool_call_id': 'call_00_adMDMkHsBmaA2mImRMgp4380', 
+'aid': 0})
+-- SessionRuntimeEvent(type='step_end', data={'step': 3, 'latency': 
+1.3714749421924353, 'aid': 0})
+-- SessionRuntimeEvent(type='step_start', data={'step': 4, 'aid': 0})
+-- SessionRuntimeEvent(type='tool_start', data={'tool': 'file_read', 'args': 
+{'path': 'playwright.config.ts'}, 'tool_call_id': 
+'call_00_WInqobcbyQhxG0D45T7R1595', 'aid': 0})
+-- SessionRuntimeEvent(type='tool_end', data={'tool': 'file_read', 'latency': 
+0.0005384907126426697, 'tool_call_id': 'call_00_WInqobcbyQhxG0D45T7R1595', 
+'aid': 0})
+-- SessionRuntimeEvent(type='step_end', data={'step': 4, 'latency': 
+0.976258160546422, 'aid': 0})
+-- SessionRuntimeEvent(type='step_start', data={'step': 5, 'aid': 0})
+-- SessionRuntimeEvent(type='tool_start', data={'tool': 'file_read', 'args': 
+{'path': 'tests/public'}, 'tool_call_id': 'call_00_fHcIzwt4m0nPFPltkPxA9863', 
+'aid': 0})
+-- SessionRuntimeEvent(type='tool_end', data={'tool': 'file_read', 'latency': 
+0.0004330109804868698, 'tool_call_id': 'call_00_fHcIzwt4m0nPFPltkPxA9863', 
+'aid': 0})
+-- SessionRuntimeEvent(type='step_end', data={'step': 5, 'latency': 
+1.6412512436509132, 'aid': 0})
+-- SessionRuntimeEvent(type='step_start', data={'step': 6, 'aid': 0})
+-- SessionRuntimeEvent(type='tool_start', data={'tool': 'file_write', 'args': 
+{'path': 'src/components/NewTaskForm.tsx', 'mode': 'create', 'content': 
+{'__opencollab_truncated__': True, 'preview': "import { FormEvent, useState } 
+from 'react';\n\nconst TITLE_DRAFT_KEY = 'regression-board-draft';\nconst 
+DUE_DATE_DRAFT_KEY = 'regression-board-due-date-draft';\n\ntype Props = { onAdd:
+(title: string, dueDate?: string) => void };\n\nconst todayLocal = () => {\n  
+const now = new Date();\n  const month = String(now.getMonth() + 1).padStart(2, 
+'0');\n  const day = String(now.getDate()).padStart(2, '0');\n  return 
+`${now.getFullYear()}-${month}-${day}`;\n};\n\nexport function NewTaskForm({ 
+onAdd }: Props) {\n  const [title, ", 'original_length': 2816, 'original_bytes':
+2816, 'sha256': 
+'be4e699f1570becf24501aac009f9c5e74fed1dbd2e3cf34746c3ba9c581a065'}}, 
+'tool_call_id': 'call_00_XlT6VVBpw3JrZaSA6pH35657', 'aid': 0})
+-- SessionRuntimeEvent(type='tool_end', data={'tool': 'file_write', 'latency': 
+0.0414568018168211, 'tool_call_id': 'call_00_XlT6VVBpw3JrZaSA6pH35657', 'aid': 
+0})
+-- SessionRuntimeEvent(type='step_end', data={'step': 6, 'latency': 
+4.097604762762785, 'aid': 0})
+-- SessionRuntimeEvent(type='step_start', data={'step': 7, 'aid': 0})
+-- SessionRuntimeEvent(type='text_delta', data={'content': 'Now update types.ts 
+and App.tsx quickly, then verify.', 'aid': 0})
+-- SessionRuntimeEvent(type='error', data={'reason': 'output truncated: provider
+reached its generation limit', 'aid': 0})
+-- SessionRuntimeEvent(type='step_end', data={'step': 7, 'latency': 
+0.9323226492851973, 'aid': 0})
+== regression-review
+-- SessionRuntimeEvent(type='user_message_appended', data={})
+-- SessionRuntimeEvent(type='step_start', data={'step': 1, 'aid': 1})
+-- SessionRuntimeEvent(type='text_delta', data={'content': 'We need review diff.
+Need assess acceptance criteria and existing behavior. Need first line VERDICT: 
+PASS or FAIL. Need independent diff review. We have only NewTaskForm diff, no 
+App.tsx/types.ts changes shown? Developer said update types.ts/App.tsx but diff 
+only NewTaskForm. Need determine if enough for acceptance? Task says primary 
+files include App.tsx types. Diff shows onAdd signature changed to (title, 
+dueDate?) but App.tsx likely still expects one arg? Need infer from diff: only 
+NewTaskForm changed, not App or types. Existing App likely passes onAdd function
+accepting title string. In TypeScript, a function with fewer params can be 
+assigned to one requiring more? Actually prop onAdd type is (title: string, 
+dueDate?: string) => void. App passes onAdd={addTask} where addTask maybe 
+(title:string)=>void. In TS, a function with fewer parameters is assignable to 
+one with more (dueDate optional? Need check). If App\'s addTask accepts title 
+only, it can be assigned to (title: string, dueDate?: string) => void because 
+extra arg ignored. But then due date not stored or displayed, likely acceptance 
+doesn\'t explicitly require due date persisted in task? "Add optional due-date 
+field to quick-add form" likely due date should be used in task? Need inspect 
+ideal. Acceptance criteria: Add date input labelled Due date; empty valid; past 
+blocks; validation failure preserves both; drafts survive reload; successful 
+clears both controls and persisted values while retaining title-required. It 
+doesn\'t explicitly say due date must be attached to task, but onAdd signature 
+includes dueDate, so likely intended. However no App/types diff means dueDate 
+may not be saved into new task. But acceptance maybe only form. Need focus 
+regression/unmet acceptance. Need see if bug in todayLocal/date comparison. It 
+uses local date string, compares lexical ISO. Good.\n\nPotential bug: validation
+order: if title empty and due date past, both errors set. Accessible alerts. 
+Fine.\n\nPotential bug: `if (!value || value >= todayLocal()) 
+setDueDateError(\'\');` clears error on change to future/empty. If user enters 
+past date, submit shows error, then changes to another past date, error remains?
+It only clears when >= today or empty. Fine maybe.\n\nPotential accessibility: 
+label "Due date" wraps input, accessible name includes "Due date". 
+Good.\n\nPotential issue: title draft key renamed? Existing DRAFT_KEY 
+\'regression-board-draft\' remains TITLE_DRAFT_KEY same. Good. Due key 
+new.\n\nPotential issue: successful submission clears localStorage drafts. 
+Good.\n\nPotential issue: validation failure preserves both title and due date. 
+It doesn\'t clear state on invalid. Good. But localStorage values? Updates on 
+change, so preserved. Good.\n\nPotential issue: empty due date valid. `if 
+(dueDate && dueDate < todayLocal())`; empty false. Good.\n\nPotential issue: 
+date input may allow invalid strings? type=date.\n\nPotential issue: "current 
+local calendar date" computed at submit/update. Good.\n\nPotential issue: The 
+date input isn\'t labelled `Due date`? It is wrapped in label text "Due date". 
+Good.\n\nPotential issue: existing title-required validation retained: 
+yes.\n\nPotential issue: `aria-describedby` and error role alert. 
+Fine.\n\nPotential bug: The form still includes a trailing blank line? 
+no.\n\nNeed assess if diff lacks App/types changes. Terminal truncated before 
+updating. The diff only NewTaskForm, so likely App.tsx and types.ts unmodified. 
+Does this cause build failure? TypeScript prop type of NewTaskForm onAdd changed
+to include optional second arg. App\'s existing `addTask` likely maybe `(title: 
+string) => void`; assignable because fewer params okay. Build may pass. But 
+dueDate not passed to addTask? Actually NewTaskForm calls onAdd(title.trim(), 
+dueDate || undefined). App\'s addTask will ignore second arg if JS. So due date 
+is not persisted into task board. Is that required? The task is "Due-date 
+validation with durable draft" and acceptance criteria only mention form. It may
+be that App/types modifications are expected to carry due date? Primary source 
+files include App and types; likely due date should be part of Task type and 
+display? But acceptance list doesn\'t mention display or task storage. However 
+the original requirement: "Add an optional due-date field to the quick-add 
+form." Could imply task object gets due date. Yet the acceptance criteria are 
+explicit; we judge against those. If App/types not changed, perhaps onAdd type 
+mismatch? Let\'s inspect likely existing code from common challenge. We don\'t 
+have files. Need maybe infer from diff. NewTaskForm Props changed, but if App 
+passes `onAdd={handleAdd}` where handleAdd is `(title: string) => void`, TS 
+allows. No build break. But if App has `const handleAdd = (title: string) => { 
+... }`, dueDate ignored. The acceptance criteria don\'t require adding due date 
+to task. But the diff\'s call passes dueDate, so developer intended. If App not 
+updated, due date is not stored in task. Could be an unmet acceptance? "Add an 
+optional due-date field to the quick-add form" maybe just form field. The 
+checklist says successful submission clears both controls and both persisted 
+draft values. It doesn\'t mention task due date. So likely not fail for 
+that.\n\nNeed find concrete regression. Let\'s scrutinize date comparison and 
+timezone. `todayLocal` returns YYYY-MM-DD from local. Compare `dueDate < 
+todayLocal()`. Due date input value is "YYYY-MM-DD". Lexical compare works for 
+valid dates. Good.\n\nWhat about dueDate stored in localStorage and restored: If
+local storage had invalid due date? Not relevant.\n\nPotential UI state: On 
+submit invalid due date, `titleError` may be cleared? Let\'s see: if title valid
+and dueDate past, submit sets dueDateError only. titleError initially \'\'; 
+fine. If title empty and due past, both errors. If then user types title, 
+updateTitle clears titleError if value.trim. dueDateError remains. Fine. If user
+changes due date to valid, updateDueDate clears dueDateError. Then title still 
+empty; titleError remains. Good. If user changes due date to past after valid, 
+updateDueDate does not clear dueDateError (it wasn\'t set). On submit sets. 
+Good.\n\nPotential bug: On successful submit, `onAdd(title.trim(), dueDate || 
+undefined)` may throw? Not our concern.\n\nPotential bug: Title draft 
+persistence key remains same, but due date draft key separate. 
+Good.\n\nPotential bug: Error messages exact string. Due date error exact `Due 
+date cannot be in the past.` Yes. Title error existing `Enter a task title.` 
+preserved.\n\nPotential bug: Accessible alert: `<p role="alert">` 
+yes.\n\nPotential bug: Label association: label wraps input and text. Good. But 
+for date input, accessible name may include error? No.\n\nPotential bug: They 
+use `aria-describedby` on title input only if error. Due date same. 
+Fine.\n\nPotential bug: Build could fail due to unused? No.\n\nPotential bug: 
+The diff removes trailing newline? no.\n\nPotential bug: `todayLocal` uses 
+`String(now.getMonth() + 1).padStart(2, \'0\')`; okay.\n\nPotential bug: If 
+dueDate is future but not valid? type=date ensures.\n\nPotential issue: The 
+"date earlier than current local calendar date" means date input\'s min should 
+be today? They didn\'t set `min`. But validation blocks submission. Acceptance 
+only blocks submission. Fine.\n\nPotential issue: If user submits with due date 
+= today, valid. `dueDate < todayLocal()` false. Good.\n\nPotential issue: Local 
+storage draft cleanup: On successful submission, clear title and due controls 
+and both persisted draft values. Yes. But what about `title` state and `dueDate`
+state reset after `onAdd`; if `onAdd` triggers parent rerender causing component
+unmount? No.\n\nPotential issue: Existing behavior: Previously `setError(\'\')` 
+on submit success; now `setTitleError(\'\'); setDueDateError(\'\')`; 
+same.\n\nPotential issue: localStorage getItem in initializer could throw in 
+privacy mode? Existing already did. Not regression.\n\nPotential issue: date 
+input type "date" not supported? Modern.\n\nNeed maybe fail because 
+App.tsx/types.ts not updated, causing due date not stored. But acceptance 
+criteria never says due date must be persisted on task, only drafts. The task 
+title "Due-date validation with durable draft" suggests focus validation/draft. 
+The primary source files include App/types though. Why include App/types? Likely
+original task involves Task type dueDate. Maybe acceptance criteria would 
+include "new task displays due date"? Not listed. We should not infer beyond 
+acceptance. However "Add an optional due-date field to the quick-add form" could
+be satisfied solely by form. The onAdd signature changed to dueDate optional; if
+App not updated, due date is silently dropped. Is that a regression? No existing
+behavior unaffected. It may be incomplete feature but not listed. But maybe 
+public tests expect task due date? The developer ran public checks? They didn\'t
+due truncation. But terminal was "Now update types.ts and App.tsx quickly, then 
+verify." Then output truncated. The diff only shows NewTaskForm, so types/App 
+not updated. The developer report says stopped before final. Our job is to find 
+concrete regression/unmet acceptance from diff. If acceptance says "Primary 
+source files: NewTaskForm, App.tsx, types.ts. Read directly", but diff not 
+showing App/types. Maybe changes not yet written. Could be build failure if 
+NewTaskForm prop type differs from App\'s? Let\'s examine TypeScript 
+assignability carefully.\n\nProp type: `{ onAdd: (title: string, dueDate?: 
+string) => void }`.\nApp likely defines `const addTask = (title: string) => { 
+... }` and `<NewTaskForm onAdd={addTask} />`. In TypeScript, function parameter 
+bivariance? For function type assignment, a function with fewer parameters is 
+assignable to a function with more parameters. Example: `let f: (a: string, b?: 
+string) => void = (a: string) => {};` allowed because source fewer params. Yes. 
+If App\'s addTask has second required? no.\n\nIf App defines `onAdd: (title: 
+string) => void` and passes to NewTaskForm, fine. So no build error.\n\nBut if 
+App uses `NewTaskForm` with `onAdd={(title) => addTask(title)}` also 
+fine.\n\nWhat about `types.ts` not modified: NewTaskForm has local Props, no 
+types import. No build failure.\n\nPotential hidden issue: The due date draft is
+persisted separately, but when title draft is removed on success, due date draft
+removed. Good.\n\nPotential hidden issue: When validation fails due to past 
+date, both title and due date preserved, but localStorage title might not be 
+preserved if title was initially loaded and not changed? It was already in 
+localStorage. If user typed, updateTitle persisted. Due date persisted via 
+updateDueDate. Yes.\n\nPotential hidden issue: If title is empty and due date 
+past, submit sets both errors. Due date error shown. Fine.\n\nPotential hidden 
+issue: If title is whitespace and due date past, title error. Fine.\n\nPotential
+hidden issue: "An empty due date is valid." If dueDate localStorage contains 
+\'\'? yes.\n\nPotential hidden issue: "A date earlier than the user\'s current 
+local calendar date blocks submission" The code compares date strings at submit 
+time. But if page stays open past midnight, todayLocal updates. Good. If user 
+entered yesterday and current date advanced, blocks. Good.\n\nPotential hidden 
+issue: "current local calendar date" - `new Date()` local. Good.\n\nPotential 
+hidden issue: `todayLocal` is called twice in updateDueDate and submit? 
+no.\n\nPotential issue: The date input is inside a `<label>` but the label does 
+not have a `htmlFor`; wrapping label works. Good.\n\nPotential issue: Accessible
+alert exact. Good.\n\nPotential issue: Could the title error and due date error 
+both have `role="alert"`; when multiple errors, screen reader announces both. 
+Fine.\n\nPotential issue: The form may not clear due date on successful submit 
+if `onAdd` does something? It sets after onAdd. Good.\n\nPotential issue: The 
+title draft key remains old, so existing title drafts survive. 
+Good.\n\nPotential issue: Existing code may have tests that query 
+`getByLabelText(\'Title\')` and input name title. Still.\n\nPotential issue: New
+date input might affect existing tests that get all textboxes? Not likely. 
+Public tests unchanged and developer didn\'t run. But adding an input is 
+required. Could existing tests use `screen.getByRole(\'textbox\')` expecting 
+only title? If they use `getByRole(\'textbox\')`, date input role is not 
+textbox? Actually `<input type="date">` has role? It may have no implicit 
+textbox role; it\'s a date input. So no conflict. Good.\n\nPotential issue: The 
+existing public tests may query error by `getByRole(\'alert\')`; with due date 
+error absent, only title. Fine.\n\nPotential issue: The title input has no 
+`required`; existing custom validation. Good.\n\nPotential issue: The due date 
+input\'s label "Due date" exact. Good.\n\nPotential issue: The error message 
+exact includes period. Yes.\n\nCould there be a bug with localStorage key names:
+existing draft key `\'regression-board-draft\'`; they keep title. Due date new. 
+Good.\n\nPotential issue: On successful submission, they remove both draft 
+values. Good.\n\nPotential issue: If due date is empty, they call 
+`onAdd(title.trim(), undefined)`. App ignores. Fine.\n\nPotential issue: The 
+diff lacks `min` attribute, but not required.\n\nPotential issue: "Preserve all 
+existing behavior" - Existing error state variable was `error` and set to \'\' 
+when title non-empty. They changed to `titleError`. On successful submit, old 
+code did `setTitle(\'\'); setError(\'\'); removeItem`. New code also 
+`setDueDate(\'\'); setTitleError(\'\'); setDueDateError(\'\'); remove both`. 
+Good.\n\nPotential issue: Existing behavior when submitting empty title: old 
+code set error and return, preserving title (empty) and draft? It didn\'t remove
+draft. New code also doesn\'t remove draft. Good.\n\nPotential issue: Existing 
+behavior on typing title after error clears error. New updateTitle clears 
+titleError if value.trim. Same. Good.\n\nPotential issue: Existing tests may 
+refer to localStorage key? They probably use key? Not change. Good.\n\nPotential
+issue: New date input type=date may be considered not a textbox; tests could use
+`getByLabelText(\'Due date\')`. Fine.\n\nCould fail on "A validation failure 
+preserves both title and due date." The code preserves state, but if validation 
+failure due to past date, does it preserve due date? Yes. But wait: 
+`updateDueDate` when user types a past date, it does not set error, so on submit
+it sets error and returns. The due date input remains because state. 
+Yes.\n\nCould fail on "Title and due date drafts both survive a page reload 
+through local storage." Due date draft persists via `updateDueDate`. But initial
+state loads from localStorage. Yes. Title draft persists. Good. However what if 
+the user types a due date that is invalid (past) and reloads? It persists. 
+Yes.\n\nCould fail because due date input\'s `onChange` for date input fires 
+with empty string when clearing; updateDueDate(\'\') sets localStorage to \'\' 
+and clears error. Good.\n\nCould fail because on successful submit, due date 
+draft removed after onAdd; if onAdd returns false? It\'s void. Good.\n\nCould 
+fail due to React state batching? no.\n\nPotential issue: `todayLocal` defined 
+outside component; uses Date at call time. Good.\n\nPotential issue: Date string
+comparison can compare `dueDate` with today\'s date. For date input, value is 
+always zero-padded. Good.\n\nPotential issue: The code doesn\'t validate due 
+date on blur, only submit. Acceptance only blocks submission.\n\nPotential 
+issue: The error message for due date is in an accessible alert. 
+Yes.\n\nPotential issue: The title error and due date error are both role=alert.
+If both, two alerts. Fine.\n\nPotential issue: The due date input is labelled 
+but maybe the label text includes the error? No.\n\nMaybe the diff is 
+incomplete: It doesn\'t show App.tsx and types.ts, but task says primary source 
+files. The developer stopped "Now update types.ts and App.tsx quickly, then 
+verify." The diff only includes NewTaskForm, so App/types not updated. If due 
+date needs to be added to Task type and displayed, that\'s an unmet requirement 
+not in acceptance? Let\'s parse task title: "Due-date validation with durable 
+draft". Acceptance criteria list only form behavior. They don\'t say task due 
+date displayed. But "Add an optional due-date field to the quick-add form" can 
+be read as form only. The onAdd signature change suggests they intended to pass 
+due date. But if App ignores, the due-date field is not actually used. Does that
+violate "Add an optional due-date field to the quick-add form"? It adds field, 
+yes. The field\'s value is captured and validated and cleared. It just isn\'t 
+stored with task. Maybe acceptance doesn\'t require storage. But why change 
+onAdd signature? To pass it. If App not updated, the due date is dropped. That 
+seems like a bug in feature, but not in acceptance. We need choose FAIL only for
+concrete repairable regression or unmet acceptance criterion supported by diff. 
+Could mention as unmet', 'aid': 1})
+-- SessionRuntimeEvent(type='error', data={'reason': 'output truncated: provider
+reached its generation limit', 'aid': 1})
+-- SessionRuntimeEvent(type='step_end', data={'step': 1, 'latency': 
+21.789166079834104, 'aid': 1})
+== sessions saved to 
+/nfs-data2/niuyizhuo/frontend-regression-collab/runs/t05-form-due-date/dev-qa-re
+silient/r1/.opencollab/sessions/wf-2026-11-23T00-08-16-7b90e4a9ccad44649eb14bb9d
+0984d33
+== orchestration at 
+/nfs-data2/niuyizhuo/frontend-regression-collab/runs/t05-form-due-date/dev-qa-re
+silient/r1/.opencollab/sessions/wf-2026-11-23T00-08-16-7b90e4a9ccad44649eb14bb9d
+0984d33/orchestration.jsonl
+{
+  "status": "incomplete",
+  "condition": "dev-qa-resilient",
+  "error": "output truncated: provider reached its generation limit",
+  "developer": "Artifact-first handoff: Developer stopped before its final report; review the complete diff and terminal outcome below.\n\nPartial output:\nNow update types.ts and App.tsx quickly, then verify.\n\nTerminal reason: output truncated: provider reached its generation limit",
+  "developer_outcome": {
+    "status": "stopped",
+    "reason": "output truncated: provider reached its generation limit",
+    "tokens": 26358,
+    "steps": 7,
+    "cleanup_complete": true,
+    "workspace_ready": true
+  },
+  "qa": null,
+  "qa_outcome": {
+    "status": "stopped",
+    "reason": "output truncated: provider reached its generation limit",
+    "tokens": 5291,
+    "steps": 1,
+    "cleanup_complete": true,
+    "workspace_ready": true
+  },
+  "repair": null,
+  "handoff_recovery": {
+    "developer": true,
+    "repair": false
+  },
+  "tokens_spent": 31649,
+  "diff": "diff --git a/src/components/NewTaskForm.tsx b/src/components/NewTaskForm.tsx\nindex 7d353807da13cd1ee2302f498ecf7d2d9258f222..c225960f4372e36eebdd93ddcc2afe7684004a6b 100644\n--- a/src/components/NewTaskForm.tsx\n+++ b/src/components/NewTaskForm.tsx\n@@ -1,29 +1,60 @@\n import { FormEvent, useState } from 'react';\n \n-const DRAFT_KEY = 'regression-board-draft';\n+const TITLE_DRAFT_KEY = 'regression-board-draft';\n+const DUE_DATE_DRAFT_KEY = 'regression-board-due-date-draft';\n \n-type Props = { onAdd: (title: string) => void };\n+type Props = { onAdd: (title: string, dueDate?: string) => void };\n+\n+const todayLocal = () => {\n+  const now = new Date();\n+  const month = String(now.getMonth() + 1).padStart(2, '0');\n+  const day = String(now.getDate()).padStart(2, '0');\n+  return `${now.getFullYear()}-${month}-${day}`;\n+};\n \n export function NewTaskForm({ onAdd }: Props) {\n-  const [title, setTitle] = useState(() => window.localStorage.getItem(DRAFT_KEY) ?? '');\n-  const [error, setError] = useState('');\n+  const [title, setTitle] = useState(() => window.localStorage.getItem(TITLE_DRAFT_KEY) ?? '');\n+  const [dueDate, setDueDate] = useState(\n+    () => window.localStorage.getItem(DUE_DATE_DRAFT_KEY) ?? '',\n+  );\n+  const [titleError, setTitleError] = useState('');\n+  const [dueDateError, setDueDateError] = useState('');\n \n   const updateTitle = (value: string) => {\n     setTitle(value);\n-    window.localStorage.setItem(DRAFT_KEY, value);\n-    if (value.trim()) setError('');\n+    window.localStorage.setItem(TITLE_DRAFT_KEY, value);\n+    if (value.trim()) setTitleError('');\n+  };\n+\n+  const updateDueDate = (value: string) => {\n+    setDueDate(value);\n+    window.localStorage.setItem(DUE_DATE_DRAFT_KEY, value);\n+    if (!value || value >= todayLocal()) setDueDateError('');\n   };\n \n   const submit = (event: FormEvent) => {\n     event.preventDefault();\n+    let invalid = false;\n+\n     if (!title.trim()) {\n-      setError('Enter a task title.');\n-      return;\n+      setTitleError('Enter a task title.');\n+      invalid = true;\n+    }\n+\n+    if (dueDate && dueDate < todayLocal()) {\n+      setDueDateError('Due date cannot be in the past.');\n+      invalid = true;\n     }\n-    onAdd(title.trim());\n+\n+    if (invalid) return;\n+\n+    onAdd(title.trim(), dueDate || undefined);\n     setTitle('');\n-    setError('');\n-    window.localStorage.removeItem(DRAFT_KEY);\n+    setDueDate('');\n+    setTitleError('');\n+    setDueDateError('');\n+    window.localStorage.removeItem(TITLE_DRAFT_KEY);\n+    window.localStorage.removeItem(DUE_DATE_DRAFT_KEY);\n   };\n \n   return (\n@@ -36,14 +67,26 @@ export function NewTaskForm({ onAdd }: Props) {\n           <input\n             name=\"title\"\n             value={title}\n-            aria-describedby={error ? 'title-error' : undefined}\n+            aria-describedby={titleError ? 'title-error' : undefined}\n             onChange={(event) => updateTitle(event.target.value)}\n           />\n         </label>\n-        {error && <p id=\"title-error\" className=\"field-error\" role=\"alert\">{error}</p>}\n+        {titleError && <p id=\"title-error\" className=\"field-error\" role=\"alert\">{titleError}</p>}\n+        <label>\n+          Due date\n+          <input\n+            type=\"date\"\n+            name=\"dueDate\"\n+            value={dueDate}\n+            aria-describedby={dueDateError ? 'due-date-error' : undefined}\n+            onChange={(event) => updateDueDate(event.target.value)}\n+          />\n+        </label>\n+        {dueDateError && (\n+          <p id=\"due-date-error\" className=\"field-error\" role=\"alert\">{dueDateError}</p>\n+        )}\n         <button type=\"submit\">Add task</button>\n       </form>\n     </section>\n   );\n }\n-\n",
+  "agent_failures": []
+}

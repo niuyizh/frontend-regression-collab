@@ -17,6 +17,7 @@ from common import task_record  # noqa: E402
 from run_experiment import _extract_json  # noqa: E402
 from run_matrix import _has_recorded_result, matrix  # noqa: E402
 from run_resilient_matrix import matrix as resilient_matrix  # noqa: E402
+from summarize_results import condition_summary, distribution  # noqa: E402
 
 
 def _workflow_module():
@@ -64,6 +65,44 @@ def test_resilient_matrix_matches_single_baseline_repetitions():
     for task_id in ("t03-sync-retry", "t04-responsive-nav"):
         assert {rep for task, _condition, rep in runs if task == task_id} == {1, 2, 3}
     assert {condition for _task, condition, _rep in runs} == {"dev-qa-resilient"}
+
+
+def test_result_summary_reports_variation_and_strict_vs_external_success():
+    assert distribution([1, 2, 3]) == {
+        "n": 3,
+        "mean": 2,
+        "sample_sd": 1.0,
+        "median": 2,
+        "min": 1,
+        "max": 3,
+    }
+    subset = [
+        {
+            "task_complete": True,
+            "external_checks_passed": True,
+            "agent_run_valid": True,
+            "tokens": 10,
+            "agent_seconds": 1.0,
+            "qa_verdict": "PASS",
+            "developer_recovered": False,
+            "repair_recovered": False,
+        },
+        {
+            "task_complete": False,
+            "external_checks_passed": True,
+            "agent_run_valid": False,
+            "tokens": 20,
+            "agent_seconds": 3.0,
+            "qa_verdict": None,
+            "developer_recovered": True,
+            "repair_recovered": False,
+        },
+    ]
+    summary = condition_summary(subset)
+    assert summary["task_completion_rate"] == 0.5
+    assert summary["external_checks_passed_rate"] == 1.0
+    assert summary["invalid_agent_runs"] == 1
+    assert summary["developer_handoffs_recovered"] == 1
 
 
 def test_cli_json_extraction_prefers_final_payload():

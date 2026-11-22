@@ -2,7 +2,10 @@
 
 一个基于 OpenCollab 的可复现多智能体项目，用于检验：在固定总 token 预算下，将第二个智能体专门用于前端回归检查，是否比单个 Frontend Developer 更能保留旧功能和未显式覆盖的 UI 状态。
 
-当前仓库已经包含固定前端应用、5 个任务、单智能体基线、Developer→Regression QA→Developer 修复工作流、公开/隐藏测试、批量运行器和结果汇总器。正式自建任务矩阵尚未执行；DesignBench `db-e30` 已完成一次同条件配对校准，原始结果和失败轨迹已提交，但不作为三次重复后的正式统计结论。
+当前仓库已经包含固定前端应用、5 个任务、单智能体基线、严格与
+artifact-first 两种 Developer→Regression QA→Developer 工作流、公开/隐藏测试、
+批量运行器、27 次正式运行以及 DesignBench 三次配对。原始轨迹、失败案例和统计均已
+提交；实验结论见 [docs/experiment-results.md](docs/experiment-results.md)。
 
 ## 研究问题
 
@@ -17,6 +20,10 @@ Dev-QA
      → Regression QA（单次上限 6k，单次 diff review）
      → 有证据失败时 Developer 修复（单次上限 18k）
      → 评分
+
+Artifact-first Dev-QA（改进）
+同样的角色、提示、模型与预算，但 coding role 停止且留下干净非空 diff 时，
+允许以 diff 继续交接；空 diff 或外部验收失败仍判失败。
 ```
 
 两个条件使用相同模型、任务、初始仓库、48k 全局预算上限和外部评分器。Dev-QA 的角色上限之和可以超过 48k，但它们顺序共享同一个全局池，后续角色只能使用前序实际未消耗的额度。Developer 和 Repair 使用状态可见的自由文本 `agent_run()`；QA 只接收任务、Developer 报告和完整 diff，用一次无工具调用返回可解析 verdict，避免重复公开测试和仓库探索。QA 不具有写文件工具；它必须检查 Developer 没有覆盖的旧行为并给出 diff 证据，不能为了体现角色价值而虚构问题。
@@ -65,7 +72,8 @@ runs/                 临时任务工作区，不提交 Git
 - React 19.3.1、Vite 8.3.8、TypeScript 7.0.2
 - DeepSeek V4.1 Flash，API ID `deepseek-flash`，Responses protocol，reasoning effort `low`
 
-`deepseek-flash` 是服务端别名而非不可变权重哈希。正式矩阵应在同一时间窗口连续运行，并保留 `/models` 元数据和每次响应中的模型标识；这是模型版本固定性的已知限制。
+`deepseek-flash` 是服务端别名而非不可变权重哈希。正式矩阵已在同一时间窗口连续
+运行并保留每次响应和轨迹；无法获得供应商权重哈希仍是已知限制。
 
 ## 安装
 
@@ -124,10 +132,11 @@ python scripts/run_experiment.py t03-sync-retry single --repetition 1 --execute
 python scripts/run_experiment.py t03-sync-retry dev-qa --repetition 1 --execute
 ```
 
-48k 修订方案的 Single 与 Dev-QA smoke 均已通过。确认付费运行后执行预注册的 18 次矩阵：
+预注册的 18 次原始矩阵与 9 次 artifact-first 改进矩阵：
 
 ```bash
 python scripts/run_matrix.py --execute
+python scripts/run_resilient_matrix.py --execute
 python scripts/summarize_results.py
 ```
 
@@ -177,7 +186,8 @@ initial→gold 的 MAE 视觉进展至少达到 50% 时才算完成；Compile �
 范围读取并修正几何评分。相同修订协议下的 r2 配对中，Single 使用 14,333
 token、25.962 秒，因加入未要求的视觉改动而失败；Dev-QA 使用 24,532 token、
 50.830 秒，QA 从 diff 发现 Developer 擅自缩小 toolbar 外边距，Repair 修复后
-通过（视觉进度 0.798）。这只是一次有效配对，详细证据和限制见
+通过（视觉进度 0.798）。相同协议的 r2-r4 三次配对中，Single 通过 2/3，Dev-QA
+通过 3/3；Dev-QA 平均多用 6,156 token、慢 11.23 秒。详细证据和限制见
 [docs/designbench-validation.md](docs/designbench-validation.md) 与
 [results/designbench/README.md](results/designbench/README.md)。
 
@@ -187,24 +197,36 @@ token、25.962 秒，因加入未要求的视觉改动而失败；Dev-QA 使用 
 
 主要指标：任务完成率、公开回归通过率、隐藏需求通过数、Agent 耗时和 token 消耗。任务完成要求构建、全部公开测试、全部任务隐藏测试通过，且不得修改测试或 `package.json`。
 
+## 正式结果摘要
+
+| 条件 | 严格完成率 | 平均 token | 平均 Agent 秒 |
+|---|---:|---:|---:|
+| Single | 8/9（88.9%） | 35,690 | 26.29 |
+| 原始 Dev-QA | 2/9（22.2%） | 26,472 | 23.26 |
+| artifact-first Dev-QA | 7/9（77.8%） | 29,235 | 32.06 |
+
+原始方案因“已有有效 diff、但最终文字报告未生成”而频繁阻断 QA。artifact-first
+改进恢复了 7 次 Developer 交接和 2 次 Repair 交接，使完成率增加 55.6 个百分点，
+但仍未超过 Single；两次剩余失败来自 QA 输出截断。QA 在 T01 与 T03 找到两个有
+diff 证据的旧状态回归并触发修复。完整波动、成本与局限见结果文档。
+
 ## 当前状态
 
 - 固定应用构建通过。
 - 6 个公开回归测试通过。
 - 5 个任务均经过临时 oracle 可解性验证：各自构建、公开测试和 2/2 隐藏测试通过。
-- harness 单测通过，OpenCollab 能发现两个自定义工作流。
+- 24 项 harness 单测与 Ruff 检查通过，OpenCollab 能发现三个自定义工作流。
 - API 鉴权和模型可见性已验证。
 - 首次 16k 真实预算校准在实现前停止；失败轨迹已保留于本地，分析见 [docs/failure-cases.md](docs/failure-cases.md)。
 - 48k 最终 smoke：Single 使用 28,218 token、23.6 秒，Dev-QA 使用 29,335 token、37.4 秒；两者构建、6/6 公开测试和 2/2 隐藏测试均通过。该校准任务只证明协议可运行，不计入正式比较。
-- 正式 18-run 矩阵已具备执行条件但尚未启动，避免未经确认产生大额 API 消耗。
+- 正式 18-run 原始矩阵和 9-run 改进矩阵已经完成并保留全部原始结果。
 - DesignBench code-mode 五题已下载并接入；四个 Edit 题均完成 initial-fail、
   gold-pass 的结构与视觉校准，Compile 题的 initial 按预期返回 HTTP 500、gold
   返回 HTTP 200。当前 DeepSeek 账户只暴露 `deepseek-flash` 和
   `deepseek-v4-pro`，没有视觉模型，因此没有纳入依赖图像输入的 Repair 题。
-  `db-e30` 已完成一次有效 Single/Dev-QA 配对校准：Single 失败、Dev-QA 经独立
-  QA 指出越界视觉修改并修复后通过；尚需至少再做两次独立配对才能形成关键任务
-  的三次重复统计。
-- 框架 issue 草稿、离线最小复现和项目侧状态传播改进已经完成；GitHub issue 链接和正式实验结论尚未产生。
+  `db-e30` 三次固定配对已经完成：Single 2/3，Dev-QA 3/3。
+- 框架 issue 草稿、离线最小复现、项目侧状态传播改进和相同条件验证已经完成；
+  公开仓库与 GitHub issue 链接仍需账号登录后发布。
 
 开跑前记录见 [docs/preflight-report.md](docs/preflight-report.md)，研究依据与
 OpenCollab benchmark 适配分析见

@@ -1,19 +1,28 @@
-run_id,task_id,condition,repetition,task_complete,agent_run_valid,build_passed,public_regression_passed,hidden_passed,hidden_expected,test_tampering,agent_seconds,evaluation_seconds,tokens
-t01-search__dev-qa__r1,t01-search,dev-qa,1,False,False,True,True,2,2,False,51.06,10.099,40307
-t01-search__single__r1,t01-search,single,1,True,True,True,True,2,2,False,40.589,10.367,35750
-t02-modal-priority__dev-qa__r1,t02-modal-priority,dev-qa,1,False,False,True,True,2,2,False,12.721,10.232,23900
-t02-modal-priority__single__r1,t02-modal-priority,single,1,True,True,True,True,2,2,False,21.067,10.116,29431
-t03-sync-retry__dev-qa__r1,t03-sync-retry,dev-qa,1,True,True,True,True,2,2,False,34.375,10.227,24780
-t03-sync-retry__dev-qa__r2,t03-sync-retry,dev-qa,2,True,True,True,True,2,2,False,37.087,10.376,31001
-t03-sync-retry__dev-qa__r3,t03-sync-retry,dev-qa,3,False,False,True,True,2,2,False,12.498,10.548,21103
-t03-sync-retry__single__r1,t03-sync-retry,single,1,True,True,True,True,2,2,False,21.407,10.412,35932
-t03-sync-retry__single__r2,t03-sync-retry,single,2,True,True,True,True,2,2,False,25.392,10.571,37243
-t03-sync-retry__single__r3,t03-sync-retry,single,3,True,True,True,True,2,2,False,26.886,10.382,28003
-t04-responsive-nav__dev-qa__r1,t04-responsive-nav,dev-qa,1,False,False,True,True,2,2,False,13.349,10.34,26860
-t04-responsive-nav__dev-qa__r2,t04-responsive-nav,dev-qa,2,False,False,True,True,0,2,False,12.057,20.932,21476
-t04-responsive-nav__dev-qa__r3,t04-responsive-nav,dev-qa,3,False,False,True,True,2,2,False,13.307,10.156,23685
-t04-responsive-nav__single__r1,t04-responsive-nav,single,1,True,True,True,True,2,2,False,25.915,9.874,36508
-t04-responsive-nav__single__r2,t04-responsive-nav,single,2,False,False,True,True,2,2,False,22.524,10.081,38956
-t04-responsive-nav__single__r3,t04-responsive-nav,single,3,True,True,True,True,2,2,False,26.997,10.298,43609
-t05-form-due-date__dev-qa__r1,t05-form-due-date,dev-qa,1,False,False,True,True,2,2,False,22.852,10.546,25132
-t05-form-due-date__single__r1,t05-form-due-date,single,1,True,True,True,True,2,2,False,25.86,10.555,35775
+run_id,task_id,condition,repetition,task_complete,agent_run_valid,build_passed,public_regression_passed,hidden_passed,hidden_expected,test_tampering,agent_seconds,evaluation_seconds,tokens,workflow_status,developer_status,qa_status,qa_verdict,repair_status,developer_recovered,repair_recovered,external_checks_passed,failure_reason
+t01-search__dev-qa-resilient__r1,t01-search,dev-qa-resilient,1,True,True,True,True,2,2,False,50.237,10.064,34776,ok,stopped,completed,FAIL,stopped,True,True,True,
+t01-search__dev-qa__r1,t01-search,dev-qa,1,False,False,True,True,2,2,False,51.06,10.099,40307,incomplete,completed,completed,FAIL,stopped,False,False,True,"budget exhausted before model call: conservative input reservation requires 7858 of 6361 remaining tokens, leaving no output headroom"
+t01-search__single__r1,t01-search,single,1,True,True,True,True,2,2,False,40.589,10.367,35750,ok,completed,,,,False,False,True,
+t02-modal-priority__dev-qa-resilient__r1,t02-modal-priority,dev-qa-resilient,1,True,True,True,True,2,2,False,29.803,10.182,28199,ok,completed,completed,PASS,,False,False,True,
+t02-modal-priority__dev-qa__r1,t02-modal-priority,dev-qa,1,False,False,True,True,2,2,False,12.721,10.232,23900,incomplete,stopped,,,,False,False,True,"budget exhausted before model call: conservative input reservation requires 8245 of 6100 remaining tokens, leaving no output headroom"
+t02-modal-priority__single__r1,t02-modal-priority,single,1,True,True,True,True,2,2,False,21.067,10.116,29431,ok,completed,,,,False,False,True,
+t03-sync-retry__dev-qa-resilient__r1,t03-sync-retry,dev-qa-resilient,1,True,True,True,True,2,2,False,34.462,10.328,36812,ok,stopped,completed,FAIL,stopped,True,True,True,
+t03-sync-retry__dev-qa-resilient__r2,t03-sync-retry,dev-qa-resilient,2,True,True,True,True,2,2,False,30.079,13.265,28362,ok,stopped,completed,PASS,,True,False,True,
+t03-sync-retry__dev-qa-resilient__r3,t03-sync-retry,dev-qa-resilient,3,True,True,True,True,2,2,False,24.117,10.505,21473,ok,completed,completed,PASS,,False,False,True,
+t03-sync-retry__dev-qa__r1,t03-sync-retry,dev-qa,1,True,True,True,True,2,2,False,34.375,10.227,24780,ok,completed,completed,PASS,,False,False,True,
+t03-sync-retry__dev-qa__r2,t03-sync-retry,dev-qa,2,True,True,True,True,2,2,False,37.087,10.376,31001,ok,completed,completed,FAIL,completed,False,False,True,
+t03-sync-retry__dev-qa__r3,t03-sync-retry,dev-qa,3,False,False,True,True,2,2,False,12.498,10.548,21103,incomplete,stopped,,,,False,False,True,"budget exhausted before model call: conservative input reservation requires 9858 of 8897 remaining tokens, leaving no output headroom"
+t03-sync-retry__single__r1,t03-sync-retry,single,1,True,True,True,True,2,2,False,21.407,10.412,35932,ok,completed,,,,False,False,True,
+t03-sync-retry__single__r2,t03-sync-retry,single,2,True,True,True,True,2,2,False,25.392,10.571,37243,ok,completed,,,,False,False,True,
+t03-sync-retry__single__r3,t03-sync-retry,single,3,True,True,True,True,2,2,False,26.886,10.382,28003,ok,completed,,,,False,False,True,
+t04-responsive-nav__dev-qa-resilient__r1,t04-responsive-nav,dev-qa-resilient,1,True,True,True,True,2,2,False,22.82,10.261,28747,ok,stopped,completed,PASS,,True,False,True,
+t04-responsive-nav__dev-qa-resilient__r2,t04-responsive-nav,dev-qa-resilient,2,True,True,True,True,2,2,False,28.222,12.706,25866,ok,stopped,completed,PASS,,True,False,True,
+t04-responsive-nav__dev-qa-resilient__r3,t04-responsive-nav,dev-qa-resilient,3,False,False,True,True,2,2,False,33.4,10.861,27232,incomplete,stopped,stopped,,,True,False,True,output truncated: provider reached its generation limit
+t04-responsive-nav__dev-qa__r1,t04-responsive-nav,dev-qa,1,False,False,True,True,2,2,False,13.349,10.34,26860,incomplete,stopped,,,,False,False,True,"budget exhausted before model call: conservative input reservation requires 9387 of 3140 remaining tokens, leaving no output headroom"
+t04-responsive-nav__dev-qa__r2,t04-responsive-nav,dev-qa,2,False,False,True,True,0,2,False,12.057,20.932,21476,incomplete,stopped,,,,False,False,False,"budget exhausted before model call: conservative input reservation requires 9059 of 8524 remaining tokens, leaving no output headroom"
+t04-responsive-nav__dev-qa__r3,t04-responsive-nav,dev-qa,3,False,False,True,True,2,2,False,13.307,10.156,23685,incomplete,stopped,,,,False,False,True,"budget exhausted before model call: conservative input reservation requires 8398 of 6315 remaining tokens, leaving no output headroom"
+t04-responsive-nav__single__r1,t04-responsive-nav,single,1,True,True,True,True,2,2,False,25.915,9.874,36508,ok,completed,,,,False,False,True,
+t04-responsive-nav__single__r2,t04-responsive-nav,single,2,False,False,True,True,2,2,False,22.524,10.081,38956,incomplete,stopped,,,,False,False,True,step limit reached: 8 steps
+t04-responsive-nav__single__r3,t04-responsive-nav,single,3,True,True,True,True,2,2,False,26.997,10.298,43609,ok,completed,,,,False,False,True,
+t05-form-due-date__dev-qa-resilient__r1,t05-form-due-date,dev-qa-resilient,1,False,False,True,True,2,2,False,35.416,10.404,31649,incomplete,stopped,stopped,,,True,False,True,output truncated: provider reached its generation limit
+t05-form-due-date__dev-qa__r1,t05-form-due-date,dev-qa,1,False,False,True,True,2,2,False,22.852,10.546,25132,incomplete,stopped,,,,False,False,True,"budget exhausted before model call: conservative input reservation requires 10498 of 4868 remaining tokens, leaving no output headroom"
+t05-form-due-date__single__r1,t05-form-due-date,single,1,True,True,True,True,2,2,False,25.86,10.555,35775,ok,completed,,,,False,False,True,

@@ -1,0 +1,19 @@
+{
+  "workflow": "frontend-dev-qa-resilient",
+  "run_id": "workflow-81899c8e763740b492aa776ce0ddd672",
+  "args": {
+    "allow_unisolated_shell": true,
+    "goal": "# T04 — Responsive navigation destination and active state\n\nExtend the primary navigation with a `Reports` destination and active-state semantics.\n\nAcceptance criteria:\n\n- Add a `Reports` link targeting `#reports`; preserve `Board` and `Activity`.\n- Clicking a navigation link marks only that link with `aria-current=\"page\"` and updates the URL hash.\n- On mobile, selecting any link closes the expanded menu and updates the Menu button's `aria-expanded` state.\n- On desktop, all navigation links remain visible without opening the menu.\n- Resizing from mobile to desktop must not leave links hidden because the mobile menu was closed.\n- Preserve all existing behavior and keep `npm run build` and `npm run test:public` green.\n\nDo not modify or delete existing public tests. Check both sides of the responsive breakpoint.\n\nPrimary source files: `src/components/ResponsiveNav.tsx` and `src/styles.css`. Read these directly; the shell already starts at the task repository root.\n"
+  },
+  "sessions": 2,
+  "tokens_spent": 25866,
+  "budget_total": 48000,
+  "status": "completed",
+  "reason": null,
+  "failure_type": null,
+  "evidence_complete": true,
+  "trace_enabled": true,
+  "tracer_write_error": null,
+  "tracer_dropped_steps": 0,
+  "tracer_failure": null
+}

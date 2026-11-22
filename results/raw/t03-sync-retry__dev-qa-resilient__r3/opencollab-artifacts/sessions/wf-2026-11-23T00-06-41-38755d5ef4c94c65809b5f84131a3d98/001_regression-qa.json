@@ -1,0 +1,93 @@
+{
+  "snapshot_version": 1,
+  "aid": 1,
+  "role": "workflow_agent",
+  "model": "deepseek-flash",
+  "session_state": {
+    "used_tokens": 2017,
+    "context_tokens": 1394,
+    "step_count": 1,
+    "markup_recovered": 0,
+    "recent_call_hashes": [],
+    "reads_since_last_edit": 0,
+    "has_landed_write": false,
+    "low_yield_since_progress": 0,
+    "distinct_evidence_count": 0,
+    "seen_result_hashes": [],
+    "scout_ledger": [],
+    "steps_since_progress": 0,
+    "wind_down_done": false,
+    "wind_down_attempts": 0,
+    "wind_down_token_mark": 0,
+    "budget_reserve_consumed": false,
+    "loop_blocked_since_progress": 0,
+    "loop_state": {
+      "version": 1,
+      "edit_seq": 0,
+      "blocked_rounds": 0,
+      "last_counted_step": -1,
+      "operations": {}
+    },
+    "write_effect_unknown": false,
+    "last_progress_unknown": false,
+    "phase": "done",
+    "terminal_reason": "completed",
+    "pending_events": [],
+    "pending_external_user_turn": null,
+    "active_turn_start_message_index": null,
+    "completed_turn_start_message_index": 2,
+    "pending_step_latency": null,
+    "submitted_summary": null,
+    "anthropic_history": null
+  },
+  "run_id": "workflow-f81e7701338c49f29b1ce4096cc7a0cc",
+  "_autosave_sequence": 4,
+  "messages": [
+    {
+      "role": "system",
+      "content": "You are Regression QA performing a bounded independent diff review. The developer already implemented\nthe new requirement and ran the public checks. Do not repeat those checks. Focus on old behavior the\ndiff may affect and UI states that the developer report did not cover: keyboard/focus, cancellation,\npersistence, responsive boundaries, and loading/error/empty transitions as relevant.\n\nYour first line must be exactly `VERDICT: PASS` or `VERDICT: FAIL`. Choose FAIL only for a concrete,\nrepairable regression or unmet acceptance criterion supported by the supplied diff. For each FAIL\nfinding name severity, affected behavior, exact diff evidence, reproduction, and a bounded fix. Choose\nPASS when no such finding is supported; do not invent findings to justify your role.\n\nThe handoff may be artifact-first because the Developer stopped after writing code but before a\nfinal narrative response. In that case, treat the supplied diff as the authoritative artifact and\ndo not infer success from the partial report. Return PASS or FAIL by the same evidence standard.\n",
+      "timestamp": "2026-11-22T16:06:59.491769+00:00"
+    },
+    {
+      "role": "user",
+      "content": "Review this handoff without tools.\n\nTask:\n# T03 — Recoverable asynchronous error state\n\nAdd a recovery action to the remote-sync error state.\n\nAcceptance criteria:\n\n- The existing success path at `/` remains unchanged and never shows a retry action.\n- At `/?sync=error`, the error state includes a button named `Retry sync`.\n- Activating it immediately returns the panel to `Checking service…`, then completes as `All changes are synced.` after the same simulated delay.\n- The retry action disappears after success and cannot create overlapping timers from repeated activation.\n- Retrying must not reload the page or reset the currently selected task.\n- Preserve all existing behavior and keep `npm run build` and `npm run test:public` green.\n\nDo not modify or delete existing public tests. Treat loading, error, success, cleanup, and unrelated page state as separate regression surfaces.\n\nPrimary source file: `src/components/AsyncPanel.tsx`; existing button styles are in `src/styles.css`. Read these directly; the shell already starts at the task repository root.\n\nDeveloper report:\nDone.\n\n**Change** — `src/components/AsyncPanel.tsx`:\n- Extracted the simulated-delay scheduling into a `scheduleResult` callback backed by a `timerRef`, which clears any pending timer before starting a new one (prevents overlapping timers) and is cleared on unmount.\n- Added a `Retry sync` button (`button.secondary`, existing style) inside the error state. It sets state to `loading` immediately (`Checking service…`), then completes as `All changes are synced.` after the same 120 ms delay — no navigation/reload, and no interaction with task selection outside this component.\n- Success path at `/` and the initial error detection at `/?sync=error` are otherwise unchanged; the retry control is only rendered in the error branch, so it disappears after success.\n\n**Commands run**:\n- `verify_frontend` → `npm run verify:agent` = `npm run build` (`tsc --noEmit && vite build`) + `npm run test:public` (Playwright, 6 tests). Exit code 0; all 6 public tests passed.\n\n**Remaining risks**:\n- Retry always resolves to success by design (per acceptance criteria); no repeated-error retry path is modeled.\n- The public suite has no explicit test for the new retry button/timer behavior, so that flow is verified only by the build and code review.\n\nCurrent diff:\ndiff --git a/src/components/AsyncPanel.tsx b/src/components/AsyncPanel.tsx\nindex 708aa1a31bb0d2c886acbf86fc167b1f131b1aac..d99bf554df3c5672146d35633c927337db24ed69 100644\n--- a/src/components/AsyncPanel.tsx\n+++ b/src/components/AsyncPanel.tsx\n@@ -1,18 +1,39 @@\n-import { useEffect, useState } from 'react';\n+import { useCallback, useEffect, useRef, useState } from 'react';\n \n type State = 'loading' | 'success' | 'error';\n \n+const SIMULATED_DELAY = 120;\n+\n export function AsyncPanel() {\n   const [state, setState] = useState<State>('loading');\n+  const timerRef = useRef<number | null>(null);\n \n-  useEffect(() => {\n-    const timer = window.setTimeout(() => {\n-      const requested = new URLSearchParams(window.location.search).get('sync');\n-      setState(requested === 'error' ? 'error' : 'success');\n-    }, 120);\n-    return () => window.clearTimeout(timer);\n+  const scheduleResult = useCallback((next: State, delay: number) => {\n+    if (timerRef.current !== null) {\n+      window.clearTimeout(timerRef.current);\n+    }\n+    timerRef.current = window.setTimeout(() => {\n+      timerRef.current = null;\n+      setState(next);\n+    }, delay);\n   }, []);\n \n+  useEffect(() => {\n+    const requested = new URLSearchParams(window.location.search).get('sync');\n+    scheduleResult(requested === 'error' ? 'error' : 'success', SIMULATED_DELAY);\n+    return () => {\n+      if (timerRef.current !== null) {\n+        window.clearTimeout(timerRef.current);\n+        timerRef.current = null;\n+      }\n+    };\n+  }, [scheduleResult]);\n+\n+  const retry = () => {\n+    setState('loading');\n+    scheduleResult('success', SIMULATED_DELAY);\n+  };\n+\n   return (\n     <section className=\"card sync-card\" aria-live=\"polite\">\n       <p className=\"eyebrow\">Remote sync</p>\n@@ -22,9 +43,11 @@ export function AsyncPanel() {\n         <div className=\"sync-state error\" role=\"alert\">\n           <strong>Sync failed</strong>\n           <span>Check your connection and try again later.</span>\n+          <button type=\"button\" className=\"secondary\" onClick={retry}>\n+            Retry sync\n+          </button>\n         </div>\n       )}\n     </section>\n   );\n }\n-\n\n\n\n\n[Budget: ~6k/6k tokens left, ~0 steps left.]",
+      "timestamp": "2026-11-22T16:06:59.553147+00:00"
+    },
+    {
+      "role": "assistant",
+      "reasoning_content": "We need answer verdict only first line exact. Need review diff without tools. Need assess regression. Need inspect given AsyncPanel partial. Need determine if any concrete issue. Key acceptance: success path unchanged never shows retry. error has Retry sync. Activating immediately returns loading then success after delay. Retry disappears after success cannot overlap timers repeated activation. Retry no reload/reset selected task. Preserve existing. Diff: initial useEffect reads query and schedules. Retry sets loading and schedules success. TimerRef clearing. Potential issue: scheduleResult callback uses timerRef; unmount cleanup effect depends on scheduleResult stable. Fine.\n\nPotential race: retry button sets state loading, scheduleResult clears existing timer. But in error state initial timer already fired and timerRef null. Fine.\n\nPotential issue with accessibility: role alert contains button; okay. Button class secondary existing style. Fine.\n\nPotential issue: The retry button is rendered only error branch; after success gone. Repeated activation: after clicking retry, state loading immediately and button disappears, so cannot click repeatedly unless state error again (it won't). If somehow click multiple before render? React event batching, the button unmounts; double click could trigger two events? scheduleResult clears timer. Fine.\n\nPotential issue: query string remains ?sync=error, but success after retry only state success. Since no re-initialization effect on state. Fine.\n\nPotential issue: Initial success at `/` now uses scheduleResult in effect. Equivalent delay 120. Fine.\n\nPotential issue: strict mode effect cleanup: In React StrictMode dev, effect runs setup, cleanup, setup. scheduleResult clears any previous. Fine.\n\nPotential issue: timerRef not cleared after cleanup? It sets null. Good.\n\nCould be issue that on retry, URL still has ?sync=error; but irrelevant.\n\nNeed assess \"Activating it immediately returns panel to Checking service…, then completes...\" setState loading in same event; yes.\n\n\"cannot create overlapping timers from repeated activation\": schedule clears pending. However retry action disappears immediately because state loading, so no repeat. fine.\n\nAny missing aria? Button named Retry sync. yes.\n\nNeed choose PASS likely.\n\nNeed first line exactly VERDICT: PASS. Then perhaps concise evidence. Ensure no markdown? It says first line exactly. Could provide short rationale. Since desired oververbosity 5 but budget. We can mention no concrete regression. Need not use tools. Need only final. Ensure first line exactly.",
+      "content": "VERDICT: PASS\n\nThe diff supports the acceptance criteria: the success path remains unchanged and renders no retry action; the error state includes a `Retry sync` button; retry sets `loading` immediately and schedules the same 120 ms success transition; the button disappears once success renders; `timerRef` clears any pending timer before scheduling and is cleaned up on unmount, preventing overlapping timers; and retry is local state only, so it does not reload or reset task selection. No concrete regression is supported by the supplied diff.",
+      "response_items": [
+        {
+          "id": "3deeb23b-39a7-45fe-9884-10ffcf01daf2",
+          "summary": [],
+          "type": "reasoning",
+          "content": [
+            {
+              "text": "We need answer verdict only first line exact. Need review diff without tools. Need assess regression. Need inspect given AsyncPanel partial. Need determine if any concrete issue. Key acceptance: success path unchanged never shows retry. error has Retry sync. Activating immediately returns loading then success after delay. Retry disappears after success cannot overlap timers repeated activation. Retry no reload/reset selected task. Preserve existing. Diff: initial useEffect reads query and schedules. Retry sets loading and schedules success. TimerRef clearing. Potential issue: scheduleResult callback uses timerRef; unmount cleanup effect depends on scheduleResult stable. Fine.\n\nPotential race: retry button sets state loading, scheduleResult clears existing timer. But in error state initial timer already fired and timerRef null. Fine.\n\nPotential issue with accessibility: role alert contains button; okay. Button class secondary existing style. Fine.\n\nPotential issue: The retry button is rendered only error branch; after success gone. Repeated activation: after clicking retry, state loading immediately and button disappears, so cannot click repeatedly unless state error again (it won't). If somehow click multiple before render? React event batching, the button unmounts; double click could trigger two events? scheduleResult clears timer. Fine.\n\nPotential issue: query string remains ?sync=error, but success after retry only state success. Since no re-initialization effect on state. Fine.\n\nPotential issue: Initial success at `/` now uses scheduleResult in effect. Equivalent delay 120. Fine.\n\nPotential issue: strict mode effect cleanup: In React StrictMode dev, effect runs setup, cleanup, setup. scheduleResult clears any previous. Fine.\n\nPotential issue: timerRef not cleared after cleanup? It sets null. Good.\n\nCould be issue that on retry, URL still has ?sync=error; but irrelevant.\n\nNeed assess \"Activating it immediately returns panel to Checking service…, then completes...\" setState loading in same event; yes.\n\n\"cannot create overlapping timers from repeated activation\": schedule clears pending. However retry action disappears immediately because state loading, so no repeat. fine.\n\nAny missing aria? Button named Retry sync. yes.\n\nNeed choose PASS likely.\n\nNeed first line exactly VERDICT: PASS. Then perhaps concise evidence. Ensure no markdown? It says first line exactly. Could provide short rationale. Since desired oververbosity 5 but budget. We can mention no concrete regression. Need not use tools. Need only final. Ensure first line exactly.",
+              "type": "reasoning_text"
+            }
+          ],
+          "encrypted_content": "d0554665-c3c4-48e8-9eb8-17f49204077d-0",
+          "status": "completed"
+        },
+        {
+          "id": "419b278c-b46a-455d-b7ed-700ba1419848",
+          "content": [
+            {
+              "annotations": [],
+              "text": "VERDICT: PASS\n\nThe diff supports the acceptance criteria: the success path remains unchanged and renders no retry action; the error state includes a `Retry sync` button; retry sets `loading` immediately and schedules the same 120 ms success transition; the button disappears once success renders; `timerRef` clears any pending timer before scheduling and is cleaned up on unmount, preventing overlapping timers; and retry is local state only, so it does not reload or reset task selection. No concrete regression is supported by the supplied diff.",
+              "type": "output_text",
+              "logprobs": []
+            }
+          ],
+          "role": "assistant",
+          "status": "completed",
+          "type": "message",
+          "phase": "final_answer"
+        }
+      ],
+      "timestamp": "2026-11-22T16:07:03.900377+00:00"
+    }
+  ]
+}

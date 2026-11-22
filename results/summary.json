@@ -1,17 +1,450 @@
 {
-  "runs": 18,
+  "schema_version": 2,
+  "runs": 27,
   "conditions": {
-    "single": {
-      "completed_runs": 9,
-      "task_completion_rate": 0.8888888888888888,
-      "mean_tokens": 35689.666666666664,
-      "mean_agent_seconds": 26.293
-    },
     "dev-qa": {
-      "completed_runs": 9,
+      "runs": 9,
+      "task_complete_count": 2,
       "task_completion_rate": 0.2222222222222222,
-      "mean_tokens": 26471.555555555555,
-      "mean_agent_seconds": 23.256222222222224
+      "external_checks_passed_count": 8,
+      "external_checks_passed_rate": 0.8888888888888888,
+      "invalid_agent_runs": 7,
+      "tokens": {
+        "n": 9,
+        "mean": 26471.555555555555,
+        "sample_sd": 5967.587475502792,
+        "median": 24780,
+        "min": 21103,
+        "max": 40307
+      },
+      "agent_seconds": {
+        "n": 9,
+        "mean": 23.256222222222224,
+        "sample_sd": 14.306571888277237,
+        "median": 13.349,
+        "min": 12.057,
+        "max": 51.06
+      },
+      "qa_fail_verdicts": 2,
+      "developer_handoffs_recovered": 0,
+      "repair_handoffs_recovered": 0
+    },
+    "dev-qa-resilient": {
+      "runs": 9,
+      "task_complete_count": 7,
+      "task_completion_rate": 0.7777777777777778,
+      "external_checks_passed_count": 9,
+      "external_checks_passed_rate": 1.0,
+      "invalid_agent_runs": 2,
+      "tokens": {
+        "n": 9,
+        "mean": 29235.11111111111,
+        "sample_sd": 4631.7570760037825,
+        "median": 28362,
+        "min": 21473,
+        "max": 36812
+      },
+      "agent_seconds": {
+        "n": 9,
+        "mean": 32.06177777777778,
+        "sample_sd": 8.073480844372176,
+        "median": 30.079,
+        "min": 22.82,
+        "max": 50.237
+      },
+      "qa_fail_verdicts": 2,
+      "developer_handoffs_recovered": 7,
+      "repair_handoffs_recovered": 2
+    },
+    "single": {
+      "runs": 9,
+      "task_complete_count": 8,
+      "task_completion_rate": 0.8888888888888888,
+      "external_checks_passed_count": 9,
+      "external_checks_passed_rate": 1.0,
+      "invalid_agent_runs": 1,
+      "tokens": {
+        "n": 9,
+        "mean": 35689.666666666664,
+        "sample_sd": 4674.300589393027,
+        "median": 35932,
+        "min": 28003,
+        "max": 43609
+      },
+      "agent_seconds": {
+        "n": 9,
+        "mean": 26.293,
+        "sample_sd": 5.828319740714299,
+        "median": 25.86,
+        "min": 21.067,
+        "max": 40.589
+      },
+      "qa_fail_verdicts": 0,
+      "developer_handoffs_recovered": 0,
+      "repair_handoffs_recovered": 0
     }
+  },
+  "per_task": {
+    "t01-search": [
+      {
+        "condition": "dev-qa-resilient",
+        "repetition": 1,
+        "task_complete": true,
+        "agent_run_valid": true,
+        "external_checks_passed": true,
+        "tokens": 34776,
+        "agent_seconds": 50.237,
+        "qa_verdict": "FAIL",
+        "developer_recovered": true,
+        "repair_recovered": true,
+        "failure_reason": null
+      },
+      {
+        "condition": "dev-qa",
+        "repetition": 1,
+        "task_complete": false,
+        "agent_run_valid": false,
+        "external_checks_passed": true,
+        "tokens": 40307,
+        "agent_seconds": 51.06,
+        "qa_verdict": "FAIL",
+        "developer_recovered": false,
+        "repair_recovered": false,
+        "failure_reason": "budget exhausted before model call: conservative input reservation requires 7858 of 6361 remaining tokens, leaving no output headroom"
+      },
+      {
+        "condition": "single",
+        "repetition": 1,
+        "task_complete": true,
+        "agent_run_valid": true,
+        "external_checks_passed": true,
+        "tokens": 35750,
+        "agent_seconds": 40.589,
+        "qa_verdict": null,
+        "developer_recovered": false,
+        "repair_recovered": false,
+        "failure_reason": null
+      }
+    ],
+    "t02-modal-priority": [
+      {
+        "condition": "dev-qa-resilient",
+        "repetition": 1,
+        "task_complete": true,
+        "agent_run_valid": true,
+        "external_checks_passed": true,
+        "tokens": 28199,
+        "agent_seconds": 29.803,
+        "qa_verdict": "PASS",
+        "developer_recovered": false,
+        "repair_recovered": false,
+        "failure_reason": null
+      },
+      {
+        "condition": "dev-qa",
+        "repetition": 1,
+        "task_complete": false,
+        "agent_run_valid": false,
+        "external_checks_passed": true,
+        "tokens": 23900,
+        "agent_seconds": 12.721,
+        "qa_verdict": null,
+        "developer_recovered": false,
+        "repair_recovered": false,
+        "failure_reason": "budget exhausted before model call: conservative input reservation requires 8245 of 6100 remaining tokens, leaving no output headroom"
+      },
+      {
+        "condition": "single",
+        "repetition": 1,
+        "task_complete": true,
+        "agent_run_valid": true,
+        "external_checks_passed": true,
+        "tokens": 29431,
+        "agent_seconds": 21.067,
+        "qa_verdict": null,
+        "developer_recovered": false,
+        "repair_recovered": false,
+        "failure_reason": null
+      }
+    ],
+    "t03-sync-retry": [
+      {
+        "condition": "dev-qa-resilient",
+        "repetition": 1,
+        "task_complete": true,
+        "agent_run_valid": true,
+        "external_checks_passed": true,
+        "tokens": 36812,
+        "agent_seconds": 34.462,
+        "qa_verdict": "FAIL",
+        "developer_recovered": true,
+        "repair_recovered": true,
+        "failure_reason": null
+      },
+      {
+        "condition": "dev-qa-resilient",
+        "repetition": 2,
+        "task_complete": true,
+        "agent_run_valid": true,
+        "external_checks_passed": true,
+        "tokens": 28362,
+        "agent_seconds": 30.079,
+        "qa_verdict": "PASS",
+        "developer_recovered": true,
+        "repair_recovered": false,
+        "failure_reason": null
+      },
+      {
+        "condition": "dev-qa-resilient",
+        "repetition": 3,
+        "task_complete": true,
+        "agent_run_valid": true,
+        "external_checks_passed": true,
+        "tokens": 21473,
+        "agent_seconds": 24.117,
+        "qa_verdict": "PASS",
+        "developer_recovered": false,
+        "repair_recovered": false,
+        "failure_reason": null
+      },
+      {
+        "condition": "dev-qa",
+        "repetition": 1,
+        "task_complete": true,
+        "agent_run_valid": true,
+        "external_checks_passed": true,
+        "tokens": 24780,
+        "agent_seconds": 34.375,
+        "qa_verdict": "PASS",
+        "developer_recovered": false,
+        "repair_recovered": false,
+        "failure_reason": null
+      },
+      {
+        "condition": "dev-qa",
+        "repetition": 2,
+        "task_complete": true,
+        "agent_run_valid": true,
+        "external_checks_passed": true,
+        "tokens": 31001,
+        "agent_seconds": 37.087,
+        "qa_verdict": "FAIL",
+        "developer_recovered": false,
+        "repair_recovered": false,
+        "failure_reason": null
+      },
+      {
+        "condition": "dev-qa",
+        "repetition": 3,
+        "task_complete": false,
+        "agent_run_valid": false,
+        "external_checks_passed": true,
+        "tokens": 21103,
+        "agent_seconds": 12.498,
+        "qa_verdict": null,
+        "developer_recovered": false,
+        "repair_recovered": false,
+        "failure_reason": "budget exhausted before model call: conservative input reservation requires 9858 of 8897 remaining tokens, leaving no output headroom"
+      },
+      {
+        "condition": "single",
+        "repetition": 1,
+        "task_complete": true,
+        "agent_run_valid": true,
+        "external_checks_passed": true,
+        "tokens": 35932,
+        "agent_seconds": 21.407,
+        "qa_verdict": null,
+        "developer_recovered": false,
+        "repair_recovered": false,
+        "failure_reason": null
+      },
+      {
+        "condition": "single",
+        "repetition": 2,
+        "task_complete": true,
+        "agent_run_valid": true,
+        "external_checks_passed": true,
+        "tokens": 37243,
+        "agent_seconds": 25.392,
+        "qa_verdict": null,
+        "developer_recovered": false,
+        "repair_recovered": false,
+        "failure_reason": null
+      },
+      {
+        "condition": "single",
+        "repetition": 3,
+        "task_complete": true,
+        "agent_run_valid": true,
+        "external_checks_passed": true,
+        "tokens": 28003,
+        "agent_seconds": 26.886,
+        "qa_verdict": null,
+        "developer_recovered": false,
+        "repair_recovered": false,
+        "failure_reason": null
+      }
+    ],
+    "t04-responsive-nav": [
+      {
+        "condition": "dev-qa-resilient",
+        "repetition": 1,
+        "task_complete": true,
+        "agent_run_valid": true,
+        "external_checks_passed": true,
+        "tokens": 28747,
+        "agent_seconds": 22.82,
+        "qa_verdict": "PASS",
+        "developer_recovered": true,
+        "repair_recovered": false,
+        "failure_reason": null
+      },
+      {
+        "condition": "dev-qa-resilient",
+        "repetition": 2,
+        "task_complete": true,
+        "agent_run_valid": true,
+        "external_checks_passed": true,
+        "tokens": 25866,
+        "agent_seconds": 28.222,
+        "qa_verdict": "PASS",
+        "developer_recovered": true,
+        "repair_recovered": false,
+        "failure_reason": null
+      },
+      {
+        "condition": "dev-qa-resilient",
+        "repetition": 3,
+        "task_complete": false,
+        "agent_run_valid": false,
+        "external_checks_passed": true,
+        "tokens": 27232,
+        "agent_seconds": 33.4,
+        "qa_verdict": null,
+        "developer_recovered": true,
+        "repair_recovered": false,
+        "failure_reason": "output truncated: provider reached its generation limit"
+      },
+      {
+        "condition": "dev-qa",
+        "repetition": 1,
+        "task_complete": false,
+        "agent_run_valid": false,
+        "external_checks_passed": true,
+        "tokens": 26860,
+        "agent_seconds": 13.349,
+        "qa_verdict": null,
+        "developer_recovered": false,
+        "repair_recovered": false,
+        "failure_reason": "budget exhausted before model call: conservative input reservation requires 9387 of 3140 remaining tokens, leaving no output headroom"
+      },
+      {
+        "condition": "dev-qa",
+        "repetition": 2,
+        "task_complete": false,
+        "agent_run_valid": false,
+        "external_checks_passed": false,
+        "tokens": 21476,
+        "agent_seconds": 12.057,
+        "qa_verdict": null,
+        "developer_recovered": false,
+        "repair_recovered": false,
+        "failure_reason": "budget exhausted before model call: conservative input reservation requires 9059 of 8524 remaining tokens, leaving no output headroom"
+      },
+      {
+        "condition": "dev-qa",
+        "repetition": 3,
+        "task_complete": false,
+        "agent_run_valid": false,
+        "external_checks_passed": true,
+        "tokens": 23685,
+        "agent_seconds": 13.307,
+        "qa_verdict": null,
+        "developer_recovered": false,
+        "repair_recovered": false,
+        "failure_reason": "budget exhausted before model call: conservative input reservation requires 8398 of 6315 remaining tokens, leaving no output headroom"
+      },
+      {
+        "condition": "single",
+        "repetition": 1,
+        "task_complete": true,
+        "agent_run_valid": true,
+        "external_checks_passed": true,
+        "tokens": 36508,
+        "agent_seconds": 25.915,
+        "qa_verdict": null,
+        "developer_recovered": false,
+        "repair_recovered": false,
+        "failure_reason": null
+      },
+      {
+        "condition": "single",
+        "repetition": 2,
+        "task_complete": false,
+        "agent_run_valid": false,
+        "external_checks_passed": true,
+        "tokens": 38956,
+        "agent_seconds": 22.524,
+        "qa_verdict": null,
+        "developer_recovered": false,
+        "repair_recovered": false,
+        "failure_reason": "step limit reached: 8 steps"
+      },
+      {
+        "condition": "single",
+        "repetition": 3,
+        "task_complete": true,
+        "agent_run_valid": true,
+        "external_checks_passed": true,
+        "tokens": 43609,
+        "agent_seconds": 26.997,
+        "qa_verdict": null,
+        "developer_recovered": false,
+        "repair_recovered": false,
+        "failure_reason": null
+      }
+    ],
+    "t05-form-due-date": [
+      {
+        "condition": "dev-qa-resilient",
+        "repetition": 1,
+        "task_complete": false,
+        "agent_run_valid": false,
+        "external_checks_passed": true,
+        "tokens": 31649,
+        "agent_seconds": 35.416,
+        "qa_verdict": null,
+        "developer_recovered": true,
+        "repair_recovered": false,
+        "failure_reason": "output truncated: provider reached its generation limit"
+      },
+      {
+        "condition": "dev-qa",
+        "repetition": 1,
+        "task_complete": false,
+        "agent_run_valid": false,
+        "external_checks_passed": true,
+        "tokens": 25132,
+        "agent_seconds": 22.852,
+        "qa_verdict": null,
+        "developer_recovered": false,
+        "repair_recovered": false,
+        "failure_reason": "budget exhausted before model call: conservative input reservation requires 10498 of 4868 remaining tokens, leaving no output headroom"
+      },
+      {
+        "condition": "single",
+        "repetition": 1,
+        "task_complete": true,
+        "agent_run_valid": true,
+        "external_checks_passed": true,
+        "tokens": 35775,
+        "agent_seconds": 25.86,
+        "qa_verdict": null,
+        "developer_recovered": false,
+        "repair_recovered": false,
+        "failure_reason": null
+      }
+    ]
   }
 }

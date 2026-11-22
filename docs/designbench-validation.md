@@ -55,16 +55,16 @@ QA never ran. The task now supplies the already-known 63-90 source window and
 requires a ranged read; no role or global budget was increased. Original pilot
 artifacts remain under `results/designbench/raw/*__r1`.
 
-## Paid calibration result
+## Three-run paired result
 
-The post-pilot r2 pair used the same `deepseek-flash` endpoint, task prompt,
+The post-pilot r2-r4 pairs used the same `deepseek-flash` endpoint, task prompt,
 48k global cap, initial workspace, and scorer. Time below is OpenCollab agent
-wall time and excludes the external evaluator.
+wall time and excludes the external evaluator. Values are mean ± sample SD.
 
-| Condition | Valid | Task pass | Tokens | Time (s) | Visual progress |
+| Condition | Valid | Task pass | Tokens | Time (s) | Mean visual progress |
 |---|---:|---:|---:|---:|---:|
-| Single r2 | yes | no | 14,333 | 25.962 | 0.103 |
-| Dev-QA r2 | yes | yes | 24,532 | 50.830 | 0.798 |
+| Single | 3/3 | 2/3 | 13,157 ± 1,854 | 21.346 ± 4.004 | 0.633 |
+| Dev-QA | 3/3 | 3/3 | 19,313 ± 4,520 | 32.577 ± 15.852 | 0.798 |
 
 Single preserved the outer `p-4`, but added unrequested blur, transparency,
 `z-10`, and fixed button sizing. Its structural checks passed, while its visual
@@ -74,12 +74,13 @@ render smoke still passed. Regression QA cited that exact diff as a violation
 of “Nothing else should change,” and the repair restored `p-4`. The final page
 passed all structural checks and reached 0.798 visual progress.
 
-This pair demonstrates the intended mechanism: an independent diff-only role
+The r2 pair demonstrates the intended mechanism: an independent diff-only role
 caught an adjacent visual regression that the implementing role introduced and
 did not self-report. The observed cost was +10,199 tokens and +24.868 seconds.
-It is one stochastic paired observation, not a completion-rate estimate. At
-least two additional independent pairs under the unchanged r2 protocol are
-required before using this task for the assignment's three-run key conclusion.
+In r3 and r4, QA returned PASS and did not trigger a repair. Across all three
+pairs, Dev-QA increased task completion by 33.3 percentage points while using
+6,156 more tokens and 11.230 more seconds on average. This is a task-specific
+robustness result, not a general frontend completion-rate estimate.
 Machine-readable summaries and complete trajectories are in
 `results/designbench/`.
 

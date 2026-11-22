@@ -1,0 +1,134 @@
+== implement
+-- SessionRuntimeEvent(type='user_message_appended', data={})
+-- SessionRuntimeEvent(type='step_start', data={'step': 1, 'aid': 0})
+-- SessionRuntimeEvent(type='text_delta', data={'content': "I'll start by 
+reading the primary source files.", 'aid': 0})
+-- SessionRuntimeEvent(type='tool_start', data={'tool': 'file_read', 'args': 
+{'path': 'src/components/AsyncPanel.tsx'}, 'tool_call_id': 
+'call_00_ET_gw4hGMJoOSsPrWYWTNjC9962', 'aid': 0})
+-- SessionRuntimeEvent(type='tool_end', data={'tool': 'file_read', 'latency': 
+0.000759487971663475, 'tool_call_id': 'call_00_ET_gw4hGMJoOSsPrWYWTNjC9962', 
+'aid': 0})
+-- SessionRuntimeEvent(type='tool_start', data={'tool': 'file_read', 'args': 
+{'path': 'src/styles.css'}, 'tool_call_id': 
+'call_01_ET_GE72fwM4XQ7W8P5KZ68q0491', 'aid': 0})
+-- SessionRuntimeEvent(type='tool_end', data={'tool': 'file_read', 'latency': 
+0.0005878191441297531, 'tool_call_id': 'call_01_ET_GE72fwM4XQ7W8P5KZ68q0491', 
+'aid': 0})
+-- SessionRuntimeEvent(type='step_end', data={'step': 1, 'latency': 
+1.7513273302465677, 'aid': 0})
+-- SessionRuntimeEvent(type='step_start', data={'step': 2, 'aid': 0})
+-- SessionRuntimeEvent(type='tool_start', data={'tool': 'file_read', 'args': 
+{'path': 'tests/public/async-panel.test.tsx'}, 'tool_call_id': 
+'call_00_XLzokv54huY4Jd2QIZs53033', 'aid': 0})
+-- SessionRuntimeEvent(type='tool_end', data={'tool': 'file_read', 'latency': 
+0.000893784686923027, 'tool_call_id': 'call_00_XLzokv54huY4Jd2QIZs53033', 'aid':
+0})
+-- SessionRuntimeEvent(type='step_end', data={'step': 2, 'latency': 
+3.544170096516609, 'aid': 0})
+-- SessionRuntimeEvent(type='step_start', data={'step': 3, 'aid': 0})
+-- SessionRuntimeEvent(type='tool_start', data={'tool': 'file_read', 'args': 
+{'path': 'package.json'}, 'tool_call_id': 'call_00_Zk0lOjKqK6MNMNiXtt1V9125', 
+'aid': 0})
+-- SessionRuntimeEvent(type='tool_end', data={'tool': 'file_read', 'latency': 
+0.0006438884884119034, 'tool_call_id': 'call_00_Zk0lOjKqK6MNMNiXtt1V9125', 
+'aid': 0})
+-- SessionRuntimeEvent(type='step_end', data={'step': 3, 'latency': 
+1.7770053520798683, 'aid': 0})
+-- SessionRuntimeEvent(type='step_start', data={'step': 4, 'aid': 0})
+-- SessionRuntimeEvent(type='text_delta', data={'content': "Now I'll implement 
+the retry with a single guarded timer.", 'aid': 0})
+-- SessionRuntimeEvent(type='tool_start', data={'tool': 'file_write', 'args': 
+{'path': 'src/components/AsyncPanel.tsx', 'mode': 'create', 'overwrite': True, 
+'content': {'__opencollab_truncated__': True, 'preview': "import { useCallback, 
+useEffect, useRef, useState } from 'react';\n\ntype State = 'loading' | 
+'success' | 'error';\n\nconst CHECK_DELAY_MS = 120;\n\nexport function 
+AsyncPanel() {\n  const [state, setState] = useState<State>('loading');\n  const
+timerRef = useRef<number | null>(null);\n\n  const clearTimer = useCallback(() 
+=> {\n    if (timerRef.current !== null) {\n      
+window.clearTimeout(timerRef.current);\n      timerRef.current = null;\n    }\n 
+}, []);\n\n  const scheduleCheck = useCallback(\n    (outcome: () => State", 
+'original_length': 1738, 'original_bytes': 1740, 'sha256': 
+'f8b64058bbc608e448a08aedc6038f34f87675db1cb7c174c930cceba14f7e28'}}, 
+'tool_call_id': 'call_00_55aTw71za3ji6JLmE2IY0723', 'aid': 0})
+-- SessionRuntimeEvent(type='tool_end', data={'tool': 'file_write', 'latency': 
+0.047533296048641205, 'tool_call_id': 'call_00_55aTw71za3ji6JLmE2IY0723', 'aid':
+0})
+-- SessionRuntimeEvent(type='step_end', data={'step': 4, 'latency': 
+2.9603334609419107, 'aid': 0})
+-- SessionRuntimeEvent(type='step_start', data={'step': 5, 'aid': 0})
+-- SessionRuntimeEvent(type='tool_start', data={'tool': 'file_write', 'args': 
+{'path': 'src/styles.css', 'mode': 'str_replace', 'old_str': '.sync-state.error 
+{ display: grid; gap: 4px; color: #9a3e35; }', 'new_str': '.sync-state.error { 
+display: grid; gap: 4px; color: #9a3e35; }\n.sync-state.error .retry-button { 
+justify-self: start; margin-top: 8px; }'}, 'tool_call_id': 
+'call_00_tsfLyW0Qwwm8dLA8TXMz6907', 'aid': 0})
+-- SessionRuntimeEvent(type='tool_end', data={'tool': 'file_write', 'latency': 
+0.048120640218257904, 'tool_call_id': 'call_00_tsfLyW0Qwwm8dLA8TXMz6907', 'aid':
+0})
+-- SessionRuntimeEvent(type='step_end', data={'step': 5, 'latency': 
+1.4940023589879274, 'aid': 0})
+-- SessionRuntimeEvent(type='step_start', data={'step': 6, 'aid': 0})
+-- SessionRuntimeEvent(type='tool_start', data={'tool': 'verify_frontend', 
+'args': {}, 'tool_call_id': 'call_00_ET_mtMngq0Rs3xQ5zXWVV4D3725', 'aid': 0})
+-- SessionRuntimeEvent(type='tool_end', data={'tool': 'verify_frontend', 
+'latency': 7.539056591689587, 'tool_call_id': 
+'call_00_ET_mtMngq0Rs3xQ5zXWVV4D3725', 'aid': 0})
+-- SessionRuntimeEvent(type='step_end', data={'step': 6, 'latency': 
+0.8388075791299343, 'aid': 0})
+-- SessionRuntimeEvent(type='error', data={'reason': 'budget exhausted before 
+model call: conservative input reservation requires 8764 of 4247 remaining 
+tokens, leaving no output headroom', 'aid': 0})
+== regression-review
+-- SessionRuntimeEvent(type='user_message_appended', data={})
+-- SessionRuntimeEvent(type='step_start', data={'step': 1, 'aid': 1})
+-- SessionRuntimeEvent(type='text_delta', data={'content': 'VERDICT: PASS\n\nNo 
+concrete regression is supported by the diff. The retry button is rendered only 
+in the `error` state, sets the panel back to `loading`, reuses the same guarded 
+timer path, clears prior timers before scheduling, and uses `type="button"` so 
+it does not submit/reload. The `/` success path still resolves through the same 
+query parsing and shows no retry action.', 'aid': 1})
+-- SessionRuntimeEvent(type='step_end', data={'step': 1, 'latency': 
+8.144919939339161, 'aid': 1})
+== sessions saved to 
+/nfs-data2/niuyizhuo/frontend-regression-collab/runs/t03-sync-retry/dev-qa-resil
+ient/r2/.opencollab/sessions/wf-2026-11-23T00-09-43-e58de2d4afc44c5892b195fc90d9
+2c0e
+== orchestration at 
+/nfs-data2/niuyizhuo/frontend-regression-collab/runs/t03-sync-retry/dev-qa-resil
+ient/r2/.opencollab/sessions/wf-2026-11-23T00-09-43-e58de2d4afc44c5892b195fc90d9
+2c0e/orchestration.jsonl
+{
+  "status": "ok",
+  "condition": "dev-qa-resilient",
+  "developer": "Artifact-first handoff: Developer stopped before its final report; review the complete diff and terminal outcome below.\n\nPartial output:\nNow I'll implement the retry with a single guarded timer.\n\nTerminal reason: budget exhausted before model call: conservative input reservation requires 8764 of 4247 remaining tokens, leaving no output headroom",
+  "developer_outcome": {
+    "status": "stopped",
+    "reason": "budget exhausted before model call: conservative input reservation requires 8764 of 4247 remaining tokens, leaving no output headroom",
+    "tokens": 25753,
+    "steps": 6,
+    "cleanup_complete": true,
+    "workspace_ready": true
+  },
+  "qa": {
+    "verdict": "PASS",
+    "report": "VERDICT: PASS\n\nNo concrete regression is supported by the diff. The retry button is rendered only in the `error` state, sets the panel back to `loading`, reuses the same guarded timer path, clears prior timers before scheduling, and uses `type=\"button\"` so it does not submit/reload. The `/` success path still resolves through the same query parsing and shows no retry action."
+  },
+  "qa_outcome": {
+    "status": "completed",
+    "reason": null,
+    "tokens": 2609,
+    "steps": 1,
+    "cleanup_complete": true,
+    "workspace_ready": true
+  },
+  "repair": null,
+  "repair_outcome": null,
+  "handoff_recovery": {
+    "developer": true,
+    "repair": false
+  },
+  "tokens_spent": 28362,
+  "diff": "diff --git a/src/components/AsyncPanel.tsx b/src/components/AsyncPanel.tsx\nindex 708aa1a31bb0d2c886acbf86fc167b1f131b1aac..691ccce24009c7d44cc0135242897d05a6c0819e 100644\n--- a/src/components/AsyncPanel.tsx\n+++ b/src/components/AsyncPanel.tsx\n@@ -1,17 +1,43 @@\n-import { useEffect, useState } from 'react';\n+import { useCallback, useEffect, useRef, useState } from 'react';\n \n type State = 'loading' | 'success' | 'error';\n \n+const CHECK_DELAY_MS = 120;\n+\n export function AsyncPanel() {\n   const [state, setState] = useState<State>('loading');\n+  const timerRef = useRef<number | null>(null);\n+\n+  const clearTimer = useCallback(() => {\n+    if (timerRef.current !== null) {\n+      window.clearTimeout(timerRef.current);\n+      timerRef.current = null;\n+    }\n+  }, []);\n+\n+  const scheduleCheck = useCallback(\n+    (outcome: () => State) => {\n+      clearTimer();\n+      setState('loading');\n+      timerRef.current = window.setTimeout(() => {\n+        timerRef.current = null;\n+        setState(outcome());\n+      }, CHECK_DELAY_MS);\n+    },\n+    [clearTimer],\n+  );\n \n   useEffect(() => {\n-    const timer = window.setTimeout(() => {\n+    scheduleCheck(() => {\n       const requested = new URLSearchParams(window.location.search).get('sync');\n-      setState(requested === 'error' ? 'error' : 'success');\n-    }, 120);\n-    return () => window.clearTimeout(timer);\n-  }, []);\n+      return requested === 'error' ? 'error' : 'success';\n+    });\n+    return clearTimer;\n+  }, [clearTimer, scheduleCheck]);\n+\n+  const handleRetry = useCallback(() => {\n+    scheduleCheck(() => 'success');\n+  }, [scheduleCheck]);\n \n   return (\n     <section className=\"card sync-card\" aria-live=\"polite\">\n@@ -22,9 +48,11 @@ export function AsyncPanel() {\n         <div className=\"sync-state error\" role=\"alert\">\n           <strong>Sync failed</strong>\n           <span>Check your connection and try again later.</span>\n+          <button type=\"button\" className=\"retry-button\" onClick={handleRetry}>\n+            Retry sync\n+          </button>\n         </div>\n       )}\n     </section>\n   );\n }\n-\ndiff --git a/src/styles.css b/src/styles.css\nindex 17928fd06abbf9ed36008b4d78ad257249d04540..3ff963948528c56a9ab7ba0861e34a4370a35b0e 100644\n--- a/src/styles.css\n+++ b/src/styles.css\n@@ -47,6 +47,7 @@ dt { color: #66736e; } dd { margin: 0; font-weight: 700; }\n .sync-state { margin: 0; color: #5d6b66; }\n .sync-state.success { color: #1d6d4d; }\n .sync-state.error { display: grid; gap: 4px; color: #9a3e35; }\n+.sync-state.error .retry-button { justify-self: start; margin-top: 8px; }\n \n form, .modal { display: grid; gap: 14px; }\n label { display: grid; gap: 7px; font-size: .9rem; font-weight: 700; }\n",
+  "agent_failures": []
+}

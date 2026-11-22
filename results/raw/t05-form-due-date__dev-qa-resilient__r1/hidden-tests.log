@@ -1,0 +1,12 @@
+[WebServer] (node:2286186) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+
+Running 2 tests using 1 worker
+
+(node:2286445) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+
+[1/2] evaluator/tests/t05-form-due-date.spec.ts:9:1 › past due date is rejected and both draft fields survive reload
+[2/2] evaluator/tests/t05-form-due-date.spec.ts:20:1 › valid due date submits and clears both persisted fields
+  2 passed (2.9s)

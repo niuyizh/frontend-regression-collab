@@ -1,0 +1,69 @@
+{
+  "run_id": "t03-sync-retry__dev-qa-resilient__r2",
+  "task_id": "t03-sync-retry",
+  "condition": "dev-qa-resilient",
+  "repetition": 2,
+  "workflow": "frontend-dev-qa-resilient",
+  "budget": 48000,
+  "workspace": "/nfs-data2/niuyizhuo/frontend-regression-collab/runs/t03-sync-retry/dev-qa-resilient/r2",
+  "command": [
+    "/home/niuyizhuo/.local/bin/uv",
+    "run",
+    "opencollab",
+    "workflow",
+    "run",
+    "frontend-dev-qa-resilient",
+    "--workspace",
+    "/nfs-data2/niuyizhuo/frontend-regression-collab/runs/t03-sync-retry/dev-qa-resilient/r2",
+    "--task-file",
+    "/nfs-data2/niuyizhuo/frontend-regression-collab/tasks/t03-sync-retry.md",
+    "--args",
+    "{\"allow_unisolated_shell\": true}",
+    "--budget",
+    "48000",
+    "--concurrency",
+    "1",
+    "--task-concurrency",
+    "1",
+    "--isolation",
+    "shared",
+    "--trace",
+    "--save"
+  ],
+  "returncode": 0,
+  "agent_seconds": 30.079,
+  "workflow_result": {
+    "status": "ok",
+    "condition": "dev-qa-resilient",
+    "developer": "Artifact-first handoff: Developer stopped before its final report; review the complete diff and terminal outcome below.\n\nPartial output:\nNow I'll implement the retry with a single guarded timer.\n\nTerminal reason: budget exhausted before model call: conservative input reservation requires 8764 of 4247 remaining tokens, leaving no output headroom",
+    "developer_outcome": {
+      "status": "stopped",
+      "reason": "budget exhausted before model call: conservative input reservation requires 8764 of 4247 remaining tokens, leaving no output headroom",
+      "tokens": 25753,
+      "steps": 6,
+      "cleanup_complete": true,
+      "workspace_ready": true
+    },
+    "qa": {
+      "verdict": "PASS",
+      "report": "VERDICT: PASS\n\nNo concrete regression is supported by the diff. The retry button is rendered only in the `error` state, sets the panel back to `loading`, reuses the same guarded timer path, clears prior timers before scheduling, and uses `type=\"button\"` so it does not submit/reload. The `/` success path still resolves through the same query parsing and shows no retry action."
+    },
+    "qa_outcome": {
+      "status": "completed",
+      "reason": null,
+      "tokens": 2609,
+      "steps": 1,
+      "cleanup_complete": true,
+      "workspace_ready": true
+    },
+    "repair": null,
+    "repair_outcome": null,
+    "handoff_recovery": {
+      "developer": true,
+      "repair": false
+    },
+    "tokens_spent": 28362,
+    "diff": "diff --git a/src/components/AsyncPanel.tsx b/src/components/AsyncPanel.tsx\nindex 708aa1a31bb0d2c886acbf86fc167b1f131b1aac..691ccce24009c7d44cc0135242897d05a6c0819e 100644\n--- a/src/components/AsyncPanel.tsx\n+++ b/src/components/AsyncPanel.tsx\n@@ -1,17 +1,43 @@\n-import { useEffect, useState } from 'react';\n+import { useCallback, useEffect, useRef, useState } from 'react';\n \n type State = 'loading' | 'success' | 'error';\n \n+const CHECK_DELAY_MS = 120;\n+\n export function AsyncPanel() {\n   const [state, setState] = useState<State>('loading');\n+  const timerRef = useRef<number | null>(null);\n+\n+  const clearTimer = useCallback(() => {\n+    if (timerRef.current !== null) {\n+      window.clearTimeout(timerRef.current);\n+      timerRef.current = null;\n+    }\n+  }, []);\n+\n+  const scheduleCheck = useCallback(\n+    (outcome: () => State) => {\n+      clearTimer();\n+      setState('loading');\n+      timerRef.current = window.setTimeout(() => {\n+        timerRef.current = null;\n+        setState(outcome());\n+      }, CHECK_DELAY_MS);\n+    },\n+    [clearTimer],\n+  );\n \n   useEffect(() => {\n-    const timer = window.setTimeout(() => {\n+    scheduleCheck(() => {\n       const requested = new URLSearchParams(window.location.search).get('sync');\n-      setState(requested === 'error' ? 'error' : 'success');\n-    }, 120);\n-    return () => window.clearTimeout(timer);\n-  }, []);\n+      return requested === 'error' ? 'error' : 'success';\n+    });\n+    return clearTimer;\n+  }, [clearTimer, scheduleCheck]);\n+\n+  const handleRetry = useCallback(() => {\n+    scheduleCheck(() => 'success');\n+  }, [scheduleCheck]);\n \n   return (\n     <section className=\"card sync-card\" aria-live=\"polite\">\n@@ -22,9 +48,11 @@ export function AsyncPanel() {\n         <div className=\"sync-state error\" role=\"alert\">\n           <strong>Sync failed</strong>\n           <span>Check your connection and try again later.</span>\n+          <button type=\"button\" className=\"retry-button\" onClick={handleRetry}>\n+            Retry sync\n+          </button>\n         </div>\n       )}\n     </section>\n   );\n }\n-\ndiff --git a/src/styles.css b/src/styles.css\nindex 17928fd06abbf9ed36008b4d78ad257249d04540..3ff963948528c56a9ab7ba0861e34a4370a35b0e 100644\n--- a/src/styles.css\n+++ b/src/styles.css\n@@ -47,6 +47,7 @@ dt { color: #66736e; } dd { margin: 0; font-weight: 700; }\n .sync-state { margin: 0; color: #5d6b66; }\n .sync-state.success { color: #1d6d4d; }\n .sync-state.error { display: grid; gap: 4px; color: #9a3e35; }\n+.sync-state.error .retry-button { justify-self: start; margin-top: 8px; }\n \n form, .modal { display: grid; gap: 14px; }\n label { display: grid; gap: 7px; font-size: .9rem; font-weight: 700; }\n",
+    "agent_failures": []
+  }
+}

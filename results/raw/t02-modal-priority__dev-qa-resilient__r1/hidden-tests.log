@@ -1,0 +1,12 @@
+[WebServer] (node:2276517) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+
+Running 2 tests using 1 worker
+
+(node:2276800) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+
+[1/2] evaluator/tests/t02-modal-priority.spec.ts:3:1 › saving a priority updates the selected task
+[2/2] evaluator/tests/t02-modal-priority.spec.ts:12:1 › cancel and Escape discard priority edits while focus restoration survives
+  2 passed (2.6s)

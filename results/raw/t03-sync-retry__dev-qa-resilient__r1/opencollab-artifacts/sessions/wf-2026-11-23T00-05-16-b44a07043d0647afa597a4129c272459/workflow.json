@@ -1,0 +1,19 @@
+{
+  "workflow": "frontend-dev-qa-resilient",
+  "run_id": "workflow-69e2211368824535a840389ecef5ba57",
+  "args": {
+    "allow_unisolated_shell": true,
+    "goal": "# T03 — Recoverable asynchronous error state\n\nAdd a recovery action to the remote-sync error state.\n\nAcceptance criteria:\n\n- The existing success path at `/` remains unchanged and never shows a retry action.\n- At `/?sync=error`, the error state includes a button named `Retry sync`.\n- Activating it immediately returns the panel to `Checking service…`, then completes as `All changes are synced.` after the same simulated delay.\n- The retry action disappears after success and cannot create overlapping timers from repeated activation.\n- Retrying must not reload the page or reset the currently selected task.\n- Preserve all existing behavior and keep `npm run build` and `npm run test:public` green.\n\nDo not modify or delete existing public tests. Treat loading, error, success, cleanup, and unrelated page state as separate regression surfaces.\n\nPrimary source file: `src/components/AsyncPanel.tsx`; existing button styles are in `src/styles.css`. Read these directly; the shell already starts at the task repository root.\n"
+  },
+  "sessions": 3,
+  "tokens_spent": 36812,
+  "budget_total": 48000,
+  "status": "completed",
+  "reason": null,
+  "failure_type": null,
+  "evidence_complete": true,
+  "trace_enabled": true,
+  "tracer_write_error": null,
+  "tracer_dropped_steps": 0,
+  "tracer_failure": null
+}

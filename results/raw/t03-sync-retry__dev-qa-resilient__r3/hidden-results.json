@@ -1,0 +1,187 @@
+{
+  "config": {
+    "argv": [
+      "/home/niuyizhuo/.conda/envs/node22/bin/node",
+      "/nfs-data2/niuyizhuo/frontend-regression-collab/node_modules/.bin/playwright",
+      "test",
+      "--config",
+      "evaluator/playwright.config.ts"
+    ],
+    "configFile": "/nfs-data2/niuyizhuo/frontend-regression-collab/evaluator/playwright.config.ts",
+    "rootDir": "/nfs-data2/niuyizhuo/frontend-regression-collab/evaluator/tests",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "/nfs-data2/niuyizhuo/frontend-regression-collab/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "/nfs-data2/niuyizhuo/frontend-regression-collab/evaluator/tests",
+        "testIgnore": [],
+        "testMatch": [
+          "t03-sync-retry.spec.ts"
+        ],
+        "timeout": 15000
+      }
+    ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "/nfs-data2/niuyizhuo/frontend-regression-collab/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "",
+        "testDir": "/nfs-data2/niuyizhuo/frontend-regression-collab/evaluator/tests",
+        "snapshotDir": "/nfs-data2/niuyizhuo/frontend-regression-collab/evaluator/tests",
+        "testIgnore": [],
+        "testMatch": "t03-sync-retry.spec.ts",
+        "timeout": 15000,
+        "use": {
+          "baseURL": "http://127.0.0.1:4333",
+          "actionTimeout": 5000,
+          "trace": "retain-on-failure"
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": ""
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "json",
+        {
+          "outputFile": "/nfs-data2/niuyizhuo/frontend-regression-collab/runs/t03-sync-retry/dev-qa-resilient/r3/hidden-results.json"
+        }
+      ],
+      [
+        "line",
+        null
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "default",
+    "updateSourceMethod": "patch",
+    "version": "1.65.1",
+    "workers": 1,
+    "webServer": {
+      "command": "npm run dev -- --port 4333",
+      "cwd": "/nfs-data2/niuyizhuo/frontend-regression-collab/runs/t03-sync-retry/dev-qa-resilient/r3",
+      "url": "http://127.0.0.1:4333",
+      "reuseExistingServer": false,
+      "timeout": 30000
+    }
+  },
+  "suites": [
+    {
+      "title": "t03-sync-retry.spec.ts",
+      "file": "t03-sync-retry.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "retry moves error through loading to success without losing selection",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 15000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 684,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-22T16:07:13.843Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "d782397e99991eff4ef9-74e0aa604d08f3348e4b",
+          "file": "t03-sync-retry.spec.ts",
+          "line": 3,
+          "column": 1
+        },
+        {
+          "title": "normal success path still has no retry action",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 15000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 525,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-22T16:07:14.625Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "d782397e99991eff4ef9-f815661fb57b84db78a3",
+          "file": "t03-sync-retry.spec.ts",
+          "line": 14,
+          "column": 1
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-11-22T16:07:12.378Z",
+    "duration": 2850.297,
+    "expected": 2,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  }
+}

@@ -38,7 +38,7 @@ The regression test
 `test_status_aware_extension_preserves_structured_budget_stop_reason` injects the same
 terminal condition without an API call. It verifies the exact status and reason
 propagation. A second test checks the native status-bearing Developer path. The
-complete project harness currently passes 11 tests, and Ruff passes.
+complete project harness currently passes 24 tests, and Ruff passes.
 
 ## Trade-offs and applicability
 
@@ -48,3 +48,17 @@ workaround, but a framework result API would be more stable. A schema miss after
 normally completed sessions is classified as `incomplete`, distinct from a
 budget stop. A valid retry output is classified as completed even when an
 earlier attempt stopped, because the requested structured result was recovered.
+
+## Project-level strategy improvement
+
+The validated `frontend-dev-qa-resilient` workflow uses status-bearing
+`agent_run()` outcomes and treats a clean, non-empty Git diff as the handoff
+artifact when a coding role stops before its final prose report. Empty diffs
+remain failures; a stopped repair is accepted only when its diff differs from
+the pre-repair diff. External tests remain authoritative.
+
+Under the same model, tasks, global 48k cap, and 30k/6k/18k role caps, strict
+completion improved from 2/9 to 7/9. The strategy recovered seven Developer
+handoffs and two changed Repair handoffs. Two remaining failures were QA
+provider-output truncations, not accepted successes. Full results and trade-offs
+are in `docs/experiment-results.md`.

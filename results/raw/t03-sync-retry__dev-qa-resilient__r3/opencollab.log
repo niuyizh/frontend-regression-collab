@@ -1,0 +1,130 @@
+== implement
+-- SessionRuntimeEvent(type='user_message_appended', data={})
+-- SessionRuntimeEvent(type='step_start', data={'step': 1, 'aid': 0})
+-- SessionRuntimeEvent(type='text_delta', data={'content': "I'll start by 
+reading the primary source file and locating relevant styles.", 'aid': 0})
+-- SessionRuntimeEvent(type='tool_start', data={'tool': 'file_read', 'args': 
+{'path': 'src/components/AsyncPanel.tsx'}, 'tool_call_id': 
+'call_00_ET_c7HaIJRaxi804kpcdkUa2218', 'aid': 0})
+-- SessionRuntimeEvent(type='tool_end', data={'tool': 'file_read', 'latency': 
+0.0007076282054185867, 'tool_call_id': 'call_00_ET_c7HaIJRaxi804kpcdkUa2218', 
+'aid': 0})
+-- SessionRuntimeEvent(type='tool_start', data={'tool': 'file_read', 'args': 
+{'path': 'TASK.md'}, 'tool_call_id': 'call_01_ET_PUn42kDI8gbKguqvPe959670', 
+'aid': 0})
+-- SessionRuntimeEvent(type='tool_end', data={'tool': 'file_read', 'latency': 
+0.00035390444099903107, 'tool_call_id': 'call_01_ET_PUn42kDI8gbKguqvPe959670', 
+'aid': 0})
+-- SessionRuntimeEvent(type='step_end', data={'step': 1, 'latency': 
+1.608487730845809, 'aid': 0})
+-- SessionRuntimeEvent(type='step_start', data={'step': 2, 'aid': 0})
+-- SessionRuntimeEvent(type='tool_start', data={'tool': 'file_read', 'args': 
+{'path': 'src/styles.css'}, 'tool_call_id': 'call_00_maVQ2PeF2HjudJ90noIG6793', 
+'aid': 0})
+-- SessionRuntimeEvent(type='tool_end', data={'tool': 'file_read', 'latency': 
+0.0006245393306016922, 'tool_call_id': 'call_00_maVQ2PeF2HjudJ90noIG6793', 
+'aid': 0})
+-- SessionRuntimeEvent(type='step_end', data={'step': 2, 'latency': 
+1.6559636294841766, 'aid': 0})
+-- SessionRuntimeEvent(type='step_start', data={'step': 3, 'aid': 0})
+-- SessionRuntimeEvent(type='tool_start', data={'tool': 'file_write', 'args': 
+{'path': 'src/components/AsyncPanel.tsx', 'mode': 'create', 'content': 
+{'__opencollab_truncated__': True, 'preview': "import { useCallback, useEffect, 
+useRef, useState } from 'react';\n\ntype State = 'loading' | 'success' | 
+'error';\n\nconst SIMULATED_DELAY = 120;\n\nexport function AsyncPanel() {\n  
+const [state, setState] = useState<State>('loading');\n  const timerRef = 
+useRef<number | null>(null);\n\n  const scheduleResult = useCallback((next: 
+State, delay: number) => {\n    if (timerRef.current !== null) {\n      
+window.clearTimeout(timerRef.current);\n    }\n    timerRef.current = 
+window.setTimeout(() => {\n      timerRef.current =", 'original_length': 1668, 
+'original_bytes': 1670, 'sha256': 
+'36509eac5eb56a46ef2a631de129abf92951fe09721105ccb4e2175669fb7c20'}}, 
+'tool_call_id': 'call_00_uctCXHKDJegjrKczcb5g9854', 'aid': 0})
+-- SessionRuntimeEvent(type='tool_end', data={'tool': 'file_write', 'latency': 
+0.08118979819118977, 'tool_call_id': 'call_00_uctCXHKDJegjrKczcb5g9854', 'aid': 
+0})
+-- SessionRuntimeEvent(type='step_end', data={'step': 3, 'latency': 
+4.009768661111593, 'aid': 0})
+-- SessionRuntimeEvent(type='step_start', data={'step': 4, 'aid': 0})
+-- SessionRuntimeEvent(type='tool_start', data={'tool': 'verify_frontend', 
+'args': {}, 'tool_call_id': 'call_00_UmFqYuC26qzErbJ4D86I1211', 'aid': 0})
+-- SessionRuntimeEvent(type='tool_end', data={'tool': 'verify_frontend', 
+'latency': 6.71946438215673, 'tool_call_id': 'call_00_UmFqYuC26qzErbJ4D86I1211',
+'aid': 0})
+-- SessionRuntimeEvent(type='step_end', data={'step': 4, 'latency': 
+1.1078975535929203, 'aid': 0})
+-- SessionRuntimeEvent(type='step_start', data={'step': 5, 'aid': 0})
+-- SessionRuntimeEvent(type='text_delta', data={'content': 'Done.\n\n**Change** 
+— `src/components/AsyncPanel.tsx`:\n- Extracted the simulated-delay scheduling 
+into a `scheduleResult` callback backed by a `timerRef`, which clears any 
+pending timer before starting a new one (prevents overlapping timers) and is 
+cleared on unmount.\n- Added a `Retry sync` button (`button.secondary`, existing
+style) inside the error state. It sets state to `loading` immediately (`Checking
+service…`), then completes as `All changes are synced.` after the same 120 ms 
+delay — no navigation/reload, and no interaction with task selection outside 
+this component.\n- Success path at `/` and the initial error detection at 
+`/?sync=error` are otherwise unchanged; the retry control is only rendered in 
+the error branch, so it disappears after success.\n\n**Commands run**:\n- 
+`verify_frontend` → `npm run verify:agent` = `npm run build` (`tsc --noEmit && 
+vite build`) + `npm run test:public` (Playwright, 6 tests). Exit code 0; all 6 
+public tests passed.\n\n**Remaining risks**:\n- Retry always resolves to success
+by design (per acceptance criteria); no repeated-error retry path is modeled.\n-
+The public suite has no explicit test for the new retry button/timer behavior, 
+so that flow is verified only by the build and code review.', 'aid': 0})
+-- SessionRuntimeEvent(type='step_end', data={'step': 5, 'latency': 
+2.3633253760635853, 'aid': 0})
+== regression-review
+-- SessionRuntimeEvent(type='user_message_appended', data={})
+-- SessionRuntimeEvent(type='step_start', data={'step': 1, 'aid': 1})
+-- SessionRuntimeEvent(type='text_delta', data={'content': 'VERDICT: PASS\n\nThe
+diff supports the acceptance criteria: the success path remains unchanged and 
+renders no retry action; the error state includes a `Retry sync` button; retry 
+sets `loading` immediately and schedules the same 120 ms success transition; the
+button disappears once success renders; `timerRef` clears any pending timer 
+before scheduling and is cleaned up on unmount, preventing overlapping timers; 
+and retry is local state only, so it does not reload or reset task selection. No
+concrete regression is supported by the supplied diff.', 'aid': 1})
+-- SessionRuntimeEvent(type='step_end', data={'step': 1, 'latency': 
+4.345851356163621, 'aid': 1})
+== sessions saved to 
+/nfs-data2/niuyizhuo/frontend-regression-collab/runs/t03-sync-retry/dev-qa-resil
+ient/r3/.opencollab/sessions/wf-2026-11-23T00-06-41-38755d5ef4c94c65809b5f84131a
+3d98
+== orchestration at 
+/nfs-data2/niuyizhuo/frontend-regression-collab/runs/t03-sync-retry/dev-qa-resil
+ient/r3/.opencollab/sessions/wf-2026-11-23T00-06-41-38755d5ef4c94c65809b5f84131a
+3d98/orchestration.jsonl
+{
+  "status": "ok",
+  "condition": "dev-qa-resilient",
+  "developer": "Done.\n\n**Change** \u2014 `src/components/AsyncPanel.tsx`:\n- Extracted the simulated-delay scheduling into a `scheduleResult` callback backed by a `timerRef`, which clears any pending timer before starting a new one (prevents overlapping timers) and is cleared on unmount.\n- Added a `Retry sync` button (`button.secondary`, existing style) inside the error state. It sets state to `loading` immediately (`Checking service\u2026`), then completes as `All changes are synced.` after the same 120 ms delay \u2014 no navigation/reload, and no interaction with task selection outside this component.\n- Success path at `/` and the initial error detection at `/?sync=error` are otherwise unchanged; the retry control is only rendered in the error branch, so it disappears after success.\n\n**Commands run**:\n- `verify_frontend` \u2192 `npm run verify:agent` = `npm run build` (`tsc --noEmit && vite build`) + `npm run test:public` (Playwright, 6 tests). Exit code 0; all 6 public tests passed.\n\n**Remaining risks**:\n- Retry always resolves to success by design (per acceptance criteria); no repeated-error retry path is modeled.\n- The public suite has no explicit test for the new retry button/timer behavior, so that flow is verified only by the build and code review.",
+  "developer_outcome": {
+    "status": "completed",
+    "reason": null,
+    "tokens": 19456,
+    "steps": 5,
+    "cleanup_complete": true,
+    "workspace_ready": true
+  },
+  "qa": {
+    "verdict": "PASS",
+    "report": "VERDICT: PASS\n\nThe diff supports the acceptance criteria: the success path remains unchanged and renders no retry action; the error state includes a `Retry sync` button; retry sets `loading` immediately and schedules the same 120 ms success transition; the button disappears once success renders; `timerRef` clears any pending timer before scheduling and is cleaned up on unmount, preventing overlapping timers; and retry is local state only, so it does not reload or reset task selection. No concrete regression is supported by the supplied diff."
+  },
+  "qa_outcome": {
+    "status": "completed",
+    "reason": null,
+    "tokens": 2017,
+    "steps": 1,
+    "cleanup_complete": true,
+    "workspace_ready": true
+  },
+  "repair": null,
+  "repair_outcome": null,
+  "handoff_recovery": {
+    "developer": false,
+    "repair": false
+  },
+  "tokens_spent": 21473,
+  "diff": "diff --git a/src/components/AsyncPanel.tsx b/src/components/AsyncPanel.tsx\nindex 708aa1a31bb0d2c886acbf86fc167b1f131b1aac..d99bf554df3c5672146d35633c927337db24ed69 100644\n--- a/src/components/AsyncPanel.tsx\n+++ b/src/components/AsyncPanel.tsx\n@@ -1,18 +1,39 @@\n-import { useEffect, useState } from 'react';\n+import { useCallback, useEffect, useRef, useState } from 'react';\n \n type State = 'loading' | 'success' | 'error';\n \n+const SIMULATED_DELAY = 120;\n+\n export function AsyncPanel() {\n   const [state, setState] = useState<State>('loading');\n+  const timerRef = useRef<number | null>(null);\n \n-  useEffect(() => {\n-    const timer = window.setTimeout(() => {\n-      const requested = new URLSearchParams(window.location.search).get('sync');\n-      setState(requested === 'error' ? 'error' : 'success');\n-    }, 120);\n-    return () => window.clearTimeout(timer);\n+  const scheduleResult = useCallback((next: State, delay: number) => {\n+    if (timerRef.current !== null) {\n+      window.clearTimeout(timerRef.current);\n+    }\n+    timerRef.current = window.setTimeout(() => {\n+      timerRef.current = null;\n+      setState(next);\n+    }, delay);\n   }, []);\n \n+  useEffect(() => {\n+    const requested = new URLSearchParams(window.location.search).get('sync');\n+    scheduleResult(requested === 'error' ? 'error' : 'success', SIMULATED_DELAY);\n+    return () => {\n+      if (timerRef.current !== null) {\n+        window.clearTimeout(timerRef.current);\n+        timerRef.current = null;\n+      }\n+    };\n+  }, [scheduleResult]);\n+\n+  const retry = () => {\n+    setState('loading');\n+    scheduleResult('success', SIMULATED_DELAY);\n+  };\n+\n   return (\n     <section className=\"card sync-card\" aria-live=\"polite\">\n       <p className=\"eyebrow\">Remote sync</p>\n@@ -22,9 +43,11 @@ export function AsyncPanel() {\n         <div className=\"sync-state error\" role=\"alert\">\n           <strong>Sync failed</strong>\n           <span>Check your connection and try again later.</span>\n+          <button type=\"button\" className=\"secondary\" onClick={retry}>\n+            Retry sync\n+          </button>\n         </div>\n       )}\n     </section>\n   );\n }\n-\n",
+  "agent_failures": []
+}

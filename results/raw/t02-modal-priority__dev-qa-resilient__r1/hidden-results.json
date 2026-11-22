@@ -1,0 +1,187 @@
+{
+  "config": {
+    "argv": [
+      "/home/niuyizhuo/.conda/envs/node22/bin/node",
+      "/nfs-data2/niuyizhuo/frontend-regression-collab/node_modules/.bin/playwright",
+      "test",
+      "--config",
+      "evaluator/playwright.config.ts"
+    ],
+    "configFile": "/nfs-data2/niuyizhuo/frontend-regression-collab/evaluator/playwright.config.ts",
+    "rootDir": "/nfs-data2/niuyizhuo/frontend-regression-collab/evaluator/tests",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "/nfs-data2/niuyizhuo/frontend-regression-collab/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "/nfs-data2/niuyizhuo/frontend-regression-collab/evaluator/tests",
+        "testIgnore": [],
+        "testMatch": [
+          "t02-modal-priority.spec.ts"
+        ],
+        "timeout": 15000
+      }
+    ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "/nfs-data2/niuyizhuo/frontend-regression-collab/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "",
+        "testDir": "/nfs-data2/niuyizhuo/frontend-regression-collab/evaluator/tests",
+        "snapshotDir": "/nfs-data2/niuyizhuo/frontend-regression-collab/evaluator/tests",
+        "testIgnore": [],
+        "testMatch": "t02-modal-priority.spec.ts",
+        "timeout": 15000,
+        "use": {
+          "baseURL": "http://127.0.0.1:4312",
+          "actionTimeout": 5000,
+          "trace": "retain-on-failure"
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": ""
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "json",
+        {
+          "outputFile": "/nfs-data2/niuyizhuo/frontend-regression-collab/runs/t02-modal-priority/dev-qa-resilient/r1/hidden-results.json"
+        }
+      ],
+      [
+        "line",
+        null
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "default",
+    "updateSourceMethod": "patch",
+    "version": "1.65.1",
+    "workers": 1,
+    "webServer": {
+      "command": "npm run dev -- --port 4312",
+      "cwd": "/nfs-data2/niuyizhuo/frontend-regression-collab/runs/t02-modal-priority/dev-qa-resilient/r1",
+      "url": "http://127.0.0.1:4312",
+      "reuseExistingServer": false,
+      "timeout": 30000
+    }
+  },
+  "suites": [
+    {
+      "title": "t02-modal-priority.spec.ts",
+      "file": "t02-modal-priority.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "saving a priority updates the selected task",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 15000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 466,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-22T16:06:39.431Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "12042fc5e72371e05229-1555f275f5211d3c6fb6",
+          "file": "t02-modal-priority.spec.ts",
+          "line": 3,
+          "column": 1
+        },
+        {
+          "title": "cancel and Escape discard priority edits while focus restoration survives",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 15000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 482,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-22T16:06:39.998Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "12042fc5e72371e05229-3c84379e71833ad8d81c",
+          "file": "t02-modal-priority.spec.ts",
+          "line": 12,
+          "column": 1
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-11-22T16:06:37.960Z",
+    "duration": 2604.13,
+    "expected": 2,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  }
+}

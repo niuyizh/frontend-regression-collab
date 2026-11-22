@@ -1,0 +1,66 @@
+{
+  "run_id": "t05-form-due-date__dev-qa-resilient__r1",
+  "task_id": "t05-form-due-date",
+  "condition": "dev-qa-resilient",
+  "repetition": 1,
+  "workflow": "frontend-dev-qa-resilient",
+  "budget": 48000,
+  "workspace": "/nfs-data2/niuyizhuo/frontend-regression-collab/runs/t05-form-due-date/dev-qa-resilient/r1",
+  "command": [
+    "/home/niuyizhuo/.local/bin/uv",
+    "run",
+    "opencollab",
+    "workflow",
+    "run",
+    "frontend-dev-qa-resilient",
+    "--workspace",
+    "/nfs-data2/niuyizhuo/frontend-regression-collab/runs/t05-form-due-date/dev-qa-resilient/r1",
+    "--task-file",
+    "/nfs-data2/niuyizhuo/frontend-regression-collab/tasks/t05-form-due-date.md",
+    "--args",
+    "{\"allow_unisolated_shell\": true}",
+    "--budget",
+    "48000",
+    "--concurrency",
+    "1",
+    "--task-concurrency",
+    "1",
+    "--isolation",
+    "shared",
+    "--trace",
+    "--save"
+  ],
+  "returncode": 0,
+  "agent_seconds": 35.416,
+  "workflow_result": {
+    "status": "incomplete",
+    "condition": "dev-qa-resilient",
+    "error": "output truncated: provider reached its generation limit",
+    "developer": "Artifact-first handoff: Developer stopped before its final report; review the complete diff and terminal outcome below.\n\nPartial output:\nNow update types.ts and App.tsx quickly, then verify.\n\nTerminal reason: output truncated: provider reached its generation limit",
+    "developer_outcome": {
+      "status": "stopped",
+      "reason": "output truncated: provider reached its generation limit",
+      "tokens": 26358,
+      "steps": 7,
+      "cleanup_complete": true,
+      "workspace_ready": true
+    },
+    "qa": null,
+    "qa_outcome": {
+      "status": "stopped",
+      "reason": "output truncated: provider reached its generation limit",
+      "tokens": 5291,
+      "steps": 1,
+      "cleanup_complete": true,
+      "workspace_ready": true
+    },
+    "repair": null,
+    "handoff_recovery": {
+      "developer": true,
+      "repair": false
+    },
+    "tokens_spent": 31649,
+    "diff": "diff --git a/src/components/NewTaskForm.tsx b/src/components/NewTaskForm.tsx\nindex 7d353807da13cd1ee2302f498ecf7d2d9258f222..c225960f4372e36eebdd93ddcc2afe7684004a6b 100644\n--- a/src/components/NewTaskForm.tsx\n+++ b/src/components/NewTaskForm.tsx\n@@ -1,29 +1,60 @@\n import { FormEvent, useState } from 'react';\n \n-const DRAFT_KEY = 'regression-board-draft';\n+const TITLE_DRAFT_KEY = 'regression-board-draft';\n+const DUE_DATE_DRAFT_KEY = 'regression-board-due-date-draft';\n \n-type Props = { onAdd: (title: string) => void };\n+type Props = { onAdd: (title: string, dueDate?: string) => void };\n+\n+const todayLocal = () => {\n+  const now = new Date();\n+  const month = String(now.getMonth() + 1).padStart(2, '0');\n+  const day = String(now.getDate()).padStart(2, '0');\n+  return `${now.getFullYear()}-${month}-${day}`;\n+};\n \n export function NewTaskForm({ onAdd }: Props) {\n-  const [title, setTitle] = useState(() => window.localStorage.getItem(DRAFT_KEY) ?? '');\n-  const [error, setError] = useState('');\n+  const [title, setTitle] = useState(() => window.localStorage.getItem(TITLE_DRAFT_KEY) ?? '');\n+  const [dueDate, setDueDate] = useState(\n+    () => window.localStorage.getItem(DUE_DATE_DRAFT_KEY) ?? '',\n+  );\n+  const [titleError, setTitleError] = useState('');\n+  const [dueDateError, setDueDateError] = useState('');\n \n   const updateTitle = (value: string) => {\n     setTitle(value);\n-    window.localStorage.setItem(DRAFT_KEY, value);\n-    if (value.trim()) setError('');\n+    window.localStorage.setItem(TITLE_DRAFT_KEY, value);\n+    if (value.trim()) setTitleError('');\n+  };\n+\n+  const updateDueDate = (value: string) => {\n+    setDueDate(value);\n+    window.localStorage.setItem(DUE_DATE_DRAFT_KEY, value);\n+    if (!value || value >= todayLocal()) setDueDateError('');\n   };\n \n   const submit = (event: FormEvent) => {\n     event.preventDefault();\n+    let invalid = false;\n+\n     if (!title.trim()) {\n-      setError('Enter a task title.');\n-      return;\n+      setTitleError('Enter a task title.');\n+      invalid = true;\n+    }\n+\n+    if (dueDate && dueDate < todayLocal()) {\n+      setDueDateError('Due date cannot be in the past.');\n+      invalid = true;\n     }\n-    onAdd(title.trim());\n+\n+    if (invalid) return;\n+\n+    onAdd(title.trim(), dueDate || undefined);\n     setTitle('');\n-    setError('');\n-    window.localStorage.removeItem(DRAFT_KEY);\n+    setDueDate('');\n+    setTitleError('');\n+    setDueDateError('');\n+    window.localStorage.removeItem(TITLE_DRAFT_KEY);\n+    window.localStorage.removeItem(DUE_DATE_DRAFT_KEY);\n   };\n \n   return (\n@@ -36,14 +67,26 @@ export function NewTaskForm({ onAdd }: Props) {\n           <input\n             name=\"title\"\n             value={title}\n-            aria-describedby={error ? 'title-error' : undefined}\n+            aria-describedby={titleError ? 'title-error' : undefined}\n             onChange={(event) => updateTitle(event.target.value)}\n           />\n         </label>\n-        {error && <p id=\"title-error\" className=\"field-error\" role=\"alert\">{error}</p>}\n+        {titleError && <p id=\"title-error\" className=\"field-error\" role=\"alert\">{titleError}</p>}\n+        <label>\n+          Due date\n+          <input\n+            type=\"date\"\n+            name=\"dueDate\"\n+            value={dueDate}\n+            aria-describedby={dueDateError ? 'due-date-error' : undefined}\n+            onChange={(event) => updateDueDate(event.target.value)}\n+          />\n+        </label>\n+        {dueDateError && (\n+          <p id=\"due-date-error\" className=\"field-error\" role=\"alert\">{dueDateError}</p>\n+        )}\n         <button type=\"submit\">Add task</button>\n       </form>\n     </section>\n   );\n }\n-\n",
+    "agent_failures": []
+  }
+}

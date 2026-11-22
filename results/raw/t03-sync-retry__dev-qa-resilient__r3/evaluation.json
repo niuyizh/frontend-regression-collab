@@ -1,0 +1,57 @@
+{
+  "schema_version": 1,
+  "run_id": "t03-sync-retry__dev-qa-resilient__r3",
+  "task_id": "t03-sync-retry",
+  "condition": "dev-qa-resilient",
+  "repetition": 3,
+  "task_complete": true,
+  "agent_run_valid": true,
+  "build_passed": true,
+  "public_regression_passed": true,
+  "hidden": {
+    "expected": 2,
+    "passed": 2,
+    "failed": 0,
+    "skipped": 0
+  },
+  "hidden_passed": true,
+  "test_tampering": false,
+  "changed_paths": [
+    "src/components/AsyncPanel.tsx"
+  ],
+  "evaluation_seconds": 10.505,
+  "commands": {
+    "build": {
+      "command": [
+        "npm",
+        "run",
+        "build"
+      ],
+      "cwd": "/nfs-data2/niuyizhuo/frontend-regression-collab/runs/t03-sync-retry/dev-qa-resilient/r3",
+      "returncode": 0,
+      "duration_seconds": 1.153
+    },
+    "public": {
+      "command": [
+        "npm",
+        "run",
+        "test:public"
+      ],
+      "cwd": "/nfs-data2/niuyizhuo/frontend-regression-collab/runs/t03-sync-retry/dev-qa-resilient/r3",
+      "returncode": 0,
+      "duration_seconds": 5.428
+    },
+    "hidden": {
+      "command": [
+        "npx",
+        "playwright",
+        "test",
+        "--config",
+        "evaluator/playwright.config.ts"
+      ],
+      "cwd": "/nfs-data2/niuyizhuo/frontend-regression-collab",
+      "returncode": 0,
+      "duration_seconds": 3.924
+    }
+  }
+}
