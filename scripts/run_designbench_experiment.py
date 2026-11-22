@@ -5,6 +5,7 @@ from __future__ import annotations
 import argparse
 import json
 import os
+import shutil
 import subprocess
 import time
 from pathlib import Path
@@ -13,6 +14,7 @@ from typing import Any
 from common import PROJECT_ROOT, require_command
 from prepare_designbench import ADAPTER_ROOT, _manifest, _task, prepare
 from run_experiment import _extract_json
+from score_designbench import score
 
 DEFAULT_OPENCOLLAB_ROOT = Path(
     os.environ.get("OPENCOLLAB_ROOT", PROJECT_ROOT.parent / "code-assistant" / "OpenCollab")
@@ -115,30 +117,34 @@ def run_one(
     (output_dir / "opencollab.log").write_text(completed.stdout, encoding="utf-8")
     workflow_result = _extract_json(completed.stdout)
 
-    smoke_env = env.copy()
-    smoke_env["DESIGNBENCH_SMOKE_PORT"] = str(4500 + repetition)
-    smoke = subprocess.run(
-        ["npm", "run", "verify:agent"],
-        cwd=workspace,
-        env=smoke_env,
-        text=True,
-        encoding="utf-8",
-        errors="replace",
-        stdout=subprocess.PIPE,
-        stderr=subprocess.STDOUT,
-        check=False,
-        timeout=120,
+    retained_artifacts = workspace / ".opencollab"
+    if retained_artifacts.is_dir():
+        shutil.copytree(
+            retained_artifacts,
+            output_dir / "opencollab-artifacts",
+            dirs_exist_ok=True,
+        )
+    evaluation = score(
+        task_id,
+        workspace,
+        output_dir / "evaluation",
+        port=4500 + repetition,
     )
-    (output_dir / "render-smoke.log").write_text(smoke.stdout, encoding="utf-8")
+    agent_valid = bool(
+        completed.returncode == 0
+        and isinstance(workflow_result, dict)
+        and workflow_result.get("status") == "ok"
+    )
     result = {
         **plan,
-        "status": "completed" if completed.returncode == 0 else "agent-error",
+        "status": "completed" if agent_valid else "invalid-agent-run",
+        "agent_run_valid": agent_valid,
         "agent_returncode": completed.returncode,
         "agent_seconds": agent_seconds,
         "workflow_result": workflow_result,
-        "render_passed": smoke.returncode == 0,
-        "render_returncode": smoke.returncode,
-        "scoring_status": "render-smoke-only; visual and task-specific scoring not yet implemented",
+        "evaluation": evaluation,
+        "task_passed": bool(agent_valid and evaluation["passed"]),
+        "scoring_status": "render + hidden structural checks + calibrated visual progress",
     }
     (output_dir / "result.json").write_text(
         json.dumps(result, ensure_ascii=False, indent=2) + "\n",

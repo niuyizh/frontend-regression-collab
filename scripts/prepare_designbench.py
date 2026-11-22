@@ -110,13 +110,14 @@ def prepare(
 
     prompt = PROJECT_ROOT / "benchmark" / "designbench" / task["prompt_file"]
     shutil.copy2(prompt, target / "TASK.md")
-    reference_dir = target / "reference"
-    reference_dir.mkdir()
-    if task["kind"] == "edit":
-        shutil.copy2(task_dir / f"{metadata['src_id']}.png", reference_dir / "input.png")
-    elif task["kind"] == "repair":
-        shutil.copy2(task_dir / f"{source_id}.png", reference_dir / "input.png")
-        shutil.copy2(task_dir / f"{source_id}_mark.png", reference_dir / "marked.png")
+    if manifest["mode"] != "code":
+        reference_dir = target / "reference"
+        reference_dir.mkdir()
+        if task["kind"] == "edit":
+            shutil.copy2(task_dir / f"{metadata['src_id']}.png", reference_dir / "input.png")
+        elif task["kind"] == "repair":
+            shutil.copy2(task_dir / f"{source_id}.png", reference_dir / "input.png")
+            shutil.copy2(task_dir / f"{source_id}_mark.png", reference_dir / "marked.png")
 
     harness_dir = target / ".harness"
     harness_dir.mkdir()
@@ -132,6 +133,7 @@ def prepare(
         "variant": variant,
         "benchmark_revision": manifest["revision"],
         "dataset_revision": manifest["dataset_revision"],
+        "mode": manifest["mode"],
         "target_assets_exposed": False,
     }
     (target / "run-manifest.json").write_text(

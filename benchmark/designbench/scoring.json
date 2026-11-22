@@ -1,0 +1,61 @@
+{
+  "schema_version": 1,
+  "metric": "mae_similarity",
+  "minimum_visual_progress": 0.5,
+  "viewport": {
+    "width": 1792,
+    "height": 925,
+    "device_scale_factor": 2,
+    "color_scheme": "light"
+  },
+  "calibration": {
+    "db-e01": {
+      "initial": {
+        "pixel_similarity": 0.994734103523166,
+        "mae_similarity": 0.9949329609940823,
+        "structural_passed": false
+      },
+      "gold": {
+        "pixel_similarity": 0.9993596163127413,
+        "mae_similarity": 0.9990084881362455,
+        "structural_passed": true
+      }
+    },
+    "db-e11": {
+      "initial": {
+        "pixel_similarity": 0.9629248612451737,
+        "mae_similarity": 0.9796905828491307,
+        "structural_passed": false
+      },
+      "gold": {
+        "pixel_similarity": 0.9967306648166023,
+        "mae_similarity": 0.995770621396081,
+        "structural_passed": true
+      }
+    },
+    "db-e27": {
+      "initial": {
+        "pixel_similarity": 0.9939964406370656,
+        "mae_similarity": 0.9895122888119212,
+        "structural_passed": false
+      },
+      "gold": {
+        "pixel_similarity": 0.9979836812258688,
+        "mae_similarity": 0.9955931415922225,
+        "structural_passed": true
+      }
+    },
+    "db-e30": {
+      "initial": {
+        "pixel_similarity": 0.995834942084942,
+        "mae_similarity": 0.9934761055041386,
+        "structural_passed": false
+      },
+      "gold": {
+        "pixel_similarity": 0.9959895330598456,
+        "mae_similarity": 0.9937691804199157,
+        "structural_passed": true
+      }
+    }
+  }
+}

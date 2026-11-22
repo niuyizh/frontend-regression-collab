@@ -4,11 +4,14 @@ import json
 import sys
 from pathlib import Path
 
+import pytest
+
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "scripts"))
 
 from prepare_designbench import _task  # noqa: E402
 from run_designbench_experiment import run_one  # noqa: E402
+from score_designbench import _progress  # noqa: E402
 
 
 def test_designbench_manifest_pins_five_distinct_react_tasks():
@@ -18,9 +21,12 @@ def test_designbench_manifest_pins_five_distinct_react_tasks():
     assert manifest["revision"] == "a1e58d66ecbf1f77848bc5529ee7bbbe33bc25ba"
     assert manifest["dataset_revision"] == "a04022a331a8ad385dbbf26a1da9ca4a26a2628d"
     assert manifest["framework"] == "react"
+    assert manifest["mode"] == "code"
     assert len(manifest["tasks"]) == 5
     assert len({task["id"] for task in manifest["tasks"]}) == 5
-    assert {task["kind"] for task in manifest["tasks"]} == {"edit", "repair", "compile"}
+    assert {task["kind"] for task in manifest["tasks"]} == {"edit", "compile"}
+    assert "db-e30" in {task["id"] for task in manifest["tasks"]}
+    assert "db-r20" not in {task["id"] for task in manifest["tasks"]}
     for task in manifest["tasks"]:
         assert (ROOT / "benchmark" / "designbench" / task["prompt_file"]).is_file()
         assert _task(task["id"])["source_id"] == task["source_id"]
@@ -48,3 +54,25 @@ def test_designbench_experiment_defaults_to_no_paid_execution():
     assert result["budget"] == 48_000
     assert result["workflow"] == "frontend-dev-qa"
     assert "--execute" not in result["command"]
+
+
+def test_visual_calibration_covers_every_edit_and_separates_initial_from_gold():
+    manifest = json.loads(
+        (ROOT / "benchmark" / "designbench" / "manifest.json").read_text(encoding="utf-8")
+    )
+    scoring = json.loads(
+        (ROOT / "benchmark" / "designbench" / "scoring.json").read_text(encoding="utf-8")
+    )
+    edit_ids = {task["id"] for task in manifest["tasks"] if task["kind"] == "edit"}
+    assert set(scoring["calibration"]) == edit_ids
+    for task_id in edit_ids:
+        calibration = scoring["calibration"][task_id]
+        assert calibration["initial"][scoring["metric"]] < calibration["gold"][scoring["metric"]]
+        assert calibration["initial"]["structural_passed"] is False
+        assert calibration["gold"]["structural_passed"] is True
+
+
+def test_visual_progress_is_relative_to_frozen_initial_and_gold():
+    assert _progress(0.2, 0.2, 0.8) == 0
+    assert _progress(0.5, 0.2, 0.8) == pytest.approx(0.5)
+    assert _progress(0.8, 0.2, 0.8) == 1

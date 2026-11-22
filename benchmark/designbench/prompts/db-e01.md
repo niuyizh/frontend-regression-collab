@@ -2,7 +2,8 @@
 
 Primary source: `app/page.tsx`
 
-The current UI screenshot is available at `reference/input.png`.
+This task uses DesignBench's text-and-code (`code`) mode. Treat the current
+source as the starting UI.
 
 Implement this requirement while preserving unrelated UI elements:
 

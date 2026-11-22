@@ -143,11 +143,19 @@ python3 scripts/fetch_designbench_subset.py
 npm --prefix ../benchmarks/DesignBench/web/my-react-app ci
 ```
 
-生成一个不含 gold 答案的工作区并做页面渲染 smoke：
+生成一个不含 gold 答案和参考截图的 code-mode 工作区，并做页面渲染 smoke：
 
 ```bash
 python3 scripts/prepare_designbench.py db-e11 --condition dev-qa --repetition 1 --force
 npm --prefix runs/designbench/db-e11/dev-qa/r1 run verify:agent
+```
+
+使用工作区外的隐藏结构检查和视觉指标评分：
+
+```bash
+python3 scripts/score_designbench.py \
+  db-e11 runs/designbench/db-e11/dev-qa/r1 \
+  --output-dir results/designbench/manual/db-e11
 ```
 
 下面的命令默认只打印 OpenCollab 运行计划，不调用模型 API；只有显式加入
@@ -157,9 +165,12 @@ npm --prefix runs/designbench/db-e11/dev-qa/r1 run verify:agent
 python3 scripts/run_designbench_experiment.py db-e11 dev-qa --repetition 1
 ```
 
-当前外部适配器已验证题目准备、答案隔离和 Next.js 页面启动。它还没有实现
-DesignBench 的任务级功能/视觉评分，因此暂时只适合验证执行链路，不能把
-`render_passed` 当作任务完成率。正式 Single 与 Dev-QA 对比应在补齐评分器后再跑。
+外部适配器现在记录渲染结果、隐藏 DOM 结构检查、固定视口截图、像素相似度和
+归一化 MAE 相似度。Edit 题只有在全部结构检查通过，且相对于 frozen
+initial→gold 的 MAE 视觉进展至少达到 50% 时才算完成；Compile 题以页面修复后
+能否渲染为准。DesignBench gold 是静态截图参考，不是交互功能真值，因此该子集
+只作为静态编辑/编译的外部辅助验证；项目自建隐藏 Playwright 任务仍承担正式的
+功能完成率与回归结论。
 
 ## 任务与指标
 
@@ -177,9 +188,11 @@ DesignBench 的任务级功能/视觉评分，因此暂时只适合验证执行�
 - 首次 16k 真实预算校准在实现前停止；失败轨迹已保留于本地，分析见 [docs/failure-cases.md](docs/failure-cases.md)。
 - 48k 最终 smoke：Single 使用 28,218 token、23.6 秒，Dev-QA 使用 29,335 token、37.4 秒；两者构建、6/6 公开测试和 2/2 隐藏测试均通过。该校准任务只证明协议可运行，不计入正式比较。
 - 正式 18-run 矩阵已具备执行条件但尚未启动，避免未经确认产生大额 API 消耗。
-- DesignBench 五题已下载并接入；五个 gold 页面均可渲染，四个 edit/repair
-  初始页面可渲染，compile 题的初始页面按预期因缺少 Client Component 边界返回
-  HTTP 500，修复后的 gold 页面返回 HTTP 200。尚未进行该子集的付费 Agent 实验。
+- DesignBench code-mode 五题已下载并接入；四个 Edit 题均完成 initial-fail、
+  gold-pass 的结构与视觉校准，Compile 题的 initial 按预期返回 HTTP 500、gold
+  返回 HTTP 200。当前 DeepSeek 账户只暴露 `deepseek-flash` 和
+  `deepseek-v4-pro`，没有视觉模型，因此没有纳入依赖图像输入的 Repair 题。
+  尚未进行该子集的付费 Agent 实验。
 - 框架 issue 草稿、离线最小复现和项目侧状态传播改进已经完成；GitHub issue 链接和正式实验结论尚未产生。
 
 开跑前记录见 [docs/preflight-report.md](docs/preflight-report.md)，研究依据与

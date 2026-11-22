@@ -5,6 +5,7 @@
   "dataset": "whale99/DesignBench",
   "dataset_revision": "a04022a331a8ad385dbbf26a1da9ca4a26a2628d",
   "framework": "react",
+  "mode": "code",
   "tasks": [
     {
       "id": "db-e01",
@@ -31,12 +32,12 @@
       "prompt_file": "prompts/db-e27.md"
     },
     {
-      "id": "db-r20",
-      "title": "Repair compound visual defects",
-      "kind": "repair",
-      "source_id": 20,
-      "category": "compound-display-failure",
-      "prompt_file": "prompts/db-r20.md"
+      "id": "db-e30",
+      "title": "Compact sticky email toolbar without unrelated changes",
+      "kind": "edit",
+      "source_id": 30,
+      "category": "preservation-sensitive-layout-edit",
+      "prompt_file": "prompts/db-e30.md"
     },
     {
       "id": "db-c06",

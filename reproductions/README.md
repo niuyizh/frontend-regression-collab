@@ -14,3 +14,6 @@
 
 - `budget-terminal-status/`：真实 16k 校准触发、离线脚本可重复的 schema-bound
   child budget-stop 状态丢失问题。Issue 草稿见 `docs/issue-draft.md`。
+- `workflow-multimodal-prompt/`：复现 Responses 层支持图片块、但 workflow
+  `agent_run()` 拒绝非字符串 prompt 的 API 能力缺口。补充 issue 草稿见
+  `docs/issue-draft-multimodal-workflow.md`。
