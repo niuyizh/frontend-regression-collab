@@ -42,7 +42,8 @@ Oracle 只验证任务可解和测试正确，临时解与结果已清理，不�
 5. 改进已加入回归测试；完整 harness 24/24 通过，Ruff 通过。
 6. 正式 18-run 矩阵、9 次 artifact-first 改进矩阵及 DesignBench 三次配对已完成。
 
-## 尚未完成
+## 发布状态
 
-1. 在 GitHub 创建项目远端并提交 issue；当前机器尚无可用的 GitHub API 登录。
-2. 将本地已完成的结果文档发布到 GitHub，并回填两个公开链接。
+所有作业要求的本地与公开交付均已完成。项目仓库为
+https://github.com/niuyizh/frontend-regression-collab，框架反馈为
+https://github.com/RISE-X-Lab/OpenCollab/issues/275。

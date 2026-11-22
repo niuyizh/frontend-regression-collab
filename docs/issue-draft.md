@@ -2,6 +2,8 @@
 
 Proposed title: `Schema-bound workflow agents do not expose budget-stop status`
 
+Submitted: https://github.com/RISE-X-Lab/OpenCollab/issues/275
+
 ## What happened?
 
 In an authored Workflow, `ctx.agent(..., schema=...)` can create child sessions
@@ -31,7 +33,8 @@ uv run python /path/to/reproduce.py
 ```
 
 `reproduce.py` is included at
-`reproductions/budget-terminal-status/reproduce.py` in the accompanying project.
+[`reproductions/budget-terminal-status/reproduce.py`](https://github.com/niuyizh/frontend-regression-collab/blob/main/reproductions/budget-terminal-status/reproduce.py)
+in the accompanying project.
 It creates two scripted sessions that stop with a budget terminal reason and
 calls `ctx.agent(..., schema=...)`.
 

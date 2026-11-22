@@ -7,6 +7,11 @@ artifact-first 两种 Developer→Regression QA→Developer 工作流、公开/�
 批量运行器、27 次正式运行以及 DesignBench 三次配对。原始轨迹、失败案例和统计均已
 提交；实验结论见 [docs/experiment-results.md](docs/experiment-results.md)。
 
+公开交付链接：
+
+- 项目仓库：https://github.com/niuyizh/frontend-regression-collab
+- OpenCollab issue：https://github.com/RISE-X-Lab/OpenCollab/issues/275
+
 ## 研究问题
 
 Frontend Developer 往往优先完成当前需求和可见测试，而修改周围的旧交互、键盘路径、响应式边界、异步失败态和本地持久化容易遗漏。本项目比较两个条件：
@@ -225,8 +230,8 @@ diff 证据的旧状态回归并触发修复。完整波动、成本与局限见
   返回 HTTP 200。当前 DeepSeek 账户只暴露 `deepseek-flash` 和
   `deepseek-v4-pro`，没有视觉模型，因此没有纳入依赖图像输入的 Repair 题。
   `db-e30` 三次固定配对已经完成：Single 2/3，Dev-QA 3/3。
-- 框架 issue 草稿、离线最小复现、项目侧状态传播改进和相同条件验证已经完成；
-  公开仓库与 GitHub issue 链接仍需账号登录后发布。
+- 框架 issue、离线最小复现、项目侧状态传播改进和相同条件验证已经完成；
+  issue 记录为 [RISE-X-Lab/OpenCollab#275](https://github.com/RISE-X-Lab/OpenCollab/issues/275)。
 
 开跑前记录见 [docs/preflight-report.md](docs/preflight-report.md)，研究依据与
 OpenCollab benchmark 适配分析见
