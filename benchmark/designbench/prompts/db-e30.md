@@ -2,6 +2,11 @@
 
 Primary source: `app/page.tsx`
 
+Relevant source window: lines 63-90. Read it with `file_read` using
+`offset=63, limit=28`; do not read the SVG icon definitions below the component
+or inspect the shared Button implementation unless the bounded edit fails to
+render. This keeps the task context within the fixed token budget.
+
 This task uses DesignBench's text-and-code (`code`) mode. Implement this
 requirement while preserving everything else in the UI:
 

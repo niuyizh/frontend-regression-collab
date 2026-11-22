@@ -1,0 +1,52 @@
+{
+  "schema_version": 1,
+  "model": "deepseek-flash",
+  "global_budget": 48000,
+  "task": "db-e30",
+  "pilot_r1": {
+    "comparable_with_r2": false,
+    "single": {
+      "agent_run_valid": true,
+      "task_passed": false,
+      "tokens": 34678,
+      "agent_seconds": 24.691,
+      "original_visual_progress": -18.90664565157833
+    },
+    "dev_qa": {
+      "agent_run_valid": false,
+      "task_passed": false,
+      "tokens": 21144,
+      "agent_seconds": 21.781,
+      "terminal_reason": "budget exhausted before final developer handoff"
+    }
+  },
+  "paired_r2": {
+    "protocol": "bounded source read; wrapper-independent structural scorer",
+    "single": {
+      "agent_run_valid": true,
+      "task_passed": false,
+      "tokens": 14333,
+      "agent_seconds": 25.962,
+      "visual_progress": 0.10287840780450333
+    },
+    "dev_qa": {
+      "agent_run_valid": true,
+      "task_passed": true,
+      "tokens": 24532,
+      "agent_seconds": 50.83,
+      "visual_progress": 0.797593220817853,
+      "developer_tokens": 10969,
+      "qa_tokens": 2432,
+      "repair_tokens": 11131,
+      "qa_verdict": "FAIL",
+      "repair_triggered": true
+    },
+    "dev_qa_minus_single": {
+      "tokens": 10199,
+      "agent_seconds": 24.868,
+      "task_pass": 1
+    },
+    "valid_pairs": 1,
+    "required_pairs_for_key_stochastic_claim": 3
+  }
+}

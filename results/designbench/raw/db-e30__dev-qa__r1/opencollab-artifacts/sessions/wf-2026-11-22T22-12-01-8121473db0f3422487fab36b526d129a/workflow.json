@@ -1,0 +1,19 @@
+{
+  "workflow": "frontend-dev-qa",
+  "run_id": "workflow-ed30fe118254428cbb9aae79d2736cbe",
+  "args": {
+    "allow_unisolated_shell": true,
+    "goal": "# DesignBench React Edit 30\n\nPrimary source: `app/page.tsx`\n\nThis task uses DesignBench's text-and-code (`code`) mode. Implement this\nrequirement while preserving everything else in the UI:\n\n> In the rightmost column, make the top toolbar sticky. Remove button borders\n> and place the buttons directly next to each other without margins, similar\n> to an Apple Mac toolbar. Keep the same toolbar options. Nothing else about\n> the UI should change.\n\nDo not inspect benchmark target files or paths outside this workspace. Run\n`npm run verify:agent` after editing.\n"
+  },
+  "sessions": 1,
+  "tokens_spent": 21144,
+  "budget_total": 48000,
+  "status": "completed",
+  "reason": null,
+  "failure_type": null,
+  "evidence_complete": true,
+  "trace_enabled": true,
+  "tracer_write_error": null,
+  "tracer_dropped_steps": 0,
+  "tracer_failure": null
+}

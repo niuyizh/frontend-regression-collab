@@ -25,7 +25,8 @@ accessibility and adjacent UI states. In the final response, concisely list the 
 actually run, and any remaining risks. Do not claim a check you did not run.
 
 TASK.md names the primary source files; read those directly instead of listing or dumping the whole
-repository. Land the first targeted edit no later than your third response. Prefer file_write
+repository. When TASK.md supplies a relevant line window, use file_read offset/limit exactly instead
+of reading the whole file. Land the first targeted edit no later than your third response. Prefer file_write
 mode=str_replace with an exact, unique old_str for existing files. After editing, call verify_frontend
 once; it runs the verification command fixed by the task workspace.
 """

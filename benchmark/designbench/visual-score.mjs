@@ -73,15 +73,11 @@ async function runTaskChecks(page, taskId) {
           sender && date && rect(date).left > rect(sender).right,
         );
       } else {
-        const directButtons = toolbar ? [...toolbar.children].filter(
-          element => element.tagName === "BUTTON",
-        ) : [];
-        const leading = directButtons.slice(0, 4).map(element => rect(element));
-        checks.four_primary_buttons_are_direct_neighbors = directButtons.length === 4;
+        const leading = buttons.slice(0, 4).map(element => rect(element));
         checks.toolbar_buttons_have_no_border = buttons.length === 5 && buttons.every(
           button => parseFloat(style(button).borderTopWidth) === 0,
         );
-        checks.primary_buttons_have_no_gap = leading.length === 4 && leading.slice(1).every(
+        checks.four_primary_buttons_are_contiguous = leading.length === 4 && leading.slice(1).every(
           (box, index) => close(box.left, leading[index].right, 1),
         );
         const requiredText = ["Inbox", "Flagged", "All Sent", "Work", "Expenses", "Personal", "Meeting Tomorrow"];

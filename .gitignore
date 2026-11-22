@@ -10,3 +10,5 @@ __pycache__/
 *.pyc
 .pytest_cache/
 .env
+results/**/.trace-*.lock
+results/**/*.journal.lock

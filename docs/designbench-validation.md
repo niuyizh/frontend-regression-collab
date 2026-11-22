@@ -43,6 +43,46 @@ All four Edit initial pages fail structural checks and all four gold pages pass.
 The Compile initial page returns HTTP 500 with the missing Client Component
 boundary error; its gold page returns HTTP 200.
 
+The first paid `db-e30` calibration exposed two harness issues and is retained
+as a failed pilot rather than treated as comparative evidence. First, the
+structural check required the four leading buttons to be direct DOM children;
+this rejected visually valid wrapper structures. The revised check uses button
+geometry (four contiguous leading buttons independent of their wrappers).
+Second, both agents read all 300 lines of `app/page.tsx`, including
+irrelevant SVG definitions. The Dev-QA developer then exhausted its 30k role
+budget after editing and public verification but before its final handoff, so
+QA never ran. The task now supplies the already-known 63-90 source window and
+requires a ranged read; no role or global budget was increased. Original pilot
+artifacts remain under `results/designbench/raw/*__r1`.
+
+## Paid calibration result
+
+The post-pilot r2 pair used the same `deepseek-flash` endpoint, task prompt,
+48k global cap, initial workspace, and scorer. Time below is OpenCollab agent
+wall time and excludes the external evaluator.
+
+| Condition | Valid | Task pass | Tokens | Time (s) | Visual progress |
+|---|---:|---:|---:|---:|---:|
+| Single r2 | yes | no | 14,333 | 25.962 | 0.103 |
+| Dev-QA r2 | yes | yes | 24,532 | 50.830 | 0.798 |
+
+Single preserved the outer `p-4`, but added unrequested blur, transparency,
+`z-10`, and fixed button sizing. Its structural checks passed, while its visual
+progress remained below the frozen 0.5 threshold. In Dev-QA, the first
+Developer instead changed outer toolbar padding from `p-4` to `p-2`; the public
+render smoke still passed. Regression QA cited that exact diff as a violation
+of “Nothing else should change,” and the repair restored `p-4`. The final page
+passed all structural checks and reached 0.798 visual progress.
+
+This pair demonstrates the intended mechanism: an independent diff-only role
+caught an adjacent visual regression that the implementing role introduced and
+did not self-report. The observed cost was +10,199 tokens and +24.868 seconds.
+It is one stochastic paired observation, not a completion-rate estimate. At
+least two additional independent pairs under the unchanged r2 protocol are
+required before using this task for the assignment's three-run key conclusion.
+Machine-readable summaries and complete trajectories are in
+`results/designbench/`.
+
 ## Benchmark limitation found
 
 DesignBench's gold pages are static rendering references. They are not reliable

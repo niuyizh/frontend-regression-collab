@@ -2,7 +2,7 @@
 
 一个基于 OpenCollab 的可复现多智能体项目，用于检验：在固定总 token 预算下，将第二个智能体专门用于前端回归检查，是否比单个 Frontend Developer 更能保留旧功能和未显式覆盖的 UI 状态。
 
-当前仓库已经包含固定前端应用、5 个任务、单智能体基线、Developer→Regression QA→Developer 修复工作流、公开/隐藏测试、批量运行器和结果汇总器。正式模型实验尚未执行，因此仓库没有预填任何效果数字。
+当前仓库已经包含固定前端应用、5 个任务、单智能体基线、Developer→Regression QA→Developer 修复工作流、公开/隐藏测试、批量运行器和结果汇总器。正式自建任务矩阵尚未执行；DesignBench `db-e30` 已完成一次同条件配对校准，原始结果和失败轨迹已提交，但不作为三次重复后的正式统计结论。
 
 ## 研究问题
 
@@ -172,6 +172,15 @@ initial→gold 的 MAE 视觉进展至少达到 50% 时才算完成；Compile �
 只作为静态编辑/编译的外部辅助验证；项目自建隐藏 Playwright 任务仍承担正式的
 功能完成率与回归结论。
 
+`db-e30` 的首轮付费 pilot 暴露了全文读取导致的角色预算耗尽，以及评分器对
+特定 DOM 包装方式过拟合的问题。保留 r1 失败后，在不增加预算的情况下改为
+范围读取并修正几何评分。相同修订协议下的 r2 配对中，Single 使用 14,333
+token、25.962 秒，因加入未要求的视觉改动而失败；Dev-QA 使用 24,532 token、
+50.830 秒，QA 从 diff 发现 Developer 擅自缩小 toolbar 外边距，Repair 修复后
+通过（视觉进度 0.798）。这只是一次有效配对，详细证据和限制见
+[docs/designbench-validation.md](docs/designbench-validation.md) 与
+[results/designbench/README.md](results/designbench/README.md)。
+
 ## 任务与指标
 
 5 个任务覆盖搜索/空状态、模态框键盘与取消路径、异步失败恢复、响应式导航、表单校验与持久化。详细协议见 [docs/experiment-protocol.md](docs/experiment-protocol.md)。
@@ -192,7 +201,9 @@ initial→gold 的 MAE 视觉进展至少达到 50% 时才算完成；Compile �
   gold-pass 的结构与视觉校准，Compile 题的 initial 按预期返回 HTTP 500、gold
   返回 HTTP 200。当前 DeepSeek 账户只暴露 `deepseek-flash` 和
   `deepseek-v4-pro`，没有视觉模型，因此没有纳入依赖图像输入的 Repair 题。
-  尚未进行该子集的付费 Agent 实验。
+  `db-e30` 已完成一次有效 Single/Dev-QA 配对校准：Single 失败、Dev-QA 经独立
+  QA 指出越界视觉修改并修复后通过；尚需至少再做两次独立配对才能形成关键任务
+  的三次重复统计。
 - 框架 issue 草稿、离线最小复现和项目侧状态传播改进已经完成；GitHub issue 链接和正式实验结论尚未产生。
 
 开跑前记录见 [docs/preflight-report.md](docs/preflight-report.md)，研究依据与

@@ -1,0 +1,35 @@
+{
+  "schema_version": 1,
+  "task_id": "db-e30",
+  "task_kind": "edit",
+  "workspace": "/nfs-data2/niuyizhuo/frontend-regression-collab/runs/designbench/db-e30/single/r2",
+  "scoring_role": "candidate",
+  "render_passed": true,
+  "structural_passed": true,
+  "visual_progress": 0.10287840780450333,
+  "minimum_visual_progress": 0.5,
+  "passed": false,
+  "returncode": 0,
+  "duration_seconds": 8.882,
+  "visual": {
+    "schema_version": 1,
+    "workspace": "/nfs-data2/niuyizhuo/frontend-regression-collab/runs/designbench/db-e30/single/r2",
+    "target": "/nfs-data2/niuyizhuo/frontend-regression-collab/benchmark/designbench/data/edit/react/30/7.png",
+    "screenshot": "/nfs-data2/niuyizhuo/frontend-regression-collab/results/designbench/raw/db-e30__single__r2/evaluation/candidate.png",
+    "diff": "/nfs-data2/niuyizhuo/frontend-regression-collab/results/designbench/raw/db-e30__single__r2/evaluation/diff.png",
+    "checks": {
+      "toolbar_is_sticky": true,
+      "toolbar_options_preserved": true,
+      "toolbar_buttons_have_no_border": true,
+      "four_primary_buttons_are_contiguous": true,
+      "unrelated_content_preserved": true
+    },
+    "structural_passed": true,
+    "width": 3584,
+    "height": 1850,
+    "changed_pixels": 27797,
+    "pixel_similarity": 0.9958076435810811,
+    "normalized_mae": 0.006493743415158857,
+    "mae_similarity": 0.9935062565848412
+  }
+}

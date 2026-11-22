@@ -1,0 +1,36 @@
+{
+  "schema_version": 1,
+  "task_id": "db-e30",
+  "task_kind": "edit",
+  "workspace": "/nfs-data2/niuyizhuo/frontend-regression-collab/runs/designbench/db-e30/dev-qa/r1",
+  "scoring_role": "candidate",
+  "render_passed": true,
+  "structural_passed": false,
+  "visual_progress": 0.10287235352164786,
+  "minimum_visual_progress": 0.5,
+  "passed": false,
+  "returncode": 0,
+  "duration_seconds": 8.64,
+  "visual": {
+    "schema_version": 1,
+    "workspace": "/nfs-data2/niuyizhuo/frontend-regression-collab/runs/designbench/db-e30/dev-qa/r1",
+    "target": "/nfs-data2/niuyizhuo/frontend-regression-collab/benchmark/designbench/data/edit/react/30/7.png",
+    "screenshot": "/nfs-data2/niuyizhuo/frontend-regression-collab/results/designbench/raw/db-e30__dev-qa__r1/evaluation/candidate.png",
+    "diff": "/nfs-data2/niuyizhuo/frontend-regression-collab/results/designbench/raw/db-e30__dev-qa__r1/evaluation/diff.png",
+    "checks": {
+      "toolbar_is_sticky": true,
+      "toolbar_options_preserved": true,
+      "four_primary_buttons_are_direct_neighbors": false,
+      "toolbar_buttons_have_no_border": true,
+      "primary_buttons_have_no_gap": false,
+      "unrelated_content_preserved": true
+    },
+    "structural_passed": false,
+    "width": 3584,
+    "height": 1850,
+    "changed_pixels": 27797,
+    "pixel_similarity": 0.9958076435810811,
+    "normalized_mae": 0.006493745189517249,
+    "mae_similarity": 0.9935062548104827
+  }
+}
