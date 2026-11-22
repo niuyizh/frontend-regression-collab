@@ -1,0 +1,551 @@
+{
+  "snapshot_version": 1,
+  "aid": 0,
+  "role": "workflow_agent",
+  "model": "deepseek-flash",
+  "session_state": {
+    "used_tokens": 37243,
+    "context_tokens": 7156,
+    "step_count": 7,
+    "markup_recovered": 0,
+    "recent_call_hashes": [
+      "41a19181bbd813f18f2f604051ce7cea",
+      "0b2507d4e6e12b98774fdb7da83e9c8c",
+      "09c561a451cdcb895ea6db3f6e9aa484",
+      "9ca637a1c2eb92c23a06d776d6d37478",
+      "71f2d713ab609c01041ec1db87415bb3",
+      "bd1daf2ff985365f1af5c9515ddf3990",
+      "b9717060c4d46e23a90c4808d0dd9fda",
+      "41a19181bbd813f18f2f604051ce7cea",
+      "3c45d71dcb1acaddc13d0e86e5418077"
+    ],
+    "reads_since_last_edit": 1,
+    "has_landed_write": true,
+    "low_yield_since_progress": 0,
+    "distinct_evidence_count": 8,
+    "seen_result_hashes": [
+      "09c561a451cdcb895ea6db3f6e9aa484",
+      "0b2507d4e6e12b98774fdb7da83e9c8c",
+      "29e80b273252d524539fbaf401ab8bd0",
+      "2aa9006bea6d754852dec28b4d09c628",
+      "3a69f4b2e2b34df77744bfdd2ae26182",
+      "3c45d71dcb1acaddc13d0e86e5418077",
+      "41a19181bbd813f18f2f604051ce7cea",
+      "531851c69c65329b1d5227d0253582cf",
+      "624c0e225c0e03dbc5358adc30bef926",
+      "703a2000017418a68d5a3f2c045f4b5e",
+      "71f2d713ab609c01041ec1db87415bb3",
+      "9ca637a1c2eb92c23a06d776d6d37478",
+      "9e1fdb7c3dea3ec7012f814bea51fd6f",
+      "af35a8d0a69238eca3fbb747291354ea",
+      "b9717060c4d46e23a90c4808d0dd9fda",
+      "bd1daf2ff985365f1af5c9515ddf3990",
+      "ecea975a09c1ea89f1540c6eda36f66d"
+    ],
+    "scout_ledger": [
+      {
+        "tool": "file_read",
+        "target": "src/components/AsyncPanel.tsx",
+        "outcome": "hit",
+        "snippet": "File: src/components/AsyncPanel.tsx (30 lines total, showing 1-30) 1 import { useEffect, useState } from 'react'; 2 3 type State = 'loading' | 'success' | 'error'; 4 5 export function AsyncPanel() { 6 const [state, setState] = useState<Stat"
+      },
+      {
+        "tool": "file_read",
+        "target": "src/styles.css",
+        "outcome": "hit",
+        "snippet": "File: src/styles.css (71 lines total, showing 1-71) 1 :root { 2 font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", sans-serif; 3 color: #16201d; 4 background: #eef1eb; 5 font-synthesis: none; 6 } 7 "
+      },
+      {
+        "tool": "git_diff",
+        "target": "{\"stat_only\": true}",
+        "outcome": "hit",
+        "snippet": "Status: working tree clean. diff --stat: (no changes)"
+      },
+      {
+        "tool": "file_read",
+        "target": "package.json",
+        "outcome": "hit",
+        "snippet": "File: package.json (25 lines total, showing 1-25) 1 { 2 \"name\": \"regression-board-fixture\", 3 \"version\": \"1.0.0\", 4 \"private\": true, 5 \"type\": \"module\", 6 \"scripts\": { 7 \"dev\": \"vite\", 8 \"build\": \"tsc --noEmit && vite build\", 9 \"test\": \"pla"
+      },
+      {
+        "tool": "file_write",
+        "target": "src/components/AsyncPanel.tsx",
+        "outcome": "hit",
+        "snippet": "Replaced in src/components/AsyncPanel.tsx: 454 chars → 1062 chars (content changed)"
+      },
+      {
+        "tool": "file_write",
+        "target": "src/components/AsyncPanel.tsx",
+        "outcome": "hit",
+        "snippet": "Replaced in src/components/AsyncPanel.tsx: 175 chars → 290 chars (content changed)"
+      },
+      {
+        "tool": "file_write",
+        "target": "src/styles.css",
+        "outcome": "hit",
+        "snippet": "Replaced in src/styles.css: 62 chars → 116 chars (content changed)"
+      },
+      {
+        "tool": "file_read",
+        "target": "src/components/AsyncPanel.tsx",
+        "outcome": "duplicate",
+        "snippet": "File: src/components/AsyncPanel.tsx (56 lines total, showing 1-56) 1 import { useCallback, useEffect, useRef, useState } from 'react'; 2 3 type State = 'loading' | 'success' | 'error'; 4 5 export function AsyncPanel() { 6 const [state, setS"
+      },
+      {
+        "tool": "verify_frontend",
+        "target": "{}",
+        "outcome": "hit",
+        "snippet": "Exit code: 0 > regression-board-fixture@1.0.0 verify:agent > npm run build && npm run test:public > regression-board-fixture@1.0.0 build > tsc --noEmit && vite build vite v8.3.8 building client environment for production... transforming... "
+      }
+    ],
+    "steps_since_progress": 0,
+    "wind_down_done": false,
+    "wind_down_attempts": 0,
+    "wind_down_token_mark": 0,
+    "budget_reserve_consumed": false,
+    "loop_blocked_since_progress": 0,
+    "loop_state": {
+      "version": 1,
+      "edit_seq": 3,
+      "blocked_rounds": 0,
+      "last_counted_step": 6,
+      "operations": {
+        "71f2d713ab609c01041ec1db87415bb3": {
+          "last_executed_edit_seq": 1,
+          "validation_reserved_edit_seq": 1,
+          "last_exit_kind": "completed",
+          "max_attempted_timeout": 0.0,
+          "timeout_recovery_used": false,
+          "last_result_key": "af35a8d0a69238eca3fbb747291354ea",
+          "inflight_tool_call_id": null
+        },
+        "bd1daf2ff985365f1af5c9515ddf3990": {
+          "last_executed_edit_seq": 2,
+          "validation_reserved_edit_seq": 2,
+          "last_exit_kind": "completed",
+          "max_attempted_timeout": 0.0,
+          "timeout_recovery_used": false,
+          "last_result_key": "624c0e225c0e03dbc5358adc30bef926",
+          "inflight_tool_call_id": null
+        },
+        "b9717060c4d46e23a90c4808d0dd9fda": {
+          "last_executed_edit_seq": 3,
+          "validation_reserved_edit_seq": 3,
+          "last_exit_kind": "completed",
+          "max_attempted_timeout": 0.0,
+          "timeout_recovery_used": false,
+          "last_result_key": "9e1fdb7c3dea3ec7012f814bea51fd6f",
+          "inflight_tool_call_id": null
+        },
+        "41a19181bbd813f18f2f604051ce7cea": {
+          "last_executed_edit_seq": 3,
+          "validation_reserved_edit_seq": 3,
+          "last_exit_kind": "completed",
+          "max_attempted_timeout": 0.0,
+          "timeout_recovery_used": false,
+          "last_result_key": "2aa9006bea6d754852dec28b4d09c628",
+          "inflight_tool_call_id": null
+        }
+      }
+    },
+    "write_effect_unknown": true,
+    "last_progress_unknown": false,
+    "phase": "done",
+    "terminal_reason": "completed",
+    "pending_events": [],
+    "pending_external_user_turn": null,
+    "active_turn_start_message_index": null,
+    "completed_turn_start_message_index": 2,
+    "pending_step_latency": null,
+    "submitted_summary": null,
+    "anthropic_history": null
+  },
+  "run_id": "workflow-3e5113cb2e21425fa9a3ccde09e75bd9",
+  "_autosave_sequence": 10,
+  "messages": [
+    {
+      "role": "system",
+      "content": "You are Frontend Developer. Work as an engineer, not as a commentator: inspect the existing\nimplementation, make the smallest\ncoherent source change, and verify it. You may run the public build and tests. Do not delete, weaken,\nskip, or rewrite existing tests. Do not inspect paths outside this task workspace. Preserve existing\naccessibility and adjacent UI states. In the final response, concisely list the change, exact commands\nactually run, and any remaining risks. Do not claim a check you did not run.\n\nTASK.md names the primary source files; read those directly instead of listing or dumping the whole\nrepository. When TASK.md supplies a relevant line window, use file_read offset/limit exactly instead\nof reading the whole file. Land the first targeted edit no later than your third response. Prefer file_write\nmode=str_replace with an exact, unique old_str for existing files. After editing, call verify_frontend\nonce; it runs the verification command fixed by the task workspace.\n",
+      "timestamp": "2026-11-22T15:50:47.289435+00:00"
+    },
+    {
+      "role": "user",
+      "content": "# T03 — Recoverable asynchronous error state\n\nAdd a recovery action to the remote-sync error state.\n\nAcceptance criteria:\n\n- The existing success path at `/` remains unchanged and never shows a retry action.\n- At `/?sync=error`, the error state includes a button named `Retry sync`.\n- Activating it immediately returns the panel to `Checking service…`, then completes as `All changes are synced.` after the same simulated delay.\n- The retry action disappears after success and cannot create overlapping timers from repeated activation.\n- Retrying must not reload the page or reset the currently selected task.\n- Preserve all existing behavior and keep `npm run build` and `npm run test:public` green.\n\nDo not modify or delete existing public tests. Treat loading, error, success, cleanup, and unrelated page state as separate regression surfaces.\n\nPrimary source file: `src/components/AsyncPanel.tsx`; existing button styles are in `src/styles.css`. Read these directly; the shell already starts at the task repository root.\n\n[Budget: ~48k/48k tokens left, ~7 steps left.]",
+      "timestamp": "2026-11-22T15:50:47.362296+00:00"
+    },
+    {
+      "role": "assistant",
+      "content": "I'll start by reading the primary source file and related context.",
+      "tool_calls": [
+        {
+          "id": "call_00_ET_lotaP5Bym4oXeNBVbhrR0822",
+          "type": "function",
+          "function": {
+            "name": "file_read",
+            "arguments": "{\"path\": \"src/components/AsyncPanel.tsx\"}"
+          }
+        },
+        {
+          "id": "call_01_ET_PWPdPTqqtUIi2xaLsxf83707",
+          "type": "function",
+          "function": {
+            "name": "file_read",
+            "arguments": "{\"path\": \"src/styles.css\"}"
+          }
+        }
+      ],
+      "response_items": [
+        {
+          "id": "8f7767f9-f29c-4fad-8052-ae2fb3c80fc0",
+          "content": [
+            {
+              "annotations": [],
+              "text": "I'll start by reading the primary source file and related context.",
+              "type": "output_text",
+              "logprobs": []
+            }
+          ],
+          "role": "assistant",
+          "status": "completed",
+          "type": "message",
+          "phase": "commentary"
+        },
+        {
+          "arguments": "{\"path\": \"src/components/AsyncPanel.tsx\"}",
+          "call_id": "call_00_ET_lotaP5Bym4oXeNBVbhrR0822",
+          "name": "file_read",
+          "type": "function_call",
+          "id": "26afa603-71ac-4dfe-99d2-45373c005bb8",
+          "status": "completed"
+        },
+        {
+          "arguments": "{\"path\": \"src/styles.css\"}",
+          "call_id": "call_01_ET_PWPdPTqqtUIi2xaLsxf83707",
+          "name": "file_read",
+          "type": "function_call",
+          "id": "db1b930a-5bec-4c52-8a2b-4f643077b7ec",
+          "status": "completed"
+        }
+      ],
+      "timestamp": "2026-11-22T15:50:49.278061+00:00"
+    },
+    {
+      "role": "tool",
+      "tool_call_id": "call_00_ET_lotaP5Bym4oXeNBVbhrR0822",
+      "content": "File: src/components/AsyncPanel.tsx (30 lines total, showing 1-30)\n1\timport { useEffect, useState } from 'react';\n2\t\n3\ttype State = 'loading' | 'success' | 'error';\n4\t\n5\texport function AsyncPanel() {\n6\t  const [state, setState] = useState<State>('loading');\n7\t\n8\t  useEffect(() => {\n9\t    const timer = window.setTimeout(() => {\n10\t      const requested = new URLSearchParams(window.location.search).get('sync');\n11\t      setState(requested === 'error' ? 'error' : 'success');\n12\t    }, 120);\n13\t    return () => window.clearTimeout(timer);\n14\t  }, []);\n15\t\n16\t  return (\n17\t    <section className=\"card sync-card\" aria-live=\"polite\">\n18\t      <p className=\"eyebrow\">Remote sync</p>\n19\t      {state === 'loading' && <p className=\"sync-state\">Checking service…</p>}\n20\t      {state === 'success' && <p className=\"sync-state success\">All changes are synced.</p>}\n21\t      {state === 'error' && (\n22\t        <div className=\"sync-state error\" role=\"alert\">\n23\t          <strong>Sync failed</strong>\n24\t          <span>Check your connection and try again later.</span>\n25\t        </div>\n26\t      )}\n27\t    </section>\n28\t  );\n29\t}\n30\t",
+      "timestamp": "2026-11-22T15:50:49.284515+00:00"
+    },
+    {
+      "role": "tool",
+      "tool_call_id": "call_01_ET_PWPdPTqqtUIi2xaLsxf83707",
+      "content": "File: src/styles.css (71 lines total, showing 1-71)\n1\t:root {\n2\t  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", sans-serif;\n3\t  color: #16201d;\n4\t  background: #eef1eb;\n5\t  font-synthesis: none;\n6\t}\n7\t\n8\t* { box-sizing: border-box; }\n9\tbody { margin: 0; min-width: 320px; min-height: 100vh; }\n10\tbutton, input, select { font: inherit; }\n11\tbutton { cursor: pointer; }\n12\t\n13\t.app-shell { min-height: 100vh; }\n14\t.top-nav {\n15\t  position: sticky; top: 0; z-index: 5; display: flex; align-items: center; gap: 24px;\n16\t  padding: 14px max(24px, calc((100vw - 1120px) / 2)); color: white; background: #163f37;\n17\t}\n18\t.brand { color: white; font-weight: 900; text-decoration: none; letter-spacing: -.04em; }\n19\t.nav-links { display: flex; gap: 20px; }\n20\t.nav-links a { color: #dcebe5; text-decoration: none; }\n21\t.menu-button { display: none; margin-left: auto; }\n22\t\n23\tmain { width: min(1120px, calc(100% - 40px)); margin: 0 auto; padding: 54px 0 80px; }\n24\t.hero { display: flex; align-items: end; justify-content: space-between; gap: 30px; margin-bottom: 30px; }\n25\t.hero h1 { margin: 4px 0 8px; font-size: clamp(2.4rem, 6vw, 5rem); letter-spacing: -.06em; }\n26\t.hero p { max-width: 620px; margin: 0; color: #55635e; }\n27\t.eyebrow { margin: 0 0 6px; color: #9a5a32; font-size: .76rem; font-weight: 800; letter-spacing: .14em; text-transform: uppercase; }\n28\t.task-count { padding: 10px 16px; border: 1px solid #b8c0ba; border-radius: 999px; white-space: nowrap; }\n29\t\n30\t.dashboard-grid { display: grid; grid-template-columns: minmax(0, 1.55fr) minmax(290px, .85fr); gap: 22px; align-items: start; }\n31\t.stack { display: grid; gap: 18px; }\n32\t.card { border: 1px solid #d5dbd4; border-radius: 20px; background: #fafbf7; box-shadow: 0 14px 35px rgb(27 54 46 / 7%); }\n33\t.task-card, .detail-card, .sync-card, .form-card { padding: 24px; }\n34\t.section-heading { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }\n35\th2 { margin: 0 0 14px; font-size: 1.35rem; }\n36\t\n37\t.task-list { display: grid; gap: 10px; padding: 0; margin: 0; list-style: none; }\n38\t.task-list li { display: flex; gap: 10px; align-items: stretch; border: 1px solid #d9ded8; border-radius: 14px; overflow: hidden; background: white; }\n39\t.task-list li.selected { border-color: #2e7865; box-shadow: 0 0 0 2px #cfe5dc; }\n40\t.task-main { flex: 1; display: grid; gap: 5px; padding: 15px; text-align: left; color: inherit; border: 0; background: transparent; }\n41\t.task-main span { color: #66736e; font-size: .9rem; }\n42\t.icon-button { border: 0; border-left: 1px solid #e0e4df; padding: 0 14px; background: #f5f6f2; color: #285c4e; }\n43\t\n44\tdl { display: grid; gap: 10px; margin: 0; }\n45\tdl div { display: flex; justify-content: space-between; gap: 20px; }\n46\tdt { color: #66736e; } dd { margin: 0; font-weight: 700; }\n47\t.sync-state { margin: 0; color: #5d6b66; }\n48\t.sync-state.success { color: #1d6d4d; }\n49\t.sync-state.error { display: grid; gap: 4px; color: #9a3e35; }\n50\t\n51\tform, .modal { display: grid; gap: 14px; }\n52\tlabel { display: grid; gap: 7px; font-size: .9rem; font-weight: 700; }\n53\tinput, select { width: 100%; border: 1px solid #bec7c0; border-radius: 10px; padding: 10px 12px; background: white; color: inherit; }\n54\tinput:focus, select:focus, button:focus-visible { outline: 3px solid #efb46b; outline-offset: 2px; }\n55\tbutton { border: 0; border-radius: 10px; padding: 10px 15px; color: white; background: #246b59; font-weight: 750; }\n56\tbutton.secondary { color: #284039; background: #e8ece7; }\n57\t.field-error { margin: -4px 0 0; color: #a43831; font-size: .88rem; }\n58\t\n59\t.modal-backdrop { position: fixed; inset: 0; z-index: 20; display: grid; place-items: center; padding: 20px; background: rgb(12 29 25 / 62%); }\n60\t.modal { width: min(470px, 100%); padding: 26px; border-radius: 20px; background: #fff; box-shadow: 0 28px 80px rgb(0 0 0 / 28%); }\n61\t.modal-actions { display: flex; justify-content: flex-end; gap: 10px; margin-top: 5px; }\n62\t.read-only-priority { margin: 0; color: #5f6c67; }\n63\t\n64\t@media (max-width: 760px) {\n65\t  .dashboard-grid { grid-template-columns: 1fr; }\n66\t  .hero { align-items: start; flex-direction: column; }\n67\t  .menu-button { display: inline-flex; }\n68\t  .nav-links { display: none; position: absolute; top: 58px; left: 0; right: 0; padding: 18px 24px; background: #163f37; flex-direction: column; }\n69\t  .nav-links.open { display: flex; }\n70\t}\n71\t",
+      "timestamp": "2026-11-22T15:50:49.284527+00:00"
+    },
+    {
+      "role": "assistant",
+      "reasoning_content": "Now I need to see how AsyncPanel is used, and whether the task selection state is elsewhere (parent). The retry must not reload the page or reset selected task — since AsyncPanel is local state, this is automatic as long as we don't navigate.\n\nLet me check the app structure briefly — maybe check tests to understand expectations. Let's look for the test files referenced by test:public.",
+      "tool_calls": [
+        {
+          "id": "call_00_a7s57VP8Q5RWpFy7AixQ7370",
+          "type": "function",
+          "function": {
+            "name": "git_diff",
+            "arguments": "{\"stat_only\": true}"
+          }
+        },
+        {
+          "id": "call_01_DV7dfHy1FNo2u2Zz60xS1530",
+          "type": "function",
+          "function": {
+            "name": "file_read",
+            "arguments": "{\"path\": \"package.json\"}"
+          }
+        }
+      ],
+      "response_items": [
+        {
+          "id": "d0f9b538-437f-470c-9403-6ae711494965",
+          "summary": [],
+          "type": "reasoning",
+          "content": [
+            {
+              "text": "Now I need to see how AsyncPanel is used, and whether the task selection state is elsewhere (parent). The retry must not reload the page or reset selected task — since AsyncPanel is local state, this is automatic as long as we don't navigate.\n\nLet me check the app structure briefly — maybe check tests to understand expectations. Let's look for the test files referenced by test:public.",
+              "type": "reasoning_text"
+            }
+          ],
+          "encrypted_content": "c7c5df47-22c5-4310-9d03-eaa4689387d3-0",
+          "status": "completed"
+        },
+        {
+          "arguments": "{\"stat_only\": true}",
+          "call_id": "call_00_a7s57VP8Q5RWpFy7AixQ7370",
+          "name": "git_diff",
+          "type": "function_call",
+          "id": "360682b5-ff26-4eac-aac2-8494d4dcbce3",
+          "status": "completed"
+        },
+        {
+          "arguments": "{\"path\": \"package.json\"}",
+          "call_id": "call_01_DV7dfHy1FNo2u2Zz60xS1530",
+          "name": "file_read",
+          "type": "function_call",
+          "id": "bc404176-467c-4c6b-b6bd-24ef51ad02c3",
+          "status": "completed"
+        }
+      ],
+      "timestamp": "2026-11-22T15:50:50.434860+00:00"
+    },
+    {
+      "role": "tool",
+      "tool_call_id": "call_00_a7s57VP8Q5RWpFy7AixQ7370",
+      "content": "Status: working tree clean.\n\ndiff --stat: (no changes)",
+      "timestamp": "2026-11-22T15:50:50.505528+00:00"
+    },
+    {
+      "role": "tool",
+      "tool_call_id": "call_01_DV7dfHy1FNo2u2Zz60xS1530",
+      "content": "File: package.json (25 lines total, showing 1-25)\n1\t{\n2\t  \"name\": \"regression-board-fixture\",\n3\t  \"version\": \"1.0.0\",\n4\t  \"private\": true,\n5\t  \"type\": \"module\",\n6\t  \"scripts\": {\n7\t    \"dev\": \"vite\",\n8\t    \"build\": \"tsc --noEmit && vite build\",\n9\t    \"test\": \"playwright test\",\n10\t    \"test:public\": \"playwright test\",\n11\t    \"verify:agent\": \"npm run build && npm run test:public\"\n12\t  },\n13\t  \"dependencies\": {\n14\t    \"@vitejs/plugin-react\": \"6.3.0\",\n15\t    \"vite\": \"8.3.8\",\n16\t    \"typescript\": \"7.0.2\",\n17\t    \"react\": \"19.3.1\",\n18\t    \"react-dom\": \"19.3.1\"\n19\t  },\n20\t  \"devDependencies\": {\n21\t    \"@playwright/test\": \"1.65.1\",\n22\t    \"@types/react\": \"19.3.0\",\n23\t    \"@types/react-dom\": \"19.3.0\"\n24\t  }\n25\t}",
+      "timestamp": "2026-11-22T15:50:50.505542+00:00"
+    },
+    {
+      "role": "assistant",
+      "reasoning_content": "Let me look at existing public tests quickly to see conventions (e.g., accessible names and timing). Where are tests? Let's check directory listing via reading a likely path. I can't list directories with tools available except file_read. Maybe read tests/public or tests folder... Task says don't modify tests but reading is fine. Let me try likely paths.\n\nActually to save steps, let me just write the implementation. Timer: 120ms delay. Retry must return to loading immediately and use same delay. Prevent overlapping timers from repeated activation: since retry only renders in error state, clicking it sets loading → button disappears, so no overlap. Also on unmount cleanup.\n\nI'll implement with a `runCheck`-ish approach: a state and effect keyed on attempt counter.\n\nSimpler: keep state + ref for timer.\n\n```tsx\nimport { useCallback, useEffect, useRef, useState } from 'react';\n\ntype State = 'loading' | 'success' | 'error';\n\nexport function AsyncPanel() {\n  const [state, setState] = useState<State>('loading');\n  const timerRef = useRef<number | null>(null);\n\n  const startCheck = useCallback(() => {\n    if (timerRef.current !== null) {\n      window.clearTimeout(timerRef.current);\n    }\n    timerRef.current = window.setTimeout(() => {\n      timerRef.current = null;\n      const requested = new URLSearchParams(window.location.search).get('sync');\n      setState(requested === 'error' ? 'error' : 'success');\n    }, 120);\n  }, []);\n\n  useEffect(() => {\n    startCheck();\n    return () => {\n      if (timerRef.current !== null) {\n        window.clearTimeout(timerRef.current);\n        timerRef.current = null;\n      }\n    };\n  }, [startCheck]);\n\n  const handleRetry = () => {\n    setState('loading');\n    startCheck();\n  };\n```\n\nHmm, careful: after retry, the URL still has sync=error, so the check would resolve to 'error' again — but acceptance criterion says \"completes as `All changes are synced.` after the same simulated delay.\" So retry should resolve to success regardless. So the retry check should set success.\n\nDesign: startCheck(forceSuccess?) — retry sets loading immediately and after 120ms success.\n\nLet me implement:\n\n```tsx\nconst finish = (requested: URLSearchParams) => ...\n```\n\nSimpler two functions:\n\n```tsx\nconst runCheck = useCallback((resolve: () => void) => {\n  if (timerRef.current !== null) window.clearTimeout(timerRef.current);\n  timerRef.current = window.setTimeout(() => {\n    timerRef.current = null;\n    resolve();\n  }, 120);\n}, []);\n```\n\nInitial: runCheck(() => setState(requested === 'error' ? 'error':'success')) — but the resolve closure reads URL; fine to read inside.\n\nEffect: \n```tsx\nuseEffect(() => {\n  runCheck(() => {\n    const requested = new URLSearchParams(window.location.search).get('sync');\n    setState(requested === 'error' ? 'error' : 'success');\n  });\n  return () => { if (timerRef.current !== null) { window.clearTimeout(timerRef.current); timerRef.current = null; } };\n}, [runCheck]);\n```\n\nRetry handler:\n```tsx\nconst handleRetry = () => {\n  setState('loading');\n  runCheck(() => setState('success'));\n};\n```\n\nNote: the initial effect's cleanup clears the timer on unmount. Retry timer also uses same ref, so cleanup still works.\n\nAlso \"Retrying must not reload the page\" — button type=\"button\" (not in form anyway).\n\nStyling: add `.sync-retry` class or use existing button style. Existing button styles: base button plus `.secondary`. I'll add a class `.sync-retry` in styles.css with margin-top maybe. Need `.sync-state.error` grid alignment — button in grid will stretch; fine. Add:\n\n```css\n.sync-retry { justify-self: start; margin-top: 6px; }\n```\n\nUse `className=\"secondary sync-retry\"`? Base green button on light card works, but secondary is subtle. Either fine. I'll use plain button with sync-retry class (green). Actually error red state — a green button is fine as recovery. Keep it simple: `<button className=\"sync-retry\" type=\"button\" onClick={handleRetry}>Retry sync</button>` with justify-self: start; margin-top: 6px.\n\nAlso should the button be announced? role=\"alert\" container with aria-live polite. Fine.\n\nOne concern: setting state to loading synchronously inside onClick—React batches it; the button disappears immediately in the same paint. Test \"activating it immediately returns the panel to Checking service…\" fine.\n\nLet me write it.\n\nAlso one subtlety: the timer in retry — if user clicks retry repeatedly, button gone so can't. But guard clearTimeout handles any case.\n\nUse `useRef<number | null>(null)` — in TS, window.setTimeout returns number. Good.\n\nNow write edits.",
+      "content": "Now I'll implement the retry logic in `AsyncPanel.tsx`:",
+      "tool_calls": [
+        {
+          "id": "call_00_lz7U5kRFiisHmEYNgc2a2129",
+          "type": "function",
+          "function": {
+            "name": "file_write",
+            "arguments": "{\"path\": \"src/components/AsyncPanel.tsx\", \"mode\": \"str_replace\", \"old_str\": \"import { useEffect, useState } from 'react';\\n\\ntype State = 'loading' | 'success' | 'error';\\n\\nexport function AsyncPanel() {\\n  const [state, setState] = useState<State>('loading');\\n\\n  useEffect(() => {\\n    const timer = window.setTimeout(() => {\\n      const requested = new URLSearchParams(window.location.search).get('sync');\\n      setState(requested === 'error' ? 'error' : 'success');\\n    }, 120);\\n    return () => window.clearTimeout(timer);\\n  }, []);\", \"new_str\": \"import { useCallback, useEffect, useRef, useState } from 'react';\\n\\ntype State = 'loading' | 'success' | 'error';\\n\\nexport function AsyncPanel() {\\n  const [state, setState] = useState<State>('loading');\\n  const timerRef = useRef<number | null>(null);\\n\\n  const schedule = useCallback((onDone: () => void) => {\\n    if (timerRef.current !== null) {\\n      window.clearTimeout(timerRef.current);\\n    }\\n    timerRef.current = window.setTimeout(() => {\\n      timerRef.current = null;\\n      onDone();\\n    }, 120);\\n  }, []);\\n\\n  const clearScheduled = useCallback(() => {\\n    if (timerRef.current !== null) {\\n      window.clearTimeout(timerRef.current);\\n      timerRef.current = null;\\n    }\\n  }, []);\\n\\n  useEffect(() => {\\n    schedule(() => {\\n      const requested = new URLSearchParams(window.location.search).get('sync');\\n      setState(requested === 'error' ? 'error' : 'success');\\n    });\\n    return clearScheduled;\\n  }, [schedule, clearScheduled]);\\n\\n  const retry = useCallback(() => {\\n    setState('loading');\\n    schedule(() => setState('success'));\\n  }, [schedule]);\"}"
+          }
+        }
+      ],
+      "response_items": [
+        {
+          "id": "27e22b18-a244-42fe-8d80-10b2572aa57d",
+          "summary": [],
+          "type": "reasoning",
+          "content": [
+            {
+              "text": "Let me look at existing public tests quickly to see conventions (e.g., accessible names and timing). Where are tests? Let's check directory listing via reading a likely path. I can't list directories with tools available except file_read. Maybe read tests/public or tests folder... Task says don't modify tests but reading is fine. Let me try likely paths.\n\nActually to save steps, let me just write the implementation. Timer: 120ms delay. Retry must return to loading immediately and use same delay. Prevent overlapping timers from repeated activation: since retry only renders in error state, clicking it sets loading → button disappears, so no overlap. Also on unmount cleanup.\n\nI'll implement with a `runCheck`-ish approach: a state and effect keyed on attempt counter.\n\nSimpler: keep state + ref for timer.\n\n```tsx\nimport { useCallback, useEffect, useRef, useState } from 'react';\n\ntype State = 'loading' | 'success' | 'error';\n\nexport function AsyncPanel() {\n  const [state, setState] = useState<State>('loading');\n  const timerRef = useRef<number | null>(null);\n\n  const startCheck = useCallback(() => {\n    if (timerRef.current !== null) {\n      window.clearTimeout(timerRef.current);\n    }\n    timerRef.current = window.setTimeout(() => {\n      timerRef.current = null;\n      const requested = new URLSearchParams(window.location.search).get('sync');\n      setState(requested === 'error' ? 'error' : 'success');\n    }, 120);\n  }, []);\n\n  useEffect(() => {\n    startCheck();\n    return () => {\n      if (timerRef.current !== null) {\n        window.clearTimeout(timerRef.current);\n        timerRef.current = null;\n      }\n    };\n  }, [startCheck]);\n\n  const handleRetry = () => {\n    setState('loading');\n    startCheck();\n  };\n```\n\nHmm, careful: after retry, the URL still has sync=error, so the check would resolve to 'error' again — but acceptance criterion says \"completes as `All changes are synced.` after the same simulated delay.\" So retry should resolve to success regardless. So the retry check should set success.\n\nDesign: startCheck(forceSuccess?) — retry sets loading immediately and after 120ms success.\n\nLet me implement:\n\n```tsx\nconst finish = (requested: URLSearchParams) => ...\n```\n\nSimpler two functions:\n\n```tsx\nconst runCheck = useCallback((resolve: () => void) => {\n  if (timerRef.current !== null) window.clearTimeout(timerRef.current);\n  timerRef.current = window.setTimeout(() => {\n    timerRef.current = null;\n    resolve();\n  }, 120);\n}, []);\n```\n\nInitial: runCheck(() => setState(requested === 'error' ? 'error':'success')) — but the resolve closure reads URL; fine to read inside.\n\nEffect: \n```tsx\nuseEffect(() => {\n  runCheck(() => {\n    const requested = new URLSearchParams(window.location.search).get('sync');\n    setState(requested === 'error' ? 'error' : 'success');\n  });\n  return () => { if (timerRef.current !== null) { window.clearTimeout(timerRef.current); timerRef.current = null; } };\n}, [runCheck]);\n```\n\nRetry handler:\n```tsx\nconst handleRetry = () => {\n  setState('loading');\n  runCheck(() => setState('success'));\n};\n```\n\nNote: the initial effect's cleanup clears the timer on unmount. Retry timer also uses same ref, so cleanup still works.\n\nAlso \"Retrying must not reload the page\" — button type=\"button\" (not in form anyway).\n\nStyling: add `.sync-retry` class or use existing button style. Existing button styles: base button plus `.secondary`. I'll add a class `.sync-retry` in styles.css with margin-top maybe. Need `.sync-state.error` grid alignment — button in grid will stretch; fine. Add:\n\n```css\n.sync-retry { justify-self: start; margin-top: 6px; }\n```\n\nUse `className=\"secondary sync-retry\"`? Base green button on light card works, but secondary is subtle. Either fine. I'll use plain button with sync-retry class (green). Actually error red state — a green button is fine as recovery. Keep it simple: `<button className=\"sync-retry\" type=\"button\" onClick={handleRetry}>Retry sync</button>` with justify-self: start; margin-top: 6px.\n\nAlso should the button be announced? role=\"alert\" container with aria-live polite. Fine.\n\nOne concern: setting state to loading synchronously inside onClick—React batches it; the button disappears immediately in the same paint. Test \"activating it immediately returns the panel to Checking service…\" fine.\n\nLet me write it.\n\nAlso one subtlety: the timer in retry — if user clicks retry repeatedly, button gone so can't. But guard clearTimeout handles any case.\n\nUse `useRef<number | null>(null)` — in TS, window.setTimeout returns number. Good.\n\nNow write edits.",
+              "type": "reasoning_text"
+            }
+          ],
+          "encrypted_content": "ba0a8cf3-7190-470a-ac09-c2c1cc31ae91-0",
+          "status": "completed"
+        },
+        {
+          "id": "18964ddd-099d-4e5a-a081-269f467dbf1c",
+          "content": [
+            {
+              "annotations": [],
+              "text": "Now I'll implement the retry logic in `AsyncPanel.tsx`:",
+              "type": "output_text",
+              "logprobs": []
+            }
+          ],
+          "role": "assistant",
+          "status": "completed",
+          "type": "message",
+          "phase": "commentary"
+        },
+        {
+          "arguments": "{\"path\": \"src/components/AsyncPanel.tsx\", \"mode\": \"str_replace\", \"old_str\": \"import { useEffect, useState } from 'react';\\n\\ntype State = 'loading' | 'success' | 'error';\\n\\nexport function AsyncPanel() {\\n  const [state, setState] = useState<State>('loading');\\n\\n  useEffect(() => {\\n    const timer = window.setTimeout(() => {\\n      const requested = new URLSearchParams(window.location.search).get('sync');\\n      setState(requested === 'error' ? 'error' : 'success');\\n    }, 120);\\n    return () => window.clearTimeout(timer);\\n  }, []);\", \"new_str\": \"import { useCallback, useEffect, useRef, useState } from 'react';\\n\\ntype State = 'loading' | 'success' | 'error';\\n\\nexport function AsyncPanel() {\\n  const [state, setState] = useState<State>('loading');\\n  const timerRef = useRef<number | null>(null);\\n\\n  const schedule = useCallback((onDone: () => void) => {\\n    if (timerRef.current !== null) {\\n      window.clearTimeout(timerRef.current);\\n    }\\n    timerRef.current = window.setTimeout(() => {\\n      timerRef.current = null;\\n      onDone();\\n    }, 120);\\n  }, []);\\n\\n  const clearScheduled = useCallback(() => {\\n    if (timerRef.current !== null) {\\n      window.clearTimeout(timerRef.current);\\n      timerRef.current = null;\\n    }\\n  }, []);\\n\\n  useEffect(() => {\\n    schedule(() => {\\n      const requested = new URLSearchParams(window.location.search).get('sync');\\n      setState(requested === 'error' ? 'error' : 'success');\\n    });\\n    return clearScheduled;\\n  }, [schedule, clearScheduled]);\\n\\n  const retry = useCallback(() => {\\n    setState('loading');\\n    schedule(() => setState('success'));\\n  }, [schedule]);\"}",
+          "call_id": "call_00_lz7U5kRFiisHmEYNgc2a2129",
+          "name": "file_write",
+          "type": "function_call",
+          "id": "29a50ba0-fbe0-4542-ab5f-51250a476d8c",
+          "status": "completed"
+        }
+      ],
+      "timestamp": "2026-11-22T15:50:57.280929+00:00"
+    },
+    {
+      "role": "tool",
+      "tool_call_id": "call_00_lz7U5kRFiisHmEYNgc2a2129",
+      "content": "Replaced in src/components/AsyncPanel.tsx: 454 chars → 1062 chars (content changed)",
+      "timestamp": "2026-11-22T15:50:57.368853+00:00"
+    },
+    {
+      "role": "assistant",
+      "content": "Now the error-state markup and button:",
+      "tool_calls": [
+        {
+          "id": "call_00_ET_pZv47WX6i3j6IkMK95ON7351",
+          "type": "function",
+          "function": {
+            "name": "file_write",
+            "arguments": "{\"mode\": \"str_replace\", \"new_str\": \"        <div className=\\\"sync-state error\\\" role=\\\"alert\\\">\\n          <strong>Sync failed</strong>\\n          <span>Check your connection and try again later.</span>\\n          <button type=\\\"button\\\" className=\\\"sync-retry\\\" onClick={retry}>\\n            Retry sync\\n          </button>\\n        </div>\", \"old_str\": \"        <div className=\\\"sync-state error\\\" role=\\\"alert\\\">\\n          <strong>Sync failed</strong>\\n          <span>Check your connection and try again later.</span>\\n        </div>\", \"path\": \"src/components/AsyncPanel.tsx\"}"
+          }
+        },
+        {
+          "id": "call_01_ET_k5aJ4sU9P00rQ0A9mfRX5425",
+          "type": "function",
+          "function": {
+            "name": "file_write",
+            "arguments": "{\"mode\": \"str_replace\", \"new_str\": \".sync-state.error { display: grid; gap: 4px; color: #9a3e35; }\\n.sync-retry { justify-self: start; margin-top: 6px; }\", \"old_str\": \".sync-state.error { display: grid; gap: 4px; color: #9a3e35; }\", \"path\": \"src/styles.css\"}"
+          }
+        }
+      ],
+      "response_items": [
+        {
+          "id": "1aa8ba44-4a4c-4bd3-92d5-a6e1b334e236",
+          "content": [
+            {
+              "annotations": [],
+              "text": "Now the error-state markup and button:",
+              "type": "output_text",
+              "logprobs": []
+            }
+          ],
+          "role": "assistant",
+          "status": "completed",
+          "type": "message",
+          "phase": "commentary"
+        },
+        {
+          "arguments": "{\"mode\": \"str_replace\", \"new_str\": \"        <div className=\\\"sync-state error\\\" role=\\\"alert\\\">\\n          <strong>Sync failed</strong>\\n          <span>Check your connection and try again later.</span>\\n          <button type=\\\"button\\\" className=\\\"sync-retry\\\" onClick={retry}>\\n            Retry sync\\n          </button>\\n        </div>\", \"old_str\": \"        <div className=\\\"sync-state error\\\" role=\\\"alert\\\">\\n          <strong>Sync failed</strong>\\n          <span>Check your connection and try again later.</span>\\n        </div>\", \"path\": \"src/components/AsyncPanel.tsx\"}",
+          "call_id": "call_00_ET_pZv47WX6i3j6IkMK95ON7351",
+          "name": "file_write",
+          "type": "function_call",
+          "id": "0808869f-61dc-461f-b8a0-19e484e19516",
+          "status": "completed"
+        },
+        {
+          "arguments": "{\"mode\": \"str_replace\", \"new_str\": \".sync-state.error { display: grid; gap: 4px; color: #9a3e35; }\\n.sync-retry { justify-self: start; margin-top: 6px; }\", \"old_str\": \".sync-state.error { display: grid; gap: 4px; color: #9a3e35; }\", \"path\": \"src/styles.css\"}",
+          "call_id": "call_01_ET_k5aJ4sU9P00rQ0A9mfRX5425",
+          "name": "file_write",
+          "type": "function_call",
+          "id": "adef0804-abda-45fe-9fb0-e7d802e1ed0c",
+          "status": "completed"
+        }
+      ],
+      "timestamp": "2026-11-22T15:50:58.830106+00:00"
+    },
+    {
+      "role": "tool",
+      "tool_call_id": "call_00_ET_pZv47WX6i3j6IkMK95ON7351",
+      "content": "Replaced in src/components/AsyncPanel.tsx: 175 chars → 290 chars (content changed)",
+      "timestamp": "2026-11-22T15:50:58.921605+00:00"
+    },
+    {
+      "role": "tool",
+      "tool_call_id": "call_01_ET_k5aJ4sU9P00rQ0A9mfRX5425",
+      "content": "Replaced in src/styles.css: 62 chars → 116 chars (content changed)",
+      "timestamp": "2026-11-22T15:50:58.921636+00:00"
+    },
+    {
+      "role": "assistant",
+      "reasoning_content": "Let me check the final file quickly, then verify.",
+      "tool_calls": [
+        {
+          "id": "call_00_P3xIk6IlKR5fRs1RFiZP0828",
+          "type": "function",
+          "function": {
+            "name": "file_read",
+            "arguments": "{\"path\": \"src/components/AsyncPanel.tsx\"}"
+          }
+        }
+      ],
+      "response_items": [
+        {
+          "id": "ed5506eb-3b54-4790-b37c-f54a37e35e50",
+          "summary": [],
+          "type": "reasoning",
+          "content": [
+            {
+              "text": "Let me check the final file quickly, then verify.",
+              "type": "reasoning_text"
+            }
+          ],
+          "encrypted_content": "6ff01ac9-e3e5-4ecd-abfb-c8c368f82104-0",
+          "status": "completed"
+        },
+        {
+          "arguments": "{\"path\": \"src/components/AsyncPanel.tsx\"}",
+          "call_id": "call_00_P3xIk6IlKR5fRs1RFiZP0828",
+          "name": "file_read",
+          "type": "function_call",
+          "id": "b5587bd4-b08c-4fb9-b0fb-255ca1bf27cc",
+          "status": "completed"
+        }
+      ],
+      "timestamp": "2026-11-22T15:51:00.405792+00:00"
+    },
+    {
+      "role": "tool",
+      "tool_call_id": "call_00_P3xIk6IlKR5fRs1RFiZP0828",
+      "content": "File: src/components/AsyncPanel.tsx (56 lines total, showing 1-56)\n1\timport { useCallback, useEffect, useRef, useState } from 'react';\n2\t\n3\ttype State = 'loading' | 'success' | 'error';\n4\t\n5\texport function AsyncPanel() {\n6\t  const [state, setState] = useState<State>('loading');\n7\t  const timerRef = useRef<number | null>(null);\n8\t\n9\t  const schedule = useCallback((onDone: () => void) => {\n10\t    if (timerRef.current !== null) {\n11\t      window.clearTimeout(timerRef.current);\n12\t    }\n13\t    timerRef.current = window.setTimeout(() => {\n14\t      timerRef.current = null;\n15\t      onDone();\n16\t    }, 120);\n17\t  }, []);\n18\t\n19\t  const clearScheduled = useCallback(() => {\n20\t    if (timerRef.current !== null) {\n21\t      window.clearTimeout(timerRef.current);\n22\t      timerRef.current = null;\n23\t    }\n24\t  }, []);\n25\t\n26\t  useEffect(() => {\n27\t    schedule(() => {\n28\t      const requested = new URLSearchParams(window.location.search).get('sync');\n29\t      setState(requested === 'error' ? 'error' : 'success');\n30\t    });\n31\t    return clearScheduled;\n32\t  }, [schedule, clearScheduled]);\n33\t\n34\t  const retry = useCallback(() => {\n35\t    setState('loading');\n36\t    schedule(() => setState('success'));\n37\t  }, [schedule]);\n38\t\n39\t  return (\n40\t    <section className=\"card sync-card\" aria-live=\"polite\">\n41\t      <p className=\"eyebrow\">Remote sync</p>\n42\t      {state === 'loading' && <p className=\"sync-state\">Checking service…</p>}\n43\t      {state === 'success' && <p className=\"sync-state success\">All changes are synced.</p>}\n44\t      {state === 'error' && (\n45\t        <div className=\"sync-state error\" role=\"alert\">\n46\t          <strong>Sync failed</strong>\n47\t          <span>Check your connection and try again later.</span>\n48\t          <button type=\"button\" className=\"sync-retry\" onClick={retry}>\n49\t            Retry sync\n50\t          </button>\n51\t        </div>\n52\t      )}\n53\t    </section>\n54\t  );\n55\t}\n56\t",
+      "timestamp": "2026-11-22T15:51:00.407918+00:00"
+    },
+    {
+      "role": "assistant",
+      "content": "I'll now run the fixed verification command.",
+      "tool_calls": [
+        {
+          "id": "call_00_ET_ercG6ipTCwHip5Hk9roe6355",
+          "type": "function",
+          "function": {
+            "name": "verify_frontend",
+            "arguments": "{}"
+          }
+        }
+      ],
+      "response_items": [
+        {
+          "id": "adda3506-4551-4924-8608-88a45dfd979d",
+          "content": [
+            {
+              "annotations": [],
+              "text": "I'll now run the fixed verification command.",
+              "type": "output_text",
+              "logprobs": []
+            }
+          ],
+          "role": "assistant",
+          "status": "completed",
+          "type": "message",
+          "phase": "commentary"
+        },
+        {
+          "arguments": "{}",
+          "call_id": "call_00_ET_ercG6ipTCwHip5Hk9roe6355",
+          "name": "verify_frontend",
+          "type": "function_call",
+          "id": "eded0b67-df54-4898-b288-8b4815e6a92f",
+          "status": "completed"
+        }
+      ],
+      "timestamp": "2026-11-22T15:51:01.306807+00:00"
+    },
+    {
+      "role": "tool",
+      "tool_call_id": "call_00_ET_ercG6ipTCwHip5Hk9roe6355",
+      "content": "Exit code: 0\n\n> regression-board-fixture@1.0.0 verify:agent\n> npm run build && npm run test:public\n\n\n> regression-board-fixture@1.0.0 build\n> tsc --noEmit && vite build\n\nvite v8.3.8 building client environment for production...\ntransforming...\n✓ 22 modules transformed.\nrendering chunks...\ncomputing gzip size...\ndist/index.html                   0.40 kB │ gzip:  0.27 kB\ndist/assets/index-B4rI4K5m.css    3.58 kB │ gzip:  1.46 kB\ndist/assets/index-B2Fz0-ux.js   226.62 kB │ gzip: 70.81 kB\n\n✓ built in 170ms\n\n> regression-board-fixture@1.0.0 test:public\n> playwright test\n\n\n\nRunning 6 tests using 1 worker\n\n\n[1/6] tests/public/regression.spec.ts:7:1 › selecting a task updates the detail card\n[2/6] tests/public/regression.spec.ts:13:1 › Escape closes the editor and restores focus to its edit button\n[3/6] tests/public/regression.spec.ts:22:1 › cancelling an edit does not change the task\n[4/6] tests/public/regression.spec.ts:29:1 › mobile navigation opens and closes\n[5/6] tests/public/regression.spec.ts:40:1 › new-task draft survives reload and clears after a successful add\n[6/6] tests/public/regression.spec.ts:51:1 › sync success state replaces the loading state\n  6 passed (4.6s)\n\n[WebServer] (node:2218330) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.\n[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)\n(node:2218591) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.\n(Use `node --trace-warnings ...` to show where the warning was created)",
+      "timestamp": "2026-11-22T15:51:08.080790+00:00"
+    },
+    {
+      "role": "assistant",
+      "content": "Verification passed.\n\n## Change\n\n`src/components/AsyncPanel.tsx`\n- Replaced the one-shot `setTimeout` in the mount effect with a `schedule(onDone)` helper that clears any pending timer before arming a new 120 ms timer, plus `clearScheduled()` for unmount cleanup (single `timerRef`, so no overlapping timers are possible).\n- Added `retry()`: sets state to `loading` synchronously (panel immediately shows `Checking service…`), then schedules the same 120 ms delay resolving to `success` (`All changes are synced.`), regardless of `?sync=error` still being in the URL. It's a `type=\"button\"` with local state only — no navigation/reload, and no parent/task-selection state is touched.\n- Added the `Retry sync` button inside the existing `role=\"alert\"` error block; it only exists in the error branch, so the success path at `/` never renders it and it disappears after success.\n\n`src/styles.css`\n- Added `.sync-retry { justify-self: start; margin-top: 6px; }` so the button aligns within the existing error grid; existing global button styling, focus-visible outline, and error/success colors are untouched.\n\n## Commands actually run\n\n`verify_frontend` → `npm run verify:agent` (`npm run build && npm run test:public`): exit 0 — tsc + vite build succeeded, 6/6 public Playwright tests passed.\n\n## Remaining risks\n\n- The retry result is hard-coded to success (per the acceptance criteria), so retrying while `/` is actually served `?sync=error` will report success; if the intent is to re-probe the URL, that's a follow-up.\n- No new automated test covers the retry flow (existing public tests were left untouched by design); it was verified only via build + existing suite, not by a dedicated browser assertion.",
+      "response_items": [
+        {
+          "id": "0ab408b0-b5f8-4c5b-bc84-3137b38af2a4",
+          "content": [
+            {
+              "annotations": [],
+              "text": "Verification passed.\n\n## Change\n\n`src/components/AsyncPanel.tsx`\n- Replaced the one-shot `setTimeout` in the mount effect with a `schedule(onDone)` helper that clears any pending timer before arming a new 120 ms timer, plus `clearScheduled()` for unmount cleanup (single `timerRef`, so no overlapping timers are possible).\n- Added `retry()`: sets state to `loading` synchronously (panel immediately shows `Checking service…`), then schedules the same 120 ms delay resolving to `success` (`All changes are synced.`), regardless of `?sync=error` still being in the URL. It's a `type=\"button\"` with local state only — no navigation/reload, and no parent/task-selection state is touched.\n- Added the `Retry sync` button inside the existing `role=\"alert\"` error block; it only exists in the error branch, so the success path at `/` never renders it and it disappears after success.\n\n`src/styles.css`\n- Added `.sync-retry { justify-self: start; margin-top: 6px; }` so the button aligns within the existing error grid; existing global button styling, focus-visible outline, and error/success colors are untouched.\n\n## Commands actually run\n\n`verify_frontend` → `npm run verify:agent` (`npm run build && npm run test:public`): exit 0 — tsc + vite build succeeded, 6/6 public Playwright tests passed.\n\n## Remaining risks\n\n- The retry result is hard-coded to success (per the acceptance criteria), so retrying while `/` is actually served `?sync=error` will report success; if the intent is to re-probe the URL, that's a follow-up.\n- No new automated test covers the retry flow (existing public tests were left untouched by design); it was verified only via build + existing suite, not by a dedicated browser assertion.",
+              "type": "output_text",
+              "logprobs": []
+            }
+          ],
+          "role": "assistant",
+          "status": "completed",
+          "type": "message",
+          "phase": "final_answer"
+        }
+      ],
+      "timestamp": "2026-11-22T15:51:11.149833+00:00"
+    }
+  ]
+}

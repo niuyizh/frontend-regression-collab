@@ -1,0 +1,20 @@
+
+> regression-board-fixture@1.0.0 test:public
+> playwright test
+
+[WebServer] (node:2206479) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+
+Running 6 tests using 1 worker
+
+(node:2206745) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+
+[1/6] tests/public/regression.spec.ts:7:1 › selecting a task updates the detail card
+[2/6] tests/public/regression.spec.ts:13:1 › Escape closes the editor and restores focus to its edit button
+[3/6] tests/public/regression.spec.ts:22:1 › cancelling an edit does not change the task
+[4/6] tests/public/regression.spec.ts:29:1 › mobile navigation opens and closes
+[5/6] tests/public/regression.spec.ts:40:1 › new-task draft survives reload and clears after a successful add
+[6/6] tests/public/regression.spec.ts:51:1 › sync success state replaces the loading state
+  6 passed (4.6s)

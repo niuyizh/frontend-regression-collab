@@ -19,7 +19,7 @@ from common import (
     task_record,
 )
 
-CONDITIONS = ("single", "dev-qa")
+CONDITIONS = ("single", "dev-qa", "dev-qa-resilient")
 
 
 def prepare(task_id: str, condition: str, repetition: int, *, force: bool = False) -> Path:

@@ -1,0 +1,58 @@
+{
+  "schema_version": 1,
+  "run_id": "t04-responsive-nav__single__r3",
+  "task_id": "t04-responsive-nav",
+  "condition": "single",
+  "repetition": 3,
+  "task_complete": true,
+  "agent_run_valid": true,
+  "build_passed": true,
+  "public_regression_passed": true,
+  "hidden": {
+    "expected": 2,
+    "passed": 2,
+    "failed": 0,
+    "skipped": 0
+  },
+  "hidden_passed": true,
+  "test_tampering": false,
+  "changed_paths": [
+    "src/components/ResponsiveNav.tsx",
+    "src/styles.css"
+  ],
+  "evaluation_seconds": 10.298,
+  "commands": {
+    "build": {
+      "command": [
+        "npm",
+        "run",
+        "build"
+      ],
+      "cwd": "/nfs-data2/niuyizhuo/frontend-regression-collab/runs/t04-responsive-nav/single/r3",
+      "returncode": 0,
+      "duration_seconds": 1.245
+    },
+    "public": {
+      "command": [
+        "npm",
+        "run",
+        "test:public"
+      ],
+      "cwd": "/nfs-data2/niuyizhuo/frontend-regression-collab/runs/t04-responsive-nav/single/r3",
+      "returncode": 0,
+      "duration_seconds": 5.432
+    },
+    "hidden": {
+      "command": [
+        "npx",
+        "playwright",
+        "test",
+        "--config",
+        "evaluator/playwright.config.ts"
+      ],
+      "cwd": "/nfs-data2/niuyizhuo/frontend-regression-collab",
+      "returncode": 0,
+      "duration_seconds": 3.621
+    }
+  }
+}

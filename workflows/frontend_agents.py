@@ -43,6 +43,13 @@ finding name severity, affected behavior, exact diff evidence, reproduction, and
 PASS when no such finding is supported; do not invent findings to justify your role.
 """
 
+RESILIENT_QA_SYSTEM_PROMPT = QA_SYSTEM_PROMPT + """\
+
+The handoff may be artifact-first because the Developer stopped after writing code but before a
+final narrative response. In that case, treat the supplied diff as the authoritative artifact and
+do not infer success from the partial report. Return PASS or FAIL by the same evidence standard.
+"""
+
 QA_PROMPT = """\
 Review this handoff without tools.
 
@@ -118,6 +125,17 @@ def _agent_run_ok(run: Any) -> bool:
     )
 
 
+def _artifact_handoff_ok(run: Any, diff: str, *, previous_diff: str | None = None) -> bool:
+    if (
+        str(run.status) != "stopped"
+        or not bool(run.cleanup_complete)
+        or not bool(run.workspace_ready)
+        or not diff.strip()
+    ):
+        return False
+    return previous_diff is None or diff != previous_diff
+
+
 def _qa_verdict(output: Any) -> str | None:
     if not isinstance(output, str):
         return None
@@ -180,6 +198,8 @@ async def frontend_dev_qa(ctx: WorkflowContext, args: dict[str, Any]) -> dict[st
     if not goal:
         return {"status": "error", "error": 'missing "goal"'}
     allow_shell = _allow_shell(args)
+    artifact_first = bool(args.get("_artifact_first_handoff", False))
+    condition_name = "dev-qa-resilient" if artifact_first else "dev-qa"
 
     await ctx.phase("implement")
     developer_run = await ctx.agent_run(
@@ -193,20 +213,33 @@ async def frontend_dev_qa(ctx: WorkflowContext, args: dict[str, Any]) -> dict[st
         system_prompt=DEVELOPER_SYSTEM_PROMPT,
     )
     developer = developer_run.output
+    first_diff = await ctx.diff() or ""
+    developer_recovered = False
     if not _agent_run_ok(developer_run):
-        return {
-            "status": "incomplete",
-            "condition": "dev-qa",
-            "error": developer_run.reason or "developer did not complete; QA was not started",
-            "developer": developer,
-            "developer_outcome": _agent_run_record(developer_run),
-            "qa": None,
-            "repair": None,
-            "tokens_spent": ctx.tokens_spent(),
-            "diff": await ctx.diff(),
-            "agent_failures": list(ctx.agent_failures),
-        }
-    first_diff = await ctx.diff() or "(no diff available)"
+        developer_recovered = artifact_first and _artifact_handoff_ok(
+            developer_run, first_diff
+        )
+        if not developer_recovered:
+            return {
+                "status": "incomplete",
+                "condition": condition_name,
+                "error": developer_run.reason or "developer did not complete; QA was not started",
+                "developer": developer,
+                "developer_outcome": _agent_run_record(developer_run),
+                "qa": None,
+                "repair": None,
+                "handoff_recovery": {"developer": False, "repair": False},
+                "tokens_spent": ctx.tokens_spent(),
+                "diff": first_diff,
+                "agent_failures": list(ctx.agent_failures),
+            }
+        developer = (
+            "Artifact-first handoff: Developer stopped before its final report; "
+            "review the complete diff and terminal outcome below.\n\n"
+            f"Partial output:\n{developer or '(none)'}\n\n"
+            f"Terminal reason: {developer_run.reason or '(none)'}"
+        )
+    first_diff = first_diff or "(no diff available)"
 
     await ctx.phase("regression-review")
     qa_run = await ctx.agent_run(
@@ -221,28 +254,32 @@ async def frontend_dev_qa(ctx: WorkflowContext, args: dict[str, Any]) -> dict[st
         budget=QA_BUDGET,
         timeout=360,
         max_steps=1,
-        system_prompt=QA_SYSTEM_PROMPT,
+        system_prompt=RESILIENT_QA_SYSTEM_PROMPT if artifact_first else QA_SYSTEM_PROMPT,
     )
     verdict = _qa_verdict(qa_run.output)
     qa = {"verdict": verdict, "report": qa_run.output} if verdict else None
     if not _agent_run_ok(qa_run) or qa is None:
         return {
             "status": "incomplete",
-            "condition": "dev-qa",
+            "condition": condition_name,
             "error": qa_run.reason or "regression QA returned no parseable verdict",
             "developer": developer,
             "developer_outcome": _agent_run_record(developer_run),
             "qa": qa,
             "qa_outcome": _agent_run_record(qa_run),
             "repair": None,
+            "handoff_recovery": {"developer": developer_recovered, "repair": False},
             "tokens_spent": ctx.tokens_spent(),
             "diff": await ctx.diff(),
             "agent_failures": list(ctx.agent_failures),
         }
 
     repair = None
+    repair_recovered = False
+    repair_run = None
     if qa["verdict"] == "FAIL":
         await ctx.phase("repair")
+        before_repair_diff = await ctx.diff() or ""
         repair_run = await ctx.agent_run(
             REPAIR_PROMPT.format(
                 goal=goal,
@@ -258,35 +295,68 @@ async def frontend_dev_qa(ctx: WorkflowContext, args: dict[str, Any]) -> dict[st
             system_prompt=REPAIR_SYSTEM_PROMPT,
         )
         repair = repair_run.output
+        after_repair_diff = await ctx.diff() or ""
         if not _agent_run_ok(repair_run):
-            return {
-                "status": "incomplete",
-                "condition": "dev-qa",
-                "error": repair_run.reason or "repair developer did not complete with a report",
-                "developer": developer,
-                "developer_outcome": _agent_run_record(developer_run),
-                "qa": qa,
-                "qa_outcome": _agent_run_record(qa_run),
-                "repair": repair,
-                "repair_outcome": _agent_run_record(repair_run),
-                "tokens_spent": ctx.tokens_spent(),
-                "diff": await ctx.diff(),
-                "agent_failures": list(ctx.agent_failures),
-            }
+            repair_recovered = artifact_first and _artifact_handoff_ok(
+                repair_run,
+                after_repair_diff,
+                previous_diff=before_repair_diff,
+            )
+            if not repair_recovered:
+                return {
+                    "status": "incomplete",
+                    "condition": condition_name,
+                    "error": repair_run.reason or "repair developer did not complete with a report",
+                    "developer": developer,
+                    "developer_outcome": _agent_run_record(developer_run),
+                    "qa": qa,
+                    "qa_outcome": _agent_run_record(qa_run),
+                    "repair": repair,
+                    "repair_outcome": _agent_run_record(repair_run),
+                    "handoff_recovery": {
+                        "developer": developer_recovered,
+                        "repair": False,
+                    },
+                    "tokens_spent": ctx.tokens_spent(),
+                    "diff": after_repair_diff,
+                    "agent_failures": list(ctx.agent_failures),
+                }
+            repair = (
+                "Artifact-first repair handoff: repair stopped before its final report, "
+                "but changed the diff; external evaluation remains authoritative.\n\n"
+                f"Partial output:\n{repair or '(none)'}\n\n"
+                f"Terminal reason: {repair_run.reason or '(none)'}"
+            )
 
     return {
         "status": "ok",
-        "condition": "dev-qa",
+        "condition": condition_name,
         "developer": developer,
         "developer_outcome": _agent_run_record(developer_run),
         "qa": qa,
         "qa_outcome": _agent_run_record(qa_run),
         "repair": repair,
-        "repair_outcome": _agent_run_record(repair_run) if repair is not None else None,
+        "repair_outcome": _agent_run_record(repair_run) if repair_run is not None else None,
+        "handoff_recovery": {
+            "developer": developer_recovered,
+            "repair": repair_recovered,
+        },
         "tokens_spent": ctx.tokens_spent(),
         "diff": await ctx.diff(),
         "agent_failures": list(ctx.agent_failures),
     }
 
 
-__all__ = ["frontend_single", "frontend_dev_qa"]
+@workflow(
+    name="frontend-dev-qa-resilient",
+    description="Artifact-first Developer/QA workflow that can recover a stopped coding handoff",
+    phases=["implement", "regression-review", "repair"],
+)
+async def frontend_dev_qa_resilient(
+    ctx: WorkflowContext,
+    args: dict[str, Any],
+) -> dict[str, Any]:
+    return await frontend_dev_qa(ctx, {**args, "_artifact_first_handoff": True})
+
+
+__all__ = ["frontend_single", "frontend_dev_qa", "frontend_dev_qa_resilient"]

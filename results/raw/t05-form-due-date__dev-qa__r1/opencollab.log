@@ -1,0 +1,131 @@
+== implement
+-- SessionRuntimeEvent(type='user_message_appended', data={})
+-- SessionRuntimeEvent(type='step_start', data={'step': 1, 'aid': 0})
+-- SessionRuntimeEvent(type='text_delta', data={'content': "I'll start by 
+reading the primary source files.", 'aid': 0})
+-- SessionRuntimeEvent(type='tool_start', data={'tool': 'file_read', 'args': 
+{'path': 'src/components/NewTaskForm.tsx'}, 'tool_call_id': 
+'call_00_ET_b6Ib5HiD0TOJC8Wf9okT2133', 'aid': 0})
+-- SessionRuntimeEvent(type='tool_end', data={'tool': 'file_read', 'latency': 
+0.0008241273462772369, 'tool_call_id': 'call_00_ET_b6Ib5HiD0TOJC8Wf9okT2133', 
+'aid': 0})
+-- SessionRuntimeEvent(type='tool_start', data={'tool': 'file_read', 'args': 
+{'path': 'src/App.tsx'}, 'tool_call_id': 'call_01_ET_obeJLbBMkdJ0ODriEUwB2570', 
+'aid': 0})
+-- SessionRuntimeEvent(type='tool_end', data={'tool': 'file_read', 'latency': 
+0.0007178988307714462, 'tool_call_id': 'call_01_ET_obeJLbBMkdJ0ODriEUwB2570', 
+'aid': 0})
+-- SessionRuntimeEvent(type='tool_start', data={'tool': 'file_read', 'args': 
+{'path': 'src/types.ts'}, 'tool_call_id': 'call_02_ET_G4CS7BuNi9PAoVuGRom07260',
+'aid': 0})
+-- SessionRuntimeEvent(type='tool_end', data={'tool': 'file_read', 'latency': 
+0.0003305841237306595, 'tool_call_id': 'call_02_ET_G4CS7BuNi9PAoVuGRom07260', 
+'aid': 0})
+-- SessionRuntimeEvent(type='step_end', data={'step': 1, 'latency': 
+1.36428196541965, 'aid': 0})
+-- SessionRuntimeEvent(type='step_start', data={'step': 2, 'aid': 0})
+-- SessionRuntimeEvent(type='text_delta', data={'content': 'Let me check the 
+public tests to match expected DOM/behavior conventions.', 'aid': 0})
+-- SessionRuntimeEvent(type='tool_start', data={'tool': 'file_read', 'args': 
+{'path': 'package.json'}, 'tool_call_id': 'call_00_bmYQbEKAl8myqs7ohlhi8461', 
+'aid': 0})
+-- SessionRuntimeEvent(type='tool_end', data={'tool': 'file_read', 'latency': 
+0.0005516726523637772, 'tool_call_id': 'call_00_bmYQbEKAl8myqs7ohlhi8461', 
+'aid': 0})
+-- SessionRuntimeEvent(type='tool_start', data={'tool': 'file_read', 'args': 
+{'path': 'src/components/TaskList.tsx'}, 'tool_call_id': 
+'call_01_DnJ6lrBC4MK1KN4LMebX5297', 'aid': 0})
+-- SessionRuntimeEvent(type='tool_end', data={'tool': 'file_read', 'latency': 
+0.000524323433637619, 'tool_call_id': 'call_01_DnJ6lrBC4MK1KN4LMebX5297', 'aid':
+0})
+-- SessionRuntimeEvent(type='step_end', data={'step': 2, 'latency': 
+1.1398786380887032, 'aid': 0})
+-- SessionRuntimeEvent(type='step_start', data={'step': 3, 'aid': 0})
+-- SessionRuntimeEvent(type='tool_start', data={'tool': 'file_read', 'args': 
+{'path': 'tests/quick-add.spec.ts'}, 'tool_call_id': 
+'call_00_PReh1U3Eiv0z1746jYlK4085', 'aid': 0})
+-- SessionRuntimeEvent(type='tool_end', data={'tool': 'file_read', 'latency': 
+0.0005148034542798996, 'tool_call_id': 'call_00_PReh1U3Eiv0z1746jYlK4085', 
+'aid': 0})
+-- SessionRuntimeEvent(type='step_end', data={'step': 3, 'latency': 
+1.9768883418291807, 'aid': 0})
+-- SessionRuntimeEvent(type='step_start', data={'step': 4, 'aid': 0})
+-- SessionRuntimeEvent(type='tool_start', data={'tool': 'file_write', 'args': 
+{'path': 'src/types.ts', 'mode': 'str_replace', 'old_str': "  priority: 'Low' | 
+'Medium' | 'High';\n};", 'new_str': "  priority: 'Low' | 'Medium' | 'High';\n  
+dueDate?: string;\n};"}, 'tool_call_id': 'call_00_VokIJaWe0AQAoCiQdme28468', 
+'aid': 0})
+-- SessionRuntimeEvent(type='tool_end', data={'tool': 'file_write', 'latency': 
+0.08105036988854408, 'tool_call_id': 'call_00_VokIJaWe0AQAoCiQdme28468', 'aid': 
+0})
+-- SessionRuntimeEvent(type='tool_start', data={'tool': 'file_write', 'args': 
+{'path': 'src/App.tsx', 'mode': 'str_replace', 'old_str': "  const addTask = 
+(title: string) => {\n    const task: Task = {\n      id: 
+Math.max(...tasks.map((item) => item.id)) + 1,\n      title,\n      owner: 
+'You',\n      status: 'Todo',\n      priority: 'Medium',\n    };", 'new_str': " 
+const addTask = (title: string, dueDate: string) => {\n    const task: Task = 
+{\n      id: Math.max(...tasks.map((item) => item.id)) + 1,\n      title,\n     
+owner: 'You',\n      status: 'Todo',\n      priority: 'Medium',\n      
+...(dueDate ? { dueDate } : {}),\n    };"}, 'tool_call_id': 
+'call_01_Wr46g4TzT6RNCHcHQ6dm0572', 'aid': 0})
+-- SessionRuntimeEvent(type='tool_end', data={'tool': 'file_write', 'latency': 
+0.08379125967621803, 'tool_call_id': 'call_01_Wr46g4TzT6RNCHcHQ6dm0572', 'aid': 
+0})
+-- SessionRuntimeEvent(type='step_end', data={'step': 4, 'latency': 
+3.503372348845005, 'aid': 0})
+-- SessionRuntimeEvent(type='step_start', data={'step': 5, 'aid': 0})
+-- SessionRuntimeEvent(type='tool_start', data={'tool': 'file_write', 'args': 
+{'path': 'src/components/NewTaskForm.tsx', 'mode': 'create', 'overwrite': True, 
+'content': {'__opencollab_truncated__': True, 'preview': "import { FormEvent, 
+useState } from 'react';\n\nconst DRAFT_KEY = 'regression-board-draft';\nconst 
+DUE_DRAFT_KEY = 'regression-board-draft-due-date';\n\nconst localToday = () => 
+{\n  const now = new Date();\n  const month = `${now.getMonth() + 
+1}`.padStart(2, '0');\n  const day = `${now.getDate()}`.padStart(2, '0');\n  
+return `${now.getFullYear()}-${month}-${day}`;\n};\n\nconst isPastDate = (value:
+string) => Boolean(value) && value < localToday();\n\ntype Props = { onAdd: 
+(title: string, dueDate: string) => void };\n\nexp", 'original_length': 2662, 
+'original_bytes': 2662, 'sha256': 
+'19a96dd7bbb7965da9ad849d0a8564f3d1dacdbafe92e67a68b568a45bf53ca7'}}, 
+'tool_call_id': 'call_00_pHDrd6UZNN0qfjnIvwnw0738', 'aid': 0})
+-- SessionRuntimeEvent(type='tool_end', data={'tool': 'file_write', 'latency': 
+0.04951121099293232, 'tool_call_id': 'call_00_pHDrd6UZNN0qfjnIvwnw0738', 'aid': 
+0})
+-- SessionRuntimeEvent(type='step_end', data={'step': 5, 'latency': 
+4.729294911026955, 'aid': 0})
+-- SessionRuntimeEvent(type='step_start', data={'step': 6, 'aid': 0})
+-- SessionRuntimeEvent(type='tool_start', data={'tool': 'verify_frontend', 
+'args': {}, 'tool_call_id': 'call_00_n2i1TaZNqDrEjtOldZeH3412', 'aid': 0})
+-- SessionRuntimeEvent(type='tool_end', data={'tool': 'verify_frontend', 
+'latency': 6.917855175212026, 'tool_call_id': 
+'call_00_n2i1TaZNqDrEjtOldZeH3412', 'aid': 0})
+-- SessionRuntimeEvent(type='step_end', data={'step': 6, 'latency': 
+1.3150748070329428, 'aid': 0})
+-- SessionRuntimeEvent(type='error', data={'reason': 'budget exhausted before 
+model call: conservative input reservation requires 10498 of 4868 remaining 
+tokens, leaving no output headroom', 'aid': 0})
+== sessions saved to 
+/nfs-data2/niuyizhuo/frontend-regression-collab/runs/t05-form-due-date/dev-qa/r1
+/.opencollab/sessions/wf-2026-11-22T23-52-23-a036304b83ba4958ab85d4e16f4887be
+== orchestration at 
+/nfs-data2/niuyizhuo/frontend-regression-collab/runs/t05-form-due-date/dev-qa/r1
+/.opencollab/sessions/wf-2026-11-22T23-52-23-a036304b83ba4958ab85d4e16f4887be/or
+chestration.jsonl
+{
+  "status": "incomplete",
+  "condition": "dev-qa",
+  "error": "budget exhausted before model call: conservative input reservation requires 10498 of 4868 remaining tokens, leaving no output headroom",
+  "developer": "Let me check the public tests to match expected DOM/behavior conventions.",
+  "developer_outcome": {
+    "status": "stopped",
+    "reason": "budget exhausted before model call: conservative input reservation requires 10498 of 4868 remaining tokens, leaving no output headroom",
+    "tokens": 25132,
+    "steps": 6,
+    "cleanup_complete": true,
+    "workspace_ready": true
+  },
+  "qa": null,
+  "repair": null,
+  "tokens_spent": 25132,
+  "diff": "diff --git a/src/App.tsx b/src/App.tsx\nindex adb76ea7ff9fe7b27c21db807ddc402c7000af25..e4124b6fcacfa102b4cb5a640592e33b5abda03b 100644\n--- a/src/App.tsx\n+++ b/src/App.tsx\n@@ -20,13 +20,14 @@ export function App() {\n     setEditingId(null);\n   };\n \n-  const addTask = (title: string) => {\n+  const addTask = (title: string, dueDate: string) => {\n     const task: Task = {\n       id: Math.max(...tasks.map((item) => item.id)) + 1,\n       title,\n       owner: 'You',\n       status: 'Todo',\n       priority: 'Medium',\n+      ...(dueDate ? { dueDate } : {}),\n     };\n     setTasks((current) => [...current, task]);\n     setSelectedId(task.id);\ndiff --git a/src/components/NewTaskForm.tsx b/src/components/NewTaskForm.tsx\nindex 7d353807da13cd1ee2302f498ecf7d2d9258f222..d420c104250d6f0bddd0febb5e175d09a168bc5c 100644\n--- a/src/components/NewTaskForm.tsx\n+++ b/src/components/NewTaskForm.tsx\n@@ -1,12 +1,26 @@\n import { FormEvent, useState } from 'react';\n \n const DRAFT_KEY = 'regression-board-draft';\n+const DUE_DRAFT_KEY = 'regression-board-draft-due-date';\n \n-type Props = { onAdd: (title: string) => void };\n+const localToday = () => {\n+  const now = new Date();\n+  const month = `${now.getMonth() + 1}`.padStart(2, '0');\n+  const day = `${now.getDate()}`.padStart(2, '0');\n+  return `${now.getFullYear()}-${month}-${day}`;\n+};\n+\n+const isPastDate = (value: string) => Boolean(value) && value < localToday();\n+\n+type Props = { onAdd: (title: string, dueDate: string) => void };\n \n export function NewTaskForm({ onAdd }: Props) {\n   const [title, setTitle] = useState(() => window.localStorage.getItem(DRAFT_KEY) ?? '');\n+  const [dueDate, setDueDate] = useState(\n+    () => window.localStorage.getItem(DUE_DRAFT_KEY) ?? '',\n+  );\n   const [error, setError] = useState('');\n+  const [dueError, setDueError] = useState('');\n \n   const updateTitle = (value: string) => {\n     setTitle(value);\n@@ -14,16 +28,29 @@ export function NewTaskForm({ onAdd }: Props) {\n     if (value.trim()) setError('');\n   };\n \n+  const updateDueDate = (value: string) => {\n+    setDueDate(value);\n+    window.localStorage.setItem(DUE_DRAFT_KEY, value);\n+    if (!isPastDate(value)) setDueError('');\n+  };\n+\n   const submit = (event: FormEvent) => {\n     event.preventDefault();\n     if (!title.trim()) {\n       setError('Enter a task title.');\n       return;\n     }\n-    onAdd(title.trim());\n+    if (isPastDate(dueDate)) {\n+      setDueError('Due date cannot be in the past.');\n+      return;\n+    }\n+    onAdd(title.trim(), dueDate);\n     setTitle('');\n+    setDueDate('');\n     setError('');\n+    setDueError('');\n     window.localStorage.removeItem(DRAFT_KEY);\n+    window.localStorage.removeItem(DUE_DRAFT_KEY);\n   };\n \n   return (\n@@ -41,9 +68,21 @@ export function NewTaskForm({ onAdd }: Props) {\n           />\n         </label>\n         {error && <p id=\"title-error\" className=\"field-error\" role=\"alert\">{error}</p>}\n+        <label>\n+          Due date\n+          <input\n+            name=\"dueDate\"\n+            type=\"date\"\n+            value={dueDate}\n+            aria-describedby={dueError ? 'due-date-error' : undefined}\n+            onChange={(event) => updateDueDate(event.target.value)}\n+          />\n+        </label>\n+        {dueError && (\n+          <p id=\"due-date-error\" className=\"field-error\" role=\"alert\">{dueError}</p>\n+        )}\n         <button type=\"submit\">Add task</button>\n       </form>\n     </section>\n   );\n }\n-\ndiff --git a/src/types.ts b/src/types.ts\nindex 5d9552fc0475ae2deebbf74c4f8ad383219708a4..3c2c1f6bf5aee4e9c6f83d82a9381d0cef1d7ca2 100644\n--- a/src/types.ts\n+++ b/src/types.ts\n@@ -6,5 +6,6 @@ export type Task = {\n   owner: string;\n   status: TaskStatus;\n   priority: 'Low' | 'Medium' | 'High';\n+  dueDate?: string;\n };\n \n",
+  "agent_failures": []
+}

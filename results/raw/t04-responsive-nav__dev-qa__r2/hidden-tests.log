@@ -1,0 +1,78 @@
+[WebServer] (node:2254592) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+
+Running 2 tests using 1 worker
+
+(node:2254831) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+
+[1/2] evaluator/tests/t04-responsive-nav.spec.ts:3:1 › desktop exposes the new destination and tracks the active section
+  1) evaluator/tests/t04-responsive-nav.spec.ts:3:1 › desktop exposes the new destination and tracks the active section 
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByRole('link', { name: 'Reports' })
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" getByRole('link', { name: 'Reports' }) with timeout 5000ms
+      - waiting for getByRole('link', { name: 'Reports' })
+
+
+       5 |   await page.goto('/');
+       6 |   const reports = page.getByRole('link', { name: 'Reports' });
+    >  7 |   await expect(reports).toBeVisible();
+         |                         ^
+       8 |   await reports.click();
+       9 |   await expect(reports).toHaveAttribute('aria-current', 'page');
+      10 |   await expect(page).toHaveURL(/#reports$/);
+        at /nfs-data2/niuyizhuo/frontend-regression-collab/evaluator/tests/t04-responsive-nav.spec.ts:7:25
+
+    Error Context: test-results/t04-responsive-nav-desktop-4ee25-d-tracks-the-active-section/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/t04-responsive-nav-desktop-4ee25-d-tracks-the-active-section/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/t04-responsive-nav-desktop-4ee25-d-tracks-the-active-section/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+
+(node:2255066) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+
+[2/2] evaluator/tests/t04-responsive-nav.spec.ts:14:1 › mobile selection closes the menu and desktop layout returns after resize
+  2) evaluator/tests/t04-responsive-nav.spec.ts:14:1 › mobile selection closes the menu and desktop layout returns after resize 
+
+    TimeoutError: locator.click: Timeout 5000ms exceeded.
+    Call log:
+      - waiting for getByRole('link', { name: 'Reports' })
+
+
+      17 |   const menu = page.getByRole('button', { name: 'Menu' });
+      18 |   await menu.click();
+    > 19 |   await page.getByRole('link', { name: 'Reports' }).click();
+         |                                                     ^
+      20 |   await expect(menu).toHaveAttribute('aria-expanded', 'false');
+      21 |   await expect(page.getByRole('link', { name: 'Board' })).toBeHidden();
+      22 |   await page.setViewportSize({ width: 1100, height: 800 });
+        at /nfs-data2/niuyizhuo/frontend-regression-collab/evaluator/tests/t04-responsive-nav.spec.ts:19:53
+
+    Error Context: test-results/t04-responsive-nav-mobile--fa720-layout-returns-after-resize/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/t04-responsive-nav-mobile--fa720-layout-returns-after-resize/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/t04-responsive-nav-mobile--fa720-layout-returns-after-resize/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+
+  2 failed
+    evaluator/tests/t04-responsive-nav.spec.ts:3:1 › desktop exposes the new destination and tracks the active section 
+    evaluator/tests/t04-responsive-nav.spec.ts:14:1 › mobile selection closes the menu and desktop layout returns after resize 

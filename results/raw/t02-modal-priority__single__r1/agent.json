@@ -1,0 +1,51 @@
+{
+  "run_id": "t02-modal-priority__single__r1",
+  "task_id": "t02-modal-priority",
+  "condition": "single",
+  "repetition": 1,
+  "workflow": "frontend-single",
+  "budget": 48000,
+  "workspace": "/nfs-data2/niuyizhuo/frontend-regression-collab/runs/t02-modal-priority/single/r1",
+  "command": [
+    "/home/niuyizhuo/.local/bin/uv",
+    "run",
+    "opencollab",
+    "workflow",
+    "run",
+    "frontend-single",
+    "--workspace",
+    "/nfs-data2/niuyizhuo/frontend-regression-collab/runs/t02-modal-priority/single/r1",
+    "--task-file",
+    "/nfs-data2/niuyizhuo/frontend-regression-collab/tasks/t02-modal-priority.md",
+    "--args",
+    "{\"allow_unisolated_shell\": true}",
+    "--budget",
+    "48000",
+    "--concurrency",
+    "1",
+    "--task-concurrency",
+    "1",
+    "--isolation",
+    "shared",
+    "--trace",
+    "--save"
+  ],
+  "returncode": 0,
+  "agent_seconds": 21.067,
+  "workflow_result": {
+    "status": "ok",
+    "condition": "single",
+    "developer": "Change made in `src/components/TaskModal.tsx`:\n\n- Replaced the read-only priority paragraph with a labelled `Priority` `<select>` (`Low` / `Medium` / `High`).\n- Added `priority` state initialized from `task.priority` and included it in the `onSave` payload alongside title and status.\n- Cancel / backdrop / Escape still just call `onCancel`, and the modal state is local, so all fields including priority are discarded; initial focus (`titleRef`) and focus restoration logic are untouched.\n- `App.tsx` and `types.ts` needed no changes: `updateTask` already replaces the whole task, so the selected-task detail picks up the new priority.\n\nCommands run (via `verify_frontend`):\n- `npm run build` (`tsc --noEmit && vite build`) — passed\n- `npm run test:public` (playwright, 6 tests) — 6 passed\n\nRemaining risks: the removed `.read-only-priority` CSS class is now unused (harmless, no styling regressions observed); the new select inherits the existing generic `label`/`select` styles rather than a dedicated class, so visual styling matches the Status control but wasn't visually inspected.",
+    "developer_outcome": {
+      "status": "completed",
+      "reason": null,
+      "tokens": 29431,
+      "steps": 8,
+      "cleanup_complete": true,
+      "workspace_ready": true
+    },
+    "tokens_spent": 29431,
+    "diff": "diff --git a/src/components/TaskModal.tsx b/src/components/TaskModal.tsx\nindex 7333104ffd87ff7c7ecce2c7bf1c3770682e2161..a425df5aa2dc8f97377bc8df8d4c215e528859ef 100644\n--- a/src/components/TaskModal.tsx\n+++ b/src/components/TaskModal.tsx\n@@ -10,6 +10,7 @@ type Props = {\n export function TaskModal({ task, onCancel, onSave }: Props) {\n   const [title, setTitle] = useState(task.title);\n   const [status, setStatus] = useState<TaskStatus>(task.status);\n+  const [priority, setPriority] = useState<Task['priority']>(task.priority);\n   const titleRef = useRef<HTMLInputElement>(null);\n \n   useEffect(() => {\n@@ -48,12 +49,24 @@ export function TaskModal({ task, onCancel, onSave }: Props) {\n             <option>Done</option>\n           </select>\n         </label>\n-        <p className=\"read-only-priority\">Priority: <strong>{task.priority}</strong></p>\n+        <label>\n+          Priority\n+          <select\n+            value={priority}\n+            onChange={(event) => setPriority(event.target.value as Task['priority'])}\n+          >\n+            <option>Low</option>\n+            <option>Medium</option>\n+            <option>High</option>\n+          </select>\n+        </label>\n         <div className=\"modal-actions\">\n           <button type=\"button\" className=\"secondary\" onClick={onCancel}>Cancel</button>\n           <button\n             type=\"button\"\n-            onClick={() => onSave({ ...task, title: title.trim() || task.title, status })}\n+            onClick={() =>\n+              onSave({ ...task, title: title.trim() || task.title, status, priority })\n+            }\n           >\n             Save changes\n           </button>\n",
+    "agent_failures": []
+  }
+}

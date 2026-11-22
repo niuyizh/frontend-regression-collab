@@ -1,0 +1,187 @@
+{
+  "config": {
+    "argv": [
+      "/home/niuyizhuo/.conda/envs/node22/bin/node",
+      "/nfs-data2/niuyizhuo/frontend-regression-collab/node_modules/.bin/playwright",
+      "test",
+      "--config",
+      "evaluator/playwright.config.ts"
+    ],
+    "configFile": "/nfs-data2/niuyizhuo/frontend-regression-collab/evaluator/playwright.config.ts",
+    "rootDir": "/nfs-data2/niuyizhuo/frontend-regression-collab/evaluator/tests",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "/nfs-data2/niuyizhuo/frontend-regression-collab/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "/nfs-data2/niuyizhuo/frontend-regression-collab/evaluator/tests",
+        "testIgnore": [],
+        "testMatch": [
+          "t05-form-due-date.spec.ts"
+        ],
+        "timeout": 15000
+      }
+    ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "/nfs-data2/niuyizhuo/frontend-regression-collab/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "",
+        "testDir": "/nfs-data2/niuyizhuo/frontend-regression-collab/evaluator/tests",
+        "snapshotDir": "/nfs-data2/niuyizhuo/frontend-regression-collab/evaluator/tests",
+        "testIgnore": [],
+        "testMatch": "t05-form-due-date.spec.ts",
+        "timeout": 15000,
+        "use": {
+          "baseURL": "http://127.0.0.1:4315",
+          "actionTimeout": 5000,
+          "trace": "retain-on-failure"
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": ""
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "json",
+        {
+          "outputFile": "/nfs-data2/niuyizhuo/frontend-regression-collab/runs/t05-form-due-date/single/r1/hidden-results.json"
+        }
+      ],
+      [
+        "line",
+        null
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "default",
+    "updateSourceMethod": "patch",
+    "version": "1.65.1",
+    "workers": 1,
+    "webServer": {
+      "command": "npm run dev -- --port 4315",
+      "cwd": "/nfs-data2/niuyizhuo/frontend-regression-collab/runs/t05-form-due-date/single/r1",
+      "url": "http://127.0.0.1:4315",
+      "reuseExistingServer": false,
+      "timeout": 30000
+    }
+  },
+  "suites": [
+    {
+      "title": "t05-form-due-date.spec.ts",
+      "file": "t05-form-due-date.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "past due date is rejected and both draft fields survive reload",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 15000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 669,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-22T15:52:21.279Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "562b13e0fb2baa0a3268-c102fcb2967108be7662",
+          "file": "t05-form-due-date.spec.ts",
+          "line": 9,
+          "column": 1
+        },
+        {
+          "title": "valid due date submits and clears both persisted fields",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 15000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 574,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-22T15:52:22.042Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "562b13e0fb2baa0a3268-35eafe0ff42dcf1587a3",
+          "file": "t05-form-due-date.spec.ts",
+          "line": 20,
+          "column": 1
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-11-22T15:52:19.780Z",
+    "duration": 2918.4260000000004,
+    "expected": 2,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "runs": 18,
+  "conditions": {
+    "single": {
+      "completed_runs": 9,
+      "task_completion_rate": 0.8888888888888888,
+      "mean_tokens": 35689.666666666664,
+      "mean_agent_seconds": 26.293
+    },
+    "dev-qa": {
+      "completed_runs": 9,
+      "task_completion_rate": 0.2222222222222222,
+      "mean_tokens": 26471.555555555555,
+      "mean_agent_seconds": 23.256222222222224
+    }
+  }
+}

@@ -1,0 +1,59 @@
+{
+  "schema_version": 1,
+  "run_id": "t05-form-due-date__dev-qa__r1",
+  "task_id": "t05-form-due-date",
+  "condition": "dev-qa",
+  "repetition": 1,
+  "task_complete": false,
+  "agent_run_valid": false,
+  "build_passed": true,
+  "public_regression_passed": true,
+  "hidden": {
+    "expected": 2,
+    "passed": 2,
+    "failed": 0,
+    "skipped": 0
+  },
+  "hidden_passed": true,
+  "test_tampering": false,
+  "changed_paths": [
+    "src/App.tsx",
+    "src/components/NewTaskForm.tsx",
+    "src/types.ts"
+  ],
+  "evaluation_seconds": 10.546,
+  "commands": {
+    "build": {
+      "command": [
+        "npm",
+        "run",
+        "build"
+      ],
+      "cwd": "/nfs-data2/niuyizhuo/frontend-regression-collab/runs/t05-form-due-date/dev-qa/r1",
+      "returncode": 0,
+      "duration_seconds": 1.146
+    },
+    "public": {
+      "command": [
+        "npm",
+        "run",
+        "test:public"
+      ],
+      "cwd": "/nfs-data2/niuyizhuo/frontend-regression-collab/runs/t05-form-due-date/dev-qa/r1",
+      "returncode": 0,
+      "duration_seconds": 5.346
+    },
+    "hidden": {
+      "command": [
+        "npx",
+        "playwright",
+        "test",
+        "--config",
+        "evaluator/playwright.config.ts"
+      ],
+      "cwd": "/nfs-data2/niuyizhuo/frontend-regression-collab",
+      "returncode": 0,
+      "duration_seconds": 4.054
+    }
+  }
+}

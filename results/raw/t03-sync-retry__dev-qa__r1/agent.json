@@ -1,0 +1,65 @@
+{
+  "run_id": "t03-sync-retry__dev-qa__r1",
+  "task_id": "t03-sync-retry",
+  "condition": "dev-qa",
+  "repetition": 1,
+  "workflow": "frontend-dev-qa",
+  "budget": 48000,
+  "workspace": "/nfs-data2/niuyizhuo/frontend-regression-collab/runs/t03-sync-retry/dev-qa/r1",
+  "command": [
+    "/home/niuyizhuo/.local/bin/uv",
+    "run",
+    "opencollab",
+    "workflow",
+    "run",
+    "frontend-dev-qa",
+    "--workspace",
+    "/nfs-data2/niuyizhuo/frontend-regression-collab/runs/t03-sync-retry/dev-qa/r1",
+    "--task-file",
+    "/nfs-data2/niuyizhuo/frontend-regression-collab/tasks/t03-sync-retry.md",
+    "--args",
+    "{\"allow_unisolated_shell\": true}",
+    "--budget",
+    "48000",
+    "--concurrency",
+    "1",
+    "--task-concurrency",
+    "1",
+    "--isolation",
+    "shared",
+    "--trace",
+    "--save"
+  ],
+  "returncode": 0,
+  "agent_seconds": 34.375,
+  "workflow_result": {
+    "status": "ok",
+    "condition": "dev-qa",
+    "developer": "Verification passed. Summary of the change:\n\n**`src/components/AsyncPanel.tsx`**\n- Extracted the 120 ms simulated sync into a shared `schedule(next)` helper backed by a single `timerRef`, plus `clearTimer` for unmount cleanup (preserving the original cleanup behavior).\n- The mount effect still reads `?sync=` once and resolves to `error` or `success` exactly as before, so `/` is unchanged.\n- Added a `Retry sync` button inside the error alert. Its handler immediately sets `loading` and schedules the same 120 ms transition to `success`; it returns early if a timer is already pending, so repeated activation cannot create overlapping timers. The button renders only in the `error` state and so disappears on success. No navigation/reload or state reset — the selected task lives outside this component and `window.location` is never touched.\n\n**`src/styles.css`**\n- Added `.sync-retry { justify-self: start; margin-top: 8px; }` so the recovery action sits below the error copy, reusing the existing `button.secondary` style and existing focus-visible outline rules.\n\n**Commands actually run:** `verify_frontend` → `npm run build` (tsc + vite, success) and `npm run test:public` (Playwright, 6/6 passed). No existing tests were modified.\n\n**Remaining risks:** the retry path has no public test (only the success state does), so its behavior is verified by reasoning rather than an automated assertion; if a future test asserts a different delay constant, the shared `SYNC_DELAY` would be the single place to change. The guard relies on React's single-threaded click handling, which is adequate for this \"no overlapping timers\" requirement.",
+    "developer_outcome": {
+      "status": "completed",
+      "reason": null,
+      "tokens": 20986,
+      "steps": 5,
+      "cleanup_complete": true,
+      "workspace_ready": true
+    },
+    "qa": {
+      "verdict": "PASS",
+      "report": "VERDICT: PASS\n\nNo concrete regression or unmet acceptance criterion found in the supplied diff. The retry path sets `loading` immediately, schedules the same 120 ms transition, guards against overlapping timers via `timerRef`, renders only in the `error` state, and does not touch navigation or external selected-task state."
+    },
+    "qa_outcome": {
+      "status": "completed",
+      "reason": null,
+      "tokens": 3794,
+      "steps": 1,
+      "cleanup_complete": true,
+      "workspace_ready": true
+    },
+    "repair": null,
+    "repair_outcome": null,
+    "tokens_spent": 24780,
+    "diff": "diff --git a/src/components/AsyncPanel.tsx b/src/components/AsyncPanel.tsx\nindex 708aa1a31bb0d2c886acbf86fc167b1f131b1aac..7d55f7fdb78724680b746cf132f66aedfa2c9fed 100644\n--- a/src/components/AsyncPanel.tsx\n+++ b/src/components/AsyncPanel.tsx\n@@ -1,18 +1,43 @@\n-import { useEffect, useState } from 'react';\n+import { useEffect, useRef, useState } from 'react';\n \n type State = 'loading' | 'success' | 'error';\n \n+const SYNC_DELAY = 120;\n+\n export function AsyncPanel() {\n   const [state, setState] = useState<State>('loading');\n+  const timerRef = useRef<number | undefined>(undefined);\n+\n+  const clearTimer = () => {\n+    if (timerRef.current !== undefined) {\n+      window.clearTimeout(timerRef.current);\n+      timerRef.current = undefined;\n+    }\n+  };\n+\n+  const schedule = (next: State) => {\n+    timerRef.current = window.setTimeout(() => {\n+      timerRef.current = undefined;\n+      setState(next);\n+    }, SYNC_DELAY);\n+  };\n \n   useEffect(() => {\n-    const timer = window.setTimeout(() => {\n-      const requested = new URLSearchParams(window.location.search).get('sync');\n-      setState(requested === 'error' ? 'error' : 'success');\n-    }, 120);\n-    return () => window.clearTimeout(timer);\n+    const requested = new URLSearchParams(window.location.search).get('sync');\n+    schedule(requested === 'error' ? 'error' : 'success');\n+    return clearTimer;\n+    // Runs once on mount; retries are scheduled from the click handler instead.\n+    // eslint-disable-next-line react-hooks/exhaustive-deps\n   }, []);\n \n+  const retry = () => {\n+    // Ignore repeated activation while a retry is already in flight so timers\n+    // can never overlap.\n+    if (timerRef.current !== undefined) return;\n+    setState('loading');\n+    schedule('success');\n+  };\n+\n   return (\n     <section className=\"card sync-card\" aria-live=\"polite\">\n       <p className=\"eyebrow\">Remote sync</p>\n@@ -22,9 +47,11 @@ export function AsyncPanel() {\n         <div className=\"sync-state error\" role=\"alert\">\n           <strong>Sync failed</strong>\n           <span>Check your connection and try again later.</span>\n+          <button type=\"button\" className=\"secondary sync-retry\" onClick={retry}>\n+            Retry sync\n+          </button>\n         </div>\n       )}\n     </section>\n   );\n }\n-\ndiff --git a/src/styles.css b/src/styles.css\nindex 17928fd06abbf9ed36008b4d78ad257249d04540..6bafaa996805da802df94ff610544c5c891566e8 100644\n--- a/src/styles.css\n+++ b/src/styles.css\n@@ -47,6 +47,7 @@ dt { color: #66736e; } dd { margin: 0; font-weight: 700; }\n .sync-state { margin: 0; color: #5d6b66; }\n .sync-state.success { color: #1d6d4d; }\n .sync-state.error { display: grid; gap: 4px; color: #9a3e35; }\n+.sync-retry { justify-self: start; margin-top: 8px; }\n \n form, .modal { display: grid; gap: 14px; }\n label { display: grid; gap: 7px; font-size: .9rem; font-weight: 700; }\n",
+    "agent_failures": []
+  }
+}

@@ -12,6 +12,7 @@ sys.path.insert(0, str(ROOT / "scripts"))
 from prepare_designbench import _task  # noqa: E402
 from run_designbench_experiment import run_one  # noqa: E402
 from score_designbench import _progress  # noqa: E402
+from summarize_designbench import FROZEN_REPETITIONS, summarize  # noqa: E402
 
 
 def test_designbench_manifest_pins_five_distinct_react_tasks():
@@ -56,6 +57,27 @@ def test_designbench_experiment_defaults_to_no_paid_execution():
     assert "--execute" not in result["command"]
 
 
+def test_resilient_condition_selects_artifact_first_workflow(monkeypatch):
+    import run_experiment as frontend_experiment  # noqa: PLC0415
+
+    monkeypatch.setattr(
+        frontend_experiment,
+        "require_command",
+        lambda name: f"/fake/{name}",
+    )
+
+    result = frontend_experiment.run_one(
+        "t04-responsive-nav",
+        "dev-qa-resilient",
+        1,
+        opencollab_root=ROOT.parent / "code-assistant" / "OpenCollab",
+        execute=False,
+        force=False,
+    )
+    assert result["workflow"] == "frontend-dev-qa-resilient"
+    assert result["budget"] == 48_000
+
+
 def test_visual_calibration_covers_every_edit_and_separates_initial_from_gold():
     manifest = json.loads(
         (ROOT / "benchmark" / "designbench" / "manifest.json").read_text(encoding="utf-8")
@@ -76,3 +98,14 @@ def test_visual_progress_is_relative_to_frozen_initial_and_gold():
     assert _progress(0.2, 0.2, 0.8) == 0
     assert _progress(0.5, 0.2, 0.8) == pytest.approx(0.5)
     assert _progress(0.8, 0.2, 0.8) == 1
+
+
+def test_frozen_designbench_pair_has_three_valid_repetitions():
+    summary = summarize(ROOT / "results" / "designbench" / "raw")
+    assert FROZEN_REPETITIONS == (2, 3, 4)
+    assert len(summary["runs"]) == 6
+    assert summary["conditions"]["single"]["valid_runs"] == 3
+    assert summary["conditions"]["dev-qa"]["valid_runs"] == 3
+    assert summary["conditions"]["single"]["task_passes"] == 2
+    assert summary["conditions"]["dev-qa"]["task_passes"] == 3
+    assert summary["mechanism_observation"]["repairs_triggered"] == 1

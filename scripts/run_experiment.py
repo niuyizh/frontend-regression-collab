@@ -58,7 +58,14 @@ def run_one(
     if not (opencollab_root / "pyproject.toml").exists():
         raise RuntimeError(f"invalid OpenCollab checkout: {opencollab_root}")
 
-    workflow = "frontend-single" if condition == "single" else "frontend-dev-qa"
+    workflows = {
+        "single": "frontend-single",
+        "dev-qa": "frontend-dev-qa",
+        "dev-qa-resilient": "frontend-dev-qa-resilient",
+    }
+    if condition not in workflows:
+        raise ValueError(f"unknown condition: {condition}")
+    workflow = workflows[condition]
     workspace = PROJECT_ROOT / "runs" / task_id / condition / f"r{repetition}"
     command = [
         uv,
@@ -143,7 +150,7 @@ def run_one(
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("task_id")
-    parser.add_argument("condition", choices=("single", "dev-qa"))
+    parser.add_argument("condition", choices=("single", "dev-qa", "dev-qa-resilient"))
     parser.add_argument("--repetition", type=int, default=1)
     parser.add_argument("--opencollab-root", type=Path, default=DEFAULT_OPENCOLLAB_ROOT)
     parser.add_argument("--execute", action="store_true", help="make paid model calls")

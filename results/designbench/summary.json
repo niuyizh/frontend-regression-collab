@@ -1,52 +1,231 @@
 {
-  "schema_version": 1,
-  "model": "deepseek-flash",
-  "global_budget": 48000,
+  "schema_version": 2,
   "task": "db-e30",
-  "pilot_r1": {
-    "comparable_with_r2": false,
-    "single": {
-      "agent_run_valid": true,
-      "task_passed": false,
-      "tokens": 34678,
-      "agent_seconds": 24.691,
-      "original_visual_progress": -18.90664565157833
-    },
-    "dev_qa": {
-      "agent_run_valid": false,
-      "task_passed": false,
-      "tokens": 21144,
-      "agent_seconds": 21.781,
-      "terminal_reason": "budget exhausted before final developer handoff"
-    }
+  "model": "deepseek-flash",
+  "protocol": {
+    "repetitions": [
+      2,
+      3,
+      4
+    ],
+    "conditions": [
+      "single",
+      "dev-qa"
+    ],
+    "global_budget_per_run": 48000,
+    "paired_runs": true,
+    "agent_time_excludes_external_evaluator": true,
+    "pilot_r1_excluded": true
   },
-  "paired_r2": {
-    "protocol": "bounded source read; wrapper-independent structural scorer",
-    "single": {
+  "runs": [
+    {
+      "run_id": "db-e30__single__r2",
+      "condition": "single",
+      "repetition": 2,
       "agent_run_valid": true,
       "task_passed": false,
       "tokens": 14333,
       "agent_seconds": 25.962,
-      "visual_progress": 0.10287840780450333
+      "evaluation_seconds": 8.882,
+      "visual_progress": 0.10287840780450333,
+      "structural_passed": true,
+      "qa_verdict": null,
+      "repair_triggered": false,
+      "developer_tokens": 14333,
+      "qa_tokens": null,
+      "repair_tokens": null
     },
-    "dev_qa": {
+    {
+      "run_id": "db-e30__dev-qa__r2",
+      "condition": "dev-qa",
+      "repetition": 2,
       "agent_run_valid": true,
       "task_passed": true,
       "tokens": 24532,
       "agent_seconds": 50.83,
+      "evaluation_seconds": 8.66,
       "visual_progress": 0.797593220817853,
+      "structural_passed": true,
+      "qa_verdict": "FAIL",
+      "repair_triggered": true,
       "developer_tokens": 10969,
       "qa_tokens": 2432,
-      "repair_tokens": 11131,
-      "qa_verdict": "FAIL",
-      "repair_triggered": true
+      "repair_tokens": 11131
     },
-    "dev_qa_minus_single": {
-      "tokens": 10199,
-      "agent_seconds": 24.868,
-      "task_pass": 1
+    {
+      "run_id": "db-e30__single__r3",
+      "condition": "single",
+      "repetition": 3,
+      "agent_run_valid": true,
+      "task_passed": true,
+      "tokens": 11020,
+      "agent_seconds": 19.278,
+      "evaluation_seconds": 8.525,
+      "visual_progress": 0.797593220817853,
+      "structural_passed": true,
+      "qa_verdict": null,
+      "repair_triggered": false,
+      "developer_tokens": 11020,
+      "qa_tokens": null,
+      "repair_tokens": null
     },
-    "valid_pairs": 1,
-    "required_pairs_for_key_stochastic_claim": 3
-  }
+    {
+      "run_id": "db-e30__dev-qa__r3",
+      "condition": "dev-qa",
+      "repetition": 3,
+      "agent_run_valid": true,
+      "task_passed": true,
+      "tokens": 16659,
+      "agent_seconds": 22.271,
+      "evaluation_seconds": 8.498,
+      "visual_progress": 0.797593220817853,
+      "structural_passed": true,
+      "qa_verdict": "PASS",
+      "repair_triggered": false,
+      "developer_tokens": 15121,
+      "qa_tokens": 1538,
+      "repair_tokens": null
+    },
+    {
+      "run_id": "db-e30__single__r4",
+      "condition": "single",
+      "repetition": 4,
+      "agent_run_valid": true,
+      "task_passed": true,
+      "tokens": 14118,
+      "agent_seconds": 18.799,
+      "evaluation_seconds": 8.535,
+      "visual_progress": 1.0,
+      "structural_passed": true,
+      "qa_verdict": null,
+      "repair_triggered": false,
+      "developer_tokens": 14118,
+      "qa_tokens": null,
+      "repair_tokens": null
+    },
+    {
+      "run_id": "db-e30__dev-qa__r4",
+      "condition": "dev-qa",
+      "repetition": 4,
+      "agent_run_valid": true,
+      "task_passed": true,
+      "tokens": 16749,
+      "agent_seconds": 24.629,
+      "evaluation_seconds": 8.552,
+      "visual_progress": 0.797593220817853,
+      "structural_passed": true,
+      "qa_verdict": "PASS",
+      "repair_triggered": false,
+      "developer_tokens": 15048,
+      "qa_tokens": 1701,
+      "repair_tokens": null
+    }
+  ],
+  "conditions": {
+    "single": {
+      "runs": 3,
+      "valid_runs": 3,
+      "task_passes": 2,
+      "task_completion_rate": 0.6666666666666666,
+      "tokens": {
+        "mean": 13157.0,
+        "sample_standard_deviation": 1853.8157945168123,
+        "median": 14118.0,
+        "minimum": 11020.0,
+        "maximum": 14333.0
+      },
+      "agent_seconds": {
+        "mean": 21.346333333333334,
+        "sample_standard_deviation": 4.004453062945467,
+        "median": 19.278,
+        "minimum": 18.799,
+        "maximum": 25.962
+      },
+      "visual_progress": {
+        "mean": 0.6334905428741188,
+        "sample_standard_deviation": 0.47053592262129623,
+        "median": 0.797593220817853,
+        "minimum": 0.10287840780450333,
+        "maximum": 1.0
+      },
+      "qa_failures": 0,
+      "repairs": 0
+    },
+    "dev-qa": {
+      "runs": 3,
+      "valid_runs": 3,
+      "task_passes": 3,
+      "task_completion_rate": 1.0,
+      "tokens": {
+        "mean": 19313.333333333332,
+        "sample_standard_deviation": 4519.721930974662,
+        "median": 16749.0,
+        "minimum": 16659.0,
+        "maximum": 24532.0
+      },
+      "agent_seconds": {
+        "mean": 32.57666666666667,
+        "sample_standard_deviation": 15.851756190824197,
+        "median": 24.629,
+        "minimum": 22.271,
+        "maximum": 50.83
+      },
+      "visual_progress": {
+        "mean": 0.797593220817853,
+        "sample_standard_deviation": 0.0,
+        "median": 0.797593220817853,
+        "minimum": 0.797593220817853,
+        "maximum": 0.797593220817853
+      },
+      "qa_failures": 1,
+      "repairs": 1
+    }
+  },
+  "paired_differences": {
+    "runs": [
+      {
+        "repetition": 2,
+        "task_pass_delta": 1,
+        "token_delta": 10199,
+        "agent_seconds_delta": 24.868,
+        "visual_progress_delta": 0.6947148130133497
+      },
+      {
+        "repetition": 3,
+        "task_pass_delta": 0,
+        "token_delta": 5639,
+        "agent_seconds_delta": 2.993000000000002,
+        "visual_progress_delta": 0.0
+      },
+      {
+        "repetition": 4,
+        "task_pass_delta": 0,
+        "token_delta": 2631,
+        "agent_seconds_delta": 5.830000000000002,
+        "visual_progress_delta": -0.202406779182147
+      }
+    ],
+    "token_delta": {
+      "mean": 6156.333333333333,
+      "sample_standard_deviation": 3810.430596839855,
+      "median": 5639.0,
+      "minimum": 2631.0,
+      "maximum": 10199.0
+    },
+    "agent_seconds_delta": {
+      "mean": 11.230333333333334,
+      "sample_standard_deviation": 11.895444772404826,
+      "median": 5.830000000000002,
+      "minimum": 2.993000000000002,
+      "maximum": 24.868
+    },
+    "mean_task_pass_delta": 0.3333333333333333,
+    "mean_visual_progress_delta": 0.16410267794373423
+  },
+  "mechanism_observation": {
+    "qa_failures": 1,
+    "repairs_triggered": 1,
+    "description": "In r2 QA identified an unrelated p-4 to p-2 toolbar-padding change; the repair restored p-4 and the final candidate passed. QA returned PASS without repair in r3 and r4."
+  },
+  "claim_boundary": "Three repetitions support a task-specific robustness result, not a general completion-rate claim across frontend tasks."
 }

@@ -156,7 +156,7 @@ def evaluate(task_id: str, condition: str, repetition: int) -> dict[str, Any]:
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("task_id")
-    parser.add_argument("condition", choices=("single", "dev-qa"))
+    parser.add_argument("condition", choices=("single", "dev-qa", "dev-qa-resilient"))
     parser.add_argument("--repetition", type=int, default=1)
     args = parser.parse_args()
     print(json.dumps(evaluate(args.task_id, args.condition, args.repetition), indent=2))

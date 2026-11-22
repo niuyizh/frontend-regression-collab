@@ -1,0 +1,14 @@
+
+> regression-board-fixture@1.0.0 build
+> tsc --noEmit && vite build
+
+vite v8.3.8 building client environment for production...
+transforming...
+✓ 22 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/index.html                   0.40 kB │ gzip:  0.27 kB
+dist/assets/index-BItQuLk3.css    3.64 kB │ gzip:  1.48 kB
+dist/assets/index-623S10Tt.js   226.60 kB │ gzip: 70.86 kB
+
+✓ built in 268ms

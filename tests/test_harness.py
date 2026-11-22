@@ -15,7 +15,8 @@ sys.path.insert(0, str(ROOT))
 
 from common import task_record  # noqa: E402
 from run_experiment import _extract_json  # noqa: E402
-from run_matrix import matrix  # noqa: E402
+from run_matrix import _has_recorded_result, matrix  # noqa: E402
+from run_resilient_matrix import matrix as resilient_matrix  # noqa: E402
 
 
 def _workflow_module():
@@ -46,6 +47,25 @@ def test_preregistered_matrix_has_all_tasks_once_and_three_key_repetitions():
             assert {rep for task, cond, rep in runs if task == task_id and cond == condition} == {1, 2, 3}
 
 
+def test_matrix_resume_requires_agent_and_evaluation_records(monkeypatch, tmp_path):
+    monkeypatch.setattr("run_matrix.result_dir", lambda *_args: tmp_path)
+    (tmp_path / "agent.json").write_text("{}", encoding="utf-8")
+    assert not _has_recorded_result("task", "single", 1)
+    (tmp_path / "evaluation.json").write_text("{}", encoding="utf-8")
+    assert _has_recorded_result("task", "single", 1)
+
+
+def test_resilient_matrix_matches_single_baseline_repetitions():
+    runs = resilient_matrix()
+    assert len(runs) == 9
+    assert len(set(runs)) == len(runs)
+    for task_id in ("t01-search", "t02-modal-priority", "t05-form-due-date"):
+        assert {rep for task, _condition, rep in runs if task == task_id} == {1}
+    for task_id in ("t03-sync-retry", "t04-responsive-nav"):
+        assert {rep for task, _condition, rep in runs if task == task_id} == {1, 2, 3}
+    assert {condition for _task, condition, _rep in runs} == {"dev-qa-resilient"}
+
+
 def test_cli_json_extraction_prefers_final_payload():
     text = 'log with {embedded: braces}\n{"status": "ok", "tokens_spent": 42}\n'
     assert _extract_json(text) == {"status": "ok", "tokens_spent": 42}
@@ -64,6 +84,24 @@ def test_developer_uses_targeted_write_tool_instead_of_unified_patch():
     assert names == {"file_read", "file_write", "git_diff", "verify_frontend"}
     assert "bash" not in names
     assert "apply_patch" not in names
+
+
+def test_artifact_handoff_requires_stopped_ready_run_and_changed_diff():
+    module = _workflow_module()
+    run = SimpleNamespace(
+        status="stopped",
+        cleanup_complete=True,
+        workspace_ready=True,
+    )
+    assert module._artifact_handoff_ok(run, "diff --git a/a b/a")
+    assert not module._artifact_handoff_ok(run, "")
+    assert not module._artifact_handoff_ok(
+        run,
+        "same diff",
+        previous_diff="same diff",
+    )
+    run.status = "failed"
+    assert not module._artifact_handoff_ok(run, "diff --git a/a b/a")
 
 
 class FakeContext:
@@ -138,6 +176,48 @@ async def test_dev_qa_uses_one_bounded_repair_on_fail(monkeypatch):
         "frontend-developer", "regression-qa", "frontend-developer-repair"
     ]
     assert [call["budget"] for call in context.calls] == [30_000, 6_000, 18_000]
+
+
+@pytest.mark.asyncio
+async def test_resilient_dev_qa_reviews_stopped_developer_diff(monkeypatch):
+    module = _workflow_module()
+    monkeypatch.setattr(module, "_developer_tools", lambda _allow: ())
+    context = FakeContext([None, "VERDICT: PASS\nThe diff supports the requirement."])
+
+    result = await module.frontend_dev_qa_resilient(
+        context,
+        {"goal": "Implement feature", "allow_unisolated_shell": True},
+    )
+
+    assert result["status"] == "ok"
+    assert result["condition"] == "dev-qa-resilient"
+    assert result["developer_outcome"]["status"] == "stopped"
+    assert result["handoff_recovery"] == {"developer": True, "repair": False}
+    assert result["qa"]["verdict"] == "PASS"
+    assert [call["label"] for call in context.calls] == [
+        "frontend-developer",
+        "regression-qa",
+    ]
+
+
+@pytest.mark.asyncio
+async def test_resilient_dev_qa_rejects_stopped_developer_without_diff(monkeypatch):
+    module = _workflow_module()
+    monkeypatch.setattr(module, "_developer_tools", lambda _allow: ())
+
+    class EmptyDiffContext(FakeContext):
+        async def diff(self):
+            return ""
+
+    context = EmptyDiffContext([None])
+    result = await module.frontend_dev_qa_resilient(
+        context,
+        {"goal": "Implement feature", "allow_unisolated_shell": True},
+    )
+
+    assert result["status"] == "incomplete"
+    assert result["handoff_recovery"] == {"developer": False, "repair": False}
+    assert [call["label"] for call in context.calls] == ["frontend-developer"]
 
 
 @pytest.mark.asyncio

@@ -1,0 +1,15 @@
+
+> my-app@0.1.0 dev
+> next dev --hostname 127.0.0.1 --port 4503
+
+  ▲ Next.js 14.2.26
+  - Local:        http://127.0.0.1:4503
+  - Network:      http://127.0.0.1:4503
+
+ ✓ Starting...
+ ✓ Ready in 1685ms
+ ○ Compiling / ...
+ ✓ Compiled / in 2.6s (513 modules)
+ ✓ Compiled in 231ms (238 modules)
+ GET / 200 in 2981ms
+ GET / 200 in 52ms

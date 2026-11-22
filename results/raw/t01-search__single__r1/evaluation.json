@@ -1,0 +1,57 @@
+{
+  "schema_version": 1,
+  "run_id": "t01-search__single__r1",
+  "task_id": "t01-search",
+  "condition": "single",
+  "repetition": 1,
+  "task_complete": true,
+  "agent_run_valid": true,
+  "build_passed": true,
+  "public_regression_passed": true,
+  "hidden": {
+    "expected": 2,
+    "passed": 2,
+    "failed": 0,
+    "skipped": 0
+  },
+  "hidden_passed": true,
+  "test_tampering": false,
+  "changed_paths": [
+    "src/components/TaskList.tsx"
+  ],
+  "evaluation_seconds": 10.367,
+  "commands": {
+    "build": {
+      "command": [
+        "npm",
+        "run",
+        "build"
+      ],
+      "cwd": "/nfs-data2/niuyizhuo/frontend-regression-collab/runs/t01-search/single/r1",
+      "returncode": 0,
+      "duration_seconds": 1.236
+    },
+    "public": {
+      "command": [
+        "npm",
+        "run",
+        "test:public"
+      ],
+      "cwd": "/nfs-data2/niuyizhuo/frontend-regression-collab/runs/t01-search/single/r1",
+      "returncode": 0,
+      "duration_seconds": 5.443
+    },
+    "hidden": {
+      "command": [
+        "npx",
+        "playwright",
+        "test",
+        "--config",
+        "evaluator/playwright.config.ts"
+      ],
+      "cwd": "/nfs-data2/niuyizhuo/frontend-regression-collab",
+      "returncode": 0,
+      "duration_seconds": 3.688
+    }
+  }
+}

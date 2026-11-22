@@ -1,0 +1,73 @@
+{
+  "run_id": "t01-search__dev-qa__r1",
+  "task_id": "t01-search",
+  "condition": "dev-qa",
+  "repetition": 1,
+  "workflow": "frontend-dev-qa",
+  "budget": 48000,
+  "workspace": "/nfs-data2/niuyizhuo/frontend-regression-collab/runs/t01-search/dev-qa/r1",
+  "command": [
+    "/home/niuyizhuo/.local/bin/uv",
+    "run",
+    "opencollab",
+    "workflow",
+    "run",
+    "frontend-dev-qa",
+    "--workspace",
+    "/nfs-data2/niuyizhuo/frontend-regression-collab/runs/t01-search/dev-qa/r1",
+    "--task-file",
+    "/nfs-data2/niuyizhuo/frontend-regression-collab/tasks/t01-search.md",
+    "--args",
+    "{\"allow_unisolated_shell\": true}",
+    "--budget",
+    "48000",
+    "--concurrency",
+    "1",
+    "--task-concurrency",
+    "1",
+    "--isolation",
+    "shared",
+    "--trace",
+    "--save"
+  ],
+  "returncode": 0,
+  "agent_seconds": 51.06,
+  "workflow_result": {
+    "status": "incomplete",
+    "condition": "dev-qa",
+    "error": "budget exhausted before model call: conservative input reservation requires 7858 of 6361 remaining tokens, leaving no output headroom",
+    "developer": "Change made in `src/components/TaskList.tsx` (only file touched):\n- Added a local `query` state and a `type=\"search\"` input with `aria-label=\"Search tasks\"` above the list.\n- Filtering is immediate and case-insensitive over task titles (`toLowerCase().includes`), computed as `visibleTasks`; selection state remains in `App`, so hiding a row never clears the selected task and the detail card is unaffected.\n- A non-empty query renders a `Clear search` button. Clearing resets the query, restores all tasks, and the button stays mounted while it holds focus (tracked via `keepClearVisible`, released on blur or on the next input change), so focus remains on that button after clearing.\n- When nothing matches, the list is replaced by exactly `No tasks match your search.`; the existing `ul.task-list` markup, selected-row class, select and edit handlers are unchanged.\n\nExact command run (via `verify_frontend`):\n- `npm run verify:agent` → `npm run build && npm run test:public` (tsc, vite build, 6 Playwright tests) — exit 0, all 6 passed.\n\nRemaining risks:\n- No new automated coverage for the search interaction was added (existing public tests untouched); behavior was validated only by build/type-check and the existing suite.\n- The `Clear search` button intentionally persists briefly after clearing (until blur) to satisfy the focus requirement; a future check expecting it to disappear instantly on an empty query would need re-review.\n- New classes (`task-search`, `task-search-input`, `task-list-panel`, `task-empty`) have no dedicated CSS yet, so the control uses default input/button styling.",
+    "developer_outcome": {
+      "status": "completed",
+      "reason": null,
+      "tokens": 24642,
+      "steps": 6,
+      "cleanup_complete": true,
+      "workspace_ready": true
+    },
+    "qa": {
+      "verdict": "FAIL",
+      "report": "VERDICT: FAIL\n\n- **Severity:** Medium\n- **Affected behavior:** An empty task list with no active search now shows the search-specific empty message, changing existing behavior. This affects initial empty states and the state after all tasks are removed.\n- **Diff evidence:** `visibleTasks` falls back to `tasks` when `normalizedQuery` is empty, but the render condition is unconditional: `visibleTasks.length === 0 ? (<p className=\"task-empty\">No tasks match your search.</p>) : ...`. With `tasks=[]` and `query=''`, `visibleTasks.length === 0`, so the no-match message renders even though no search is active.\n- **Reproduction:** Render `TaskList` with `tasks={[]}` and no user input. Observe `No tasks match your search.` instead of the previous empty task-list markup.\n- **Bounded fix:** Only show the search no-match message when a normalized query is active:\n\n```tsx\n{normalizedQuery !== '' && visibleTasks.length === 0 ? (\n  <p className=\"task-empty\">No tasks match your search.</p>\n) : (\n  <ul className=\"task-list\">\n    {visibleTasks.map(...)}\n  </ul>\n)}\n```\n\nThis preserves the original empty-list behavior while still showing the required message for actual searches."
+    },
+    "qa_outcome": {
+      "status": "completed",
+      "reason": null,
+      "tokens": 4026,
+      "steps": 1,
+      "cleanup_complete": true,
+      "workspace_ready": true
+    },
+    "repair": "The QA finding is valid: with `tasks=[]` and no query, the render shows the search-empty message instead of the original empty list. Applying the bounded fix to gate the message on an active query.",
+    "repair_outcome": {
+      "status": "stopped",
+      "reason": "budget exhausted before model call: conservative input reservation requires 7858 of 6361 remaining tokens, leaving no output headroom",
+      "tokens": 11639,
+      "steps": 3,
+      "cleanup_complete": true,
+      "workspace_ready": true
+    },
+    "tokens_spent": 40307,
+    "diff": "diff --git a/src/components/TaskList.tsx b/src/components/TaskList.tsx\nindex 112723f87f95de561b0a9aa03ab138e6632c8f23..f6f33ffb63935970b1a3e49aaa648c16d573b1e6 100644\n--- a/src/components/TaskList.tsx\n+++ b/src/components/TaskList.tsx\n@@ -1,3 +1,4 @@\n+import { useState } from 'react';\n import type { Task } from '../types';\n \n type Props = {\n@@ -8,25 +9,67 @@ type Props = {\n };\n \n export function TaskList({ tasks, selectedId, onSelect, onEdit }: Props) {\n+  const [query, setQuery] = useState('');\n+  const [keepClearVisible, setKeepClearVisible] = useState(false);\n+\n+  const normalizedQuery = query.trim().toLowerCase();\n+  const visibleTasks = normalizedQuery\n+    ? tasks.filter((task) => task.title.toLowerCase().includes(normalizedQuery))\n+    : tasks;\n+  const showClear = query !== '' || keepClearVisible;\n+\n+  const clearSearch = () => {\n+    setQuery('');\n+    setKeepClearVisible(true);\n+  };\n+\n   return (\n-    <ul className=\"task-list\">\n-      {tasks.map((task) => (\n-        <li key={task.id} className={task.id === selectedId ? 'selected' : ''}>\n-          <button className=\"task-main\" type=\"button\" onClick={() => onSelect(task.id)}>\n-            <strong>{task.title}</strong>\n-            <span>{task.owner} · {task.status}</span>\n-          </button>\n+    <div className=\"task-list-panel\">\n+      <div className=\"task-search\">\n+        <input\n+          type=\"search\"\n+          className=\"task-search-input\"\n+          aria-label=\"Search tasks\"\n+          placeholder=\"Search tasks\"\n+          value={query}\n+          onChange={(event) => {\n+            setQuery(event.target.value);\n+            setKeepClearVisible(false);\n+          }}\n+        />\n+        {showClear && (\n           <button\n             className=\"icon-button\"\n             type=\"button\"\n-            aria-label={`Edit ${task.title}`}\n-            onClick={() => onEdit(task.id)}\n+            onClick={clearSearch}\n+            onBlur={() => setKeepClearVisible(false)}\n           >\n-            Edit\n+            Clear search\n           </button>\n-        </li>\n-      ))}\n-    </ul>\n+        )}\n+      </div>\n+      {normalizedQuery !== '' && visibleTasks.length === 0 ? (\n+        <p className=\"task-empty\">No tasks match your search.</p>\n+      ) : (\n+        <ul className=\"task-list\">\n+          {visibleTasks.map((task) => (\n+            <li key={task.id} className={task.id === selectedId ? 'selected' : ''}>\n+              <button className=\"task-main\" type=\"button\" onClick={() => onSelect(task.id)}>\n+                <strong>{task.title}</strong>\n+                <span>{task.owner} · {task.status}</span>\n+              </button>\n+              <button\n+                className=\"icon-button\"\n+                type=\"button\"\n+                aria-label={`Edit ${task.title}`}\n+                onClick={() => onEdit(task.id)}\n+              >\n+                Edit\n+              </button>\n+            </li>\n+          ))}\n+        </ul>\n+      )}\n+    </div>\n   );\n }\n-\n",
+    "agent_failures": []
+  }
+}

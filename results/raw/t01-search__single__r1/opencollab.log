@@ -1,0 +1,133 @@
+== implement
+-- SessionRuntimeEvent(type='user_message_appended', data={})
+-- SessionRuntimeEvent(type='step_start', data={'step': 1, 'aid': 0})
+-- SessionRuntimeEvent(type='text_delta', data={'content': "I'll start by 
+reading the primary source files.", 'aid': 0})
+-- SessionRuntimeEvent(type='tool_start', data={'tool': 'file_read', 'args': 
+{'path': 'src/components/TaskList.tsx'}, 'tool_call_id': 
+'call_00_ET_L1UJayIvqTkiNgKMYOL06706', 'aid': 0})
+-- SessionRuntimeEvent(type='tool_end', data={'tool': 'file_read', 'latency': 
+0.000979539006948471, 'tool_call_id': 'call_00_ET_L1UJayIvqTkiNgKMYOL06706', 
+'aid': 0})
+-- SessionRuntimeEvent(type='tool_start', data={'tool': 'file_read', 'args': 
+{'path': 'src/App.tsx'}, 'tool_call_id': 'call_01_ET_PmUqt0zdjKe0aoUM2dwI3791', 
+'aid': 0})
+-- SessionRuntimeEvent(type='tool_end', data={'tool': 'file_read', 'latency': 
+0.0005365721881389618, 'tool_call_id': 'call_01_ET_PmUqt0zdjKe0aoUM2dwI3791', 
+'aid': 0})
+-- SessionRuntimeEvent(type='step_end', data={'step': 1, 'latency': 
+1.3491635005921125, 'aid': 0})
+-- SessionRuntimeEvent(type='step_start', data={'step': 2, 'aid': 0})
+-- SessionRuntimeEvent(type='tool_start', data={'tool': 'file_read', 'args': 
+{'path': 'TASK.md'}, 'tool_call_id': 'call_00_JO7j07x7N6KYqKdn73jM4645', 'aid': 
+0})
+-- SessionRuntimeEvent(type='tool_end', data={'tool': 'file_read', 'latency': 
+0.0007253233343362808, 'tool_call_id': 'call_00_JO7j07x7N6KYqKdn73jM4645', 
+'aid': 0})
+-- SessionRuntimeEvent(type='tool_start', data={'tool': 'file_read', 'args': 
+{'path': 'src/components/NewTaskForm.tsx'}, 'tool_call_id': 
+'call_01_j3ya6FiJ7B5Ff3VVH65l7697', 'aid': 0})
+-- SessionRuntimeEvent(type='tool_end', data={'tool': 'file_read', 'latency': 
+0.0005084089934825897, 'tool_call_id': 'call_01_j3ya6FiJ7B5Ff3VVH65l7697', 
+'aid': 0})
+-- SessionRuntimeEvent(type='step_end', data={'step': 2, 'latency': 
+1.734219629317522, 'aid': 0})
+-- SessionRuntimeEvent(type='step_start', data={'step': 3, 'aid': 0})
+-- SessionRuntimeEvent(type='tool_start', data={'tool': 'file_read', 'args': 
+{'path': 'package.json'}, 'tool_call_id': 'call_00_IylXXMci3MZ0OZrSjGs07367', 
+'aid': 0})
+-- SessionRuntimeEvent(type='tool_end', data={'tool': 'file_read', 'latency': 
+0.0007780175656080246, 'tool_call_id': 'call_00_IylXXMci3MZ0OZrSjGs07367', 
+'aid': 0})
+-- SessionRuntimeEvent(type='tool_start', data={'tool': 'file_read', 'args': 
+{'path': 'src/components/TaskModal.tsx'}, 'tool_call_id': 
+'call_01_vB3sKqnYbzFaejVNHt2N0787', 'aid': 0})
+-- SessionRuntimeEvent(type='tool_end', data={'tool': 'file_read', 'latency': 
+0.00037149712443351746, 'tool_call_id': 'call_01_vB3sKqnYbzFaejVNHt2N0787', 
+'aid': 0})
+-- SessionRuntimeEvent(type='step_end', data={'step': 3, 'latency': 
+1.4313309732824564, 'aid': 0})
+-- SessionRuntimeEvent(type='step_start', data={'step': 4, 'aid': 0})
+-- SessionRuntimeEvent(type='text_delta', data={'content': "Now I'll implement 
+the search control inside `TaskList` (keeping selection state in `App` 
+untouched, so the detail card stays stable).", 'aid': 0})
+-- SessionRuntimeEvent(type='tool_start', data={'tool': 'file_write', 'args': 
+{'path': 'src/components/TaskList.tsx', 'mode': 'create', 'content': 
+{'__opencollab_truncated__': True, 'preview': "import { useState } from 
+'react';\nimport type { Task } from '../types';\n\ntype Props = {\n  tasks: 
+Task[];\n  selectedId: number;\n  onSelect: (id: number) => void;\n  onEdit: 
+(id: number) => void;\n};\n\n// Keeps the clear button mounted (and focusable) 
+but out of the visual flow while\n// the query is empty, so focus survives 
+clearing without leaving a stray control.\nconst collapsedStyle = {\n  position:
+'absolute',\n  width: 0,\n  height: 0,\n  padding: 0,\n  margin: 0,\n  border: 
+0,\n  opacity: 0,\n  overflow: 'hidden',", 'original_length': 2328, 
+'original_bytes': 2329, 'sha256': 
+'b2a99192ae9bac2cc69d2ce8333c982cdaa6ee721e6ac66abd658ef2780d3d62'}}, 
+'tool_call_id': 'call_00_nBphCYCHNJAbybP10hAv9305', 'aid': 0})
+-- SessionRuntimeEvent(type='tool_end', data={'tool': 'file_write', 'latency': 
+0.04889563098549843, 'tool_call_id': 'call_00_nBphCYCHNJAbybP10hAv9305', 'aid': 
+0})
+-- SessionRuntimeEvent(type='step_end', data={'step': 4, 'latency': 
+20.477530917152762, 'aid': 0})
+-- SessionRuntimeEvent(type='step_start', data={'step': 5, 'aid': 0})
+-- SessionRuntimeEvent(type='tool_start', data={'tool': 'verify_frontend', 
+'args': {}, 'tool_call_id': 'call_00_3zJN9vUHAnD5bMDPsO0A5865', 'aid': 0})
+-- SessionRuntimeEvent(type='tool_end', data={'tool': 'verify_frontend', 
+'latency': 7.142132420092821, 'tool_call_id': 
+'call_00_3zJN9vUHAnD5bMDPsO0A5865', 'aid': 0})
+-- SessionRuntimeEvent(type='step_end', data={'step': 5, 'latency': 
+1.5202872138470411, 'aid': 0})
+-- SessionRuntimeEvent(type='step_start', data={'step': 6, 'aid': 0})
+-- SessionRuntimeEvent(type='text_delta', data={'content': 'Verification passed.
+Summary of the work:\n\n**Change (single file): 
+`src/components/TaskList.tsx`**\n- Added a compact search bar above the list 
+(`role="search"` wrapper).\n- `<input type="search" aria-label="Search tasks">` 
+— native `type="search"` gives the `searchbox` role and the required accessible 
+label.\n- Filtering is immediate and case-insensitive over `task.title` (query 
+is trimmed + lowercased before matching).\n- `Clear search` button is rendered 
+whenever a non-empty query exists; it resets the query, which restores every 
+task. The button stays mounted across the clear (collapsed via an inline 
+zero-size/opacity style and `tabIndex={-1}` while idle) so focus is not dropped 
+to `<body>` when it is clicked — after clearing, focus remains on `Clear 
+search`.\n- When the query matches nothing, exactly `No tasks match your 
+search.` is shown.\n- Filtering happens entirely inside `TaskList`; `App.tsx` 
+keeps `selectedId` and derives the detail card from the full `tasks` array, so a
+hidden row never mutates selection and the detail card returns unchanged after 
+clearing. No changes were needed in `App.tsx`.\n- Existing rendering (task rows,
+`selected` class, edit buttons, `aria-label`) is unchanged for the unfiltered 
+case.\n\n**Commands actually run**\n- `verify_frontend` → `npm run build && npm 
+run test:public`: `tsc --noEmit` + `vite build` succeeded (22 modules), 
+Playwright public suite 6/6 passed.\n\n**Remaining risks**\n- The idle 
+(collapsed) clear button is still present in the a11y tree with zero size; it is
+out of tab order (`tabIndex={-1}`) so it isn\'t a keyboard trap, but it is a 
+mild redundancy for screen readers.\n- I did not add new automated coverage for 
+the search flow (tests were not modified or added), so focus-retention relies on
+the button staying mounted during the clear re-render rather than a new 
+assertion.\n- No stylesheet classes were added for `.task-search*`; the control 
+uses existing generic input/button styling, so visual spacing in unusual layouts
+is unverified.', 'aid': 0})
+-- SessionRuntimeEvent(type='step_end', data={'step': 6, 'latency': 
+5.341831084340811, 'aid': 0})
+== sessions saved to 
+/nfs-data2/niuyizhuo/frontend-regression-collab/runs/t01-search/single/r1/.openc
+ollab/sessions/wf-2026-11-22T23-47-21-b0fe1fa99bb94a18846f6232ab047c2b
+== orchestration at 
+/nfs-data2/niuyizhuo/frontend-regression-collab/runs/t01-search/single/r1/.openc
+ollab/sessions/wf-2026-11-22T23-47-21-b0fe1fa99bb94a18846f6232ab047c2b/orchestra
+tion.jsonl
+{
+  "status": "ok",
+  "condition": "single",
+  "developer": "Verification passed. Summary of the work:\n\n**Change (single file): `src/components/TaskList.tsx`**\n- Added a compact search bar above the list (`role=\"search\"` wrapper).\n- `<input type=\"search\" aria-label=\"Search tasks\">` \u2014 native `type=\"search\"` gives the `searchbox` role and the required accessible label.\n- Filtering is immediate and case-insensitive over `task.title` (query is trimmed + lowercased before matching).\n- `Clear search` button is rendered whenever a non-empty query exists; it resets the query, which restores every task. The button stays mounted across the clear (collapsed via an inline zero-size/opacity style and `tabIndex={-1}` while idle) so focus is not dropped to `<body>` when it is clicked \u2014 after clearing, focus remains on `Clear search`.\n- When the query matches nothing, exactly `No tasks match your search.` is shown.\n- Filtering happens entirely inside `TaskList`; `App.tsx` keeps `selectedId` and derives the detail card from the full `tasks` array, so a hidden row never mutates selection and the detail card returns unchanged after clearing. No changes were needed in `App.tsx`.\n- Existing rendering (task rows, `selected` class, edit buttons, `aria-label`) is unchanged for the unfiltered case.\n\n**Commands actually run**\n- `verify_frontend` \u2192 `npm run build && npm run test:public`: `tsc --noEmit` + `vite build` succeeded (22 modules), Playwright public suite 6/6 passed.\n\n**Remaining risks**\n- The idle (collapsed) clear button is still present in the a11y tree with zero size; it is out of tab order (`tabIndex={-1}`) so it isn't a keyboard trap, but it is a mild redundancy for screen readers.\n- I did not add new automated coverage for the search flow (tests were not modified or added), so focus-retention relies on the button staying mounted during the clear re-render rather than a new assertion.\n- No stylesheet classes were added for `.task-search*`; the control uses existing generic input/button styling, so visual spacing in unusual layouts is unverified.",
+  "developer_outcome": {
+    "status": "completed",
+    "reason": null,
+    "tokens": 35750,
+    "steps": 6,
+    "cleanup_complete": true,
+    "workspace_ready": true
+  },
+  "tokens_spent": 35750,
+  "diff": "diff --git a/src/components/TaskList.tsx b/src/components/TaskList.tsx\nindex 112723f87f95de561b0a9aa03ab138e6632c8f23..dc4d9237684f8aa2f0a39f62a7e10a3a37a5dfda 100644\n--- a/src/components/TaskList.tsx\n+++ b/src/components/TaskList.tsx\n@@ -1,3 +1,4 @@\n+import { useState } from 'react';\n import type { Task } from '../types';\n \n type Props = {\n@@ -7,26 +8,73 @@ type Props = {\n   onEdit: (id: number) => void;\n };\n \n+// Keeps the clear button mounted (and focusable) but out of the visual flow while\n+// the query is empty, so focus survives clearing without leaving a stray control.\n+const collapsedStyle = {\n+  position: 'absolute',\n+  width: 0,\n+  height: 0,\n+  padding: 0,\n+  margin: 0,\n+  border: 0,\n+  opacity: 0,\n+  overflow: 'hidden',\n+  pointerEvents: 'none',\n+} as const;\n+\n export function TaskList({ tasks, selectedId, onSelect, onEdit }: Props) {\n+  const [query, setQuery] = useState('');\n+  const normalizedQuery = query.trim().toLowerCase();\n+  const isSearching = normalizedQuery.length > 0;\n+\n+  const visibleTasks = isSearching\n+    ? tasks.filter((task) => task.title.toLowerCase().includes(normalizedQuery))\n+    : tasks;\n+\n   return (\n-    <ul className=\"task-list\">\n-      {tasks.map((task) => (\n-        <li key={task.id} className={task.id === selectedId ? 'selected' : ''}>\n-          <button className=\"task-main\" type=\"button\" onClick={() => onSelect(task.id)}>\n-            <strong>{task.title}</strong>\n-            <span>{task.owner} \u00b7 {task.status}</span>\n-          </button>\n-          <button\n-            className=\"icon-button\"\n-            type=\"button\"\n-            aria-label={`Edit ${task.title}`}\n-            onClick={() => onEdit(task.id)}\n-          >\n-            Edit\n-          </button>\n-        </li>\n-      ))}\n-    </ul>\n+    <div className=\"task-list-panel\">\n+      <div className=\"task-search\" role=\"search\">\n+        <input\n+          type=\"search\"\n+          className=\"task-search-input\"\n+          aria-label=\"Search tasks\"\n+          placeholder=\"Search tasks\"\n+          value={query}\n+          onChange={(event) => setQuery(event.target.value)}\n+        />\n+        <button\n+          type=\"button\"\n+          className=\"task-search-clear\"\n+          style={isSearching ? undefined : collapsedStyle}\n+          tabIndex={isSearching ? 0 : -1}\n+          onClick={() => setQuery('')}\n+        >\n+          Clear search\n+        </button>\n+      </div>\n+\n+      {isSearching && visibleTasks.length === 0 && (\n+        <p className=\"task-list-empty\">No tasks match your search.</p>\n+      )}\n+\n+      <ul className=\"task-list\">\n+        {visibleTasks.map((task) => (\n+          <li key={task.id} className={task.id === selectedId ? 'selected' : ''}>\n+            <button className=\"task-main\" type=\"button\" onClick={() => onSelect(task.id)}>\n+              <strong>{task.title}</strong>\n+              <span>{task.owner} \u00b7 {task.status}</span>\n+            </button>\n+            <button\n+              className=\"icon-button\"\n+              type=\"button\"\n+              aria-label={`Edit ${task.title}`}\n+              onClick={() => onEdit(task.id)}\n+            >\n+              Edit\n+            </button>\n+          </li>\n+        ))}\n+      </ul>\n+    </div>\n   );\n }\n-\n",
+  "agent_failures": []
+}
