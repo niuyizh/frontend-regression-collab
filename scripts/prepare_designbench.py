@@ -82,8 +82,8 @@ def prepare(
     if condition is None:
         target = PROJECT_ROOT / "runs" / "designbench" / task_id / variant
     else:
-        if condition not in {"single", "dev-qa"}:
-            raise ValueError("condition must be 'single' or 'dev-qa'")
+        if condition not in {"single", "dev-qa", "dev-qa-resilient"}:
+            raise ValueError(f"unknown condition: {condition}")
         if gold:
             raise ValueError("gold workspaces cannot be used as agent experiment inputs")
         if repetition < 1:
@@ -156,7 +156,7 @@ def main() -> None:
     parser.add_argument("task_id")
     parser.add_argument("--gold", action="store_true")
     parser.add_argument("--force", action="store_true")
-    parser.add_argument("--condition", choices=("single", "dev-qa"))
+    parser.add_argument("--condition", choices=("single", "dev-qa", "dev-qa-resilient"))
     parser.add_argument("--repetition", type=int, default=1)
     args = parser.parse_args()
     print(

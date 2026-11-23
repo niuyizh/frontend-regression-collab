@@ -1,0 +1,15 @@
+{
+  "schema_version": 1,
+  "task_id": "db-e27",
+  "task_kind": "edit",
+  "workspace": "/nfs-data2/niuyizhuo/frontend-regression-collab/runs/designbench/db-e27/dev-qa-resilient/r1",
+  "scoring_role": "candidate",
+  "render_passed": false,
+  "structural_passed": null,
+  "visual_progress": null,
+  "minimum_visual_progress": null,
+  "passed": false,
+  "returncode": 1,
+  "duration_seconds": 8.556,
+  "visual": null
+}

@@ -1,0 +1,196 @@
+{
+  "schema_version": 1,
+  "scope": "one-repetition pilot; descriptive only",
+  "model": "deepseek-flash",
+  "global_budget_per_run": 48000,
+  "tasks": [
+    "db-e01",
+    "db-e11",
+    "db-e27",
+    "db-c06"
+  ],
+  "conditions": {
+    "single": {
+      "runs": 4,
+      "agent_valid": 4,
+      "task_passed": 1,
+      "mean_tokens": 23303.25,
+      "mean_agent_seconds": 13.395
+    },
+    "dev-qa-resilient": {
+      "runs": 4,
+      "agent_valid": 3,
+      "task_passed": 1,
+      "mean_tokens": 22071.25,
+      "mean_agent_seconds": 20.31075
+    }
+  },
+  "runs": [
+    {
+      "run_id": "db-e01__single__r1",
+      "task": "db-e01",
+      "condition": "single",
+      "agent_run_valid": true,
+      "task_passed": false,
+      "agent_seconds": 12.661,
+      "tokens": 18638,
+      "developer_status": "completed",
+      "qa_status": null,
+      "qa_verdict": null,
+      "repair_status": null,
+      "render_passed": true,
+      "structural_passed": true,
+      "visual_progress": 0.10110507791726717,
+      "checks": {
+        "separate_name_fields": true,
+        "name_fields_share_row": true,
+        "title_is_below_photo": true
+      }
+    },
+    {
+      "run_id": "db-e01__dev-qa-resilient__r1",
+      "task": "db-e01",
+      "condition": "dev-qa-resilient",
+      "agent_run_valid": true,
+      "task_passed": false,
+      "agent_seconds": 15.208,
+      "tokens": 18991,
+      "developer_status": "completed",
+      "qa_status": "completed",
+      "qa_verdict": "PASS",
+      "repair_status": null,
+      "render_passed": true,
+      "structural_passed": false,
+      "visual_progress": 0.05602725642467286,
+      "checks": {
+        "separate_name_fields": true,
+        "name_fields_share_row": true,
+        "title_is_below_photo": false
+      }
+    },
+    {
+      "run_id": "db-e11__single__r1",
+      "task": "db-e11",
+      "condition": "single",
+      "agent_run_valid": true,
+      "task_passed": false,
+      "agent_seconds": 14.504,
+      "tokens": 30786,
+      "developer_status": "completed",
+      "qa_status": null,
+      "qa_verdict": null,
+      "repair_status": null,
+      "render_passed": true,
+      "structural_passed": false,
+      "visual_progress": 0.08080486233846165,
+      "checks": {
+        "image_field_present": true,
+        "delivery_group_present": false,
+        "both_schedule_options_present": false,
+        "datetime_field_present": false
+      }
+    },
+    {
+      "run_id": "db-e11__dev-qa-resilient__r1",
+      "task": "db-e11",
+      "condition": "dev-qa-resilient",
+      "agent_run_valid": true,
+      "task_passed": false,
+      "agent_seconds": 21.553,
+      "tokens": 27404,
+      "developer_status": "completed",
+      "qa_status": "completed",
+      "qa_verdict": "PASS",
+      "repair_status": null,
+      "render_passed": true,
+      "structural_passed": false,
+      "visual_progress": 0.07226913019080168,
+      "checks": {
+        "image_field_present": true,
+        "delivery_group_present": true,
+        "both_schedule_options_present": false,
+        "datetime_field_present": false
+      }
+    },
+    {
+      "run_id": "db-e27__single__r1",
+      "task": "db-e27",
+      "condition": "single",
+      "agent_run_valid": true,
+      "task_passed": false,
+      "agent_seconds": 19.591,
+      "tokens": 34720,
+      "developer_status": "completed",
+      "qa_status": null,
+      "qa_verdict": null,
+      "repair_status": null,
+      "render_passed": true,
+      "structural_passed": true,
+      "visual_progress": 0.08040999179019041,
+      "checks": {
+        "toolbar_is_sticky": true,
+        "toolbar_options_preserved": true,
+        "toolbar_has_bottom_border": true,
+        "toolbar_is_icon_only": true,
+        "search_is_last": true,
+        "date_is_right_of_sender": true
+      }
+    },
+    {
+      "run_id": "db-e27__dev-qa-resilient__r1",
+      "task": "db-e27",
+      "condition": "dev-qa-resilient",
+      "agent_run_valid": false,
+      "task_passed": false,
+      "agent_seconds": 31.704,
+      "tokens": 29195,
+      "developer_status": "stopped",
+      "qa_status": "stopped",
+      "qa_verdict": null,
+      "repair_status": null,
+      "render_passed": false,
+      "structural_passed": null,
+      "visual_progress": null,
+      "checks": null
+    },
+    {
+      "run_id": "db-c06__single__r1",
+      "task": "db-c06",
+      "condition": "single",
+      "agent_run_valid": true,
+      "task_passed": true,
+      "agent_seconds": 6.824,
+      "tokens": 9069,
+      "developer_status": "completed",
+      "qa_status": null,
+      "qa_verdict": null,
+      "repair_status": null,
+      "render_passed": true,
+      "structural_passed": null,
+      "visual_progress": null,
+      "checks": null
+    },
+    {
+      "run_id": "db-c06__dev-qa-resilient__r1",
+      "task": "db-c06",
+      "condition": "dev-qa-resilient",
+      "agent_run_valid": true,
+      "task_passed": true,
+      "agent_seconds": 12.778,
+      "tokens": 12695,
+      "developer_status": "completed",
+      "qa_status": "completed",
+      "qa_verdict": "PASS",
+      "repair_status": null,
+      "render_passed": true,
+      "structural_passed": null,
+      "visual_progress": null,
+      "checks": null
+    }
+  ],
+  "known_measurement_limits": [
+    "db-e01 only recognizes a heading present in the default empty-name DOM",
+    "db-e11 hard-codes radio value specificTime and checks the conditional datetime input without selecting it",
+    "Edit-task visual progress rewards similarity to one static upstream target"
+  ]
+}

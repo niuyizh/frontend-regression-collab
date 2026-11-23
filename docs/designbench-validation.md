@@ -12,8 +12,10 @@ task. The screenshot-dependent Repair task was removed.
 ## Frozen tasks
 
 All five tasks below were used to calibrate initial/gold behavior and the
-external scorer. Only `db-e30` received paid Agent runs; the other four are
-adapter-calibration cases and are not counted as Agent evaluation results.
+external scorer. `db-e30` has three post-pilot paired repetitions. The other
+four later received one Single and one artifact-first Dev-QA real-Agent run
+each; those one-repetition results are descriptive failure-mode evidence, not
+part of the repeated comparison.
 
 | Task | Scenario | Primary external signal |
 |---|---|---|
@@ -95,6 +97,13 @@ functional oracles for interactive requirements. In the pinned data, Edit 1's
 gold page renders literal name placeholders rather than implementing input
 state, and Edit 11's date-time field is always present rather than conditionally
 revealed after a radio selection.
+
+The four-task real-Agent pilot exposed an additional adapter measurement flaw
+in `db-e11`: the hidden checker accepts only the unspecified implementation
+value `specificTime`, although agents reasonably used `specific-time`; it also
+checks for the conditional date-time input before selecting that radio. Thus a
+semantically correct implementation can fail the current structural oracle.
+The original outputs are retained unchanged rather than rescored mid-pilot.
 
 Accordingly, DesignBench is a secondary external static-edit check. The
 project's controlled benchmark and hidden Playwright tests remain the basis for

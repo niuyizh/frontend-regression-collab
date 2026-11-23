@@ -65,13 +65,22 @@ FAIL，均有可复现的 diff 证据，并触发了针对性修复：
 Developer 将未要求修改的 toolbar 外边距从 `p-4` 改为 `p-2`，Repair 恢复后通过；
 r3/r4 QA 均 PASS。该结果只支持一个静态前端编辑任务上的稳健性结论。
 
+其余四题随后各补跑一次 Single 与 artifact-first Dev-QA。Single 为 4/4 有效运行、
+1/4 最终通过，平均 23,303 token、13.40 秒；Dev-QA 为 3/4 有效运行、1/4 最终
+通过，平均 22,071 token、20.31 秒。Dev-QA token 均值更低不是效率提升，而是
+最复杂的 `db-e27` 在 Developer 部分编辑和 QA 输出截断后提前失败。简单编译题
+`db-c06` 中双方完成同一行修复，Dev-QA 额外使用 3,626 token、慢 5.95 秒，没有
+结果收益。这组一次重复的 pilot 说明应按任务风险自适应启用 QA，不能声称多 Agent
+普遍优于 Single。
+
 ## 局限
 
-- 只有 5 个受控功能任务和 1 个三次重复的外部静态任务，样本很小。
+- 只有 5 个受控功能任务、1 个三次重复的外部静态任务和 4 个一次重复 pilot，样本很小。
 - 三种条件使用同一 `deepseek-flash` 服务别名，无法固定供应商权重哈希。
 - QA 与 Developer 使用同一模型，错误相关性可能较高。
 - 两次供应商 generation truncation 直接影响严格完成率。
 - 隐藏测试覆盖功能状态，不代表完整视觉质量；DesignBench 又只有静态视觉真值。
 
-完整机器可读统计见 `results/summary.json` 和 `results/designbench/summary.json`；每次
+完整机器可读统计见 `results/summary.json`、`results/designbench/summary.json` 和
+`results/designbench/four-task-pilot.json`；每次
 模型轨迹、diff、命令日志和评分均保存在相应 `results/raw/` 目录。

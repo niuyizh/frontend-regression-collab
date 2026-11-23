@@ -13,6 +13,7 @@ from prepare_designbench import _task  # noqa: E402
 from run_designbench_experiment import run_one  # noqa: E402
 from score_designbench import _progress  # noqa: E402
 from summarize_designbench import FROZEN_REPETITIONS, summarize  # noqa: E402
+from summarize_designbench_pilot import summarize as summarize_pilot  # noqa: E402
 
 
 def test_designbench_manifest_pins_five_distinct_react_tasks():
@@ -76,6 +77,31 @@ def test_resilient_condition_selects_artifact_first_workflow(monkeypatch):
     )
     assert result["workflow"] == "frontend-dev-qa-resilient"
     assert result["budget"] == 48_000
+
+
+def test_designbench_resilient_condition_selects_artifact_first_workflow(monkeypatch):
+    import run_designbench_experiment as experiment  # noqa: PLC0415
+
+    monkeypatch.setattr(experiment, "require_command", lambda name: f"/fake/{name}")
+    result = experiment.run_one(
+        "db-e11",
+        "dev-qa-resilient",
+        1,
+        opencollab_root=ROOT.parent / "code-assistant" / "OpenCollab",
+        execute=False,
+        force=False,
+    )
+    assert result["workflow"] == "frontend-dev-qa-resilient"
+    assert result["budget"] == 48_000
+
+
+def test_four_task_pilot_summary_uses_real_paired_runs():
+    result = summarize_pilot()
+    assert len(result["runs"]) == 8
+    assert result["conditions"]["single"]["agent_valid"] == 4
+    assert result["conditions"]["dev-qa-resilient"]["agent_valid"] == 3
+    assert result["conditions"]["single"]["task_passed"] == 1
+    assert result["conditions"]["dev-qa-resilient"]["task_passed"] == 1
 
 
 def test_visual_calibration_covers_every_edit_and_separates_initial_from_gold():

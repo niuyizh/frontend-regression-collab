@@ -1,0 +1,15 @@
+{
+  "schema_version": 1,
+  "task_id": "db-c06",
+  "task_kind": "compile",
+  "workspace": "/nfs-data2/niuyizhuo/frontend-regression-collab/runs/designbench/db-c06/dev-qa-resilient/r1",
+  "scoring_role": "candidate",
+  "render_passed": true,
+  "structural_passed": null,
+  "visual_progress": null,
+  "minimum_visual_progress": null,
+  "passed": true,
+  "returncode": 0,
+  "duration_seconds": 0.402,
+  "visual": null
+}

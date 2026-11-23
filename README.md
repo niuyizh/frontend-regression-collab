@@ -160,9 +160,9 @@ python scripts/summarize_results.py
 ### DesignBench 五题适配校准与单题 Agent 实验
 
 这里必须区分两个范围：五道题都完成了数据下载、initial/gold 可解性与评分器校准；
-只有 `db-e30` 运行了付费 Agent，并按 Single/Dev-QA 各三次进入比较统计。其余四题
-不属于 Agent 效果数据，它们只验证适配器覆盖不同 Edit/Compile 类型。若要声称
-“DesignBench 五题上的 Agent 结果”，还必须正式运行那四题。
+`db-e30` 按 Single/Dev-QA 各三次进入冻结比较统计。其余四题后来补充了 Single
+与 artifact-first Dev-QA 各一次真实 API pilot；该 pilot 用于发现失败模式，只有
+一次重复，不能并入三次配对统计或声称具有统计显著性。
 
 首次下载选定题目并准备依赖：
 
@@ -244,8 +244,9 @@ diff 证据的旧状态回归并触发修复。完整波动、成本与局限见
   gold-pass 的结构与视觉校准，Compile 题的 initial 按预期返回 HTTP 500、gold
   返回 HTTP 200。当前 DeepSeek 账户只暴露 `deepseek-flash` 和
   `deepseek-v4-pro`，没有视觉模型，因此没有纳入依赖图像输入的 Repair 题。
-  只有 `db-e30` 进行了正式 Agent 比较，三次固定配对结果为 Single 2/3、Dev-QA
-  3/3；其他四题不能计作 Agent 实验结果。
+  `db-e30` 的三次固定配对结果为 Single 2/3、Dev-QA 3/3。其他四题已各补跑一次
+  Single 与 artifact-first Dev-QA 真实 pilot；双方均为 1/4 通过，但该结果未重复，
+  只能用于定位失败模式，不能并入正式三次配对结论。
 - 框架问题的离线最小复现、项目侧状态传播改进和相同条件验证已经完成；
   原公开 issue 已暂时撤回，待补充验证后重新提交。
 

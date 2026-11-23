@@ -1,0 +1,69 @@
+
+> my-app@0.1.0 dev
+> next dev --hostname 127.0.0.1 --port 4501
+
+  ▲ Next.js 14.2.26
+  - Local:        http://127.0.0.1:4501
+  - Network:      http://127.0.0.1:4501
+
+ ✓ Starting...
+ ✓ Ready in 1671ms
+ ○ Compiling / ...
+ ⨯ ./app/page.tsx
+Error: 
+  [31mx[0m Unexpected token `div`. Expected jsx identifier
+    ,-[[36;1;4m/nfs-data2/niuyizhuo/frontend-regression-collab/runs/designbench/db-e27/dev-qa-resilient/r1/app/page.tsx[0m:7:1]
+ [2m 7[0m | 
+ [2m 8[0m | export default function Component() {
+ [2m 9[0m |   return (
+ [2m10[0m |     <div className="grid grid-cols-3 gap-4 h-screen">
+    : [31;1m     ^^^[0m
+ [2m11[0m |       <div className="border-r border-zinc-200 dark:border-zinc-800 overflow-y-auto">
+ [2m12[0m |         <ul className="divide-y divide-zinc-200 dark:divide-zinc-800">
+ [2m13[0m |           <li className="p-4 hover:bg-zinc-100 dark:hover:bg-zinc-800 cursor-pointer">
+    `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./app/page.tsx
+ ⨯ ./app/page.tsx
+Error: 
+  [31mx[0m Unexpected token `div`. Expected jsx identifier
+    ,-[[36;1;4m/nfs-data2/niuyizhuo/frontend-regression-collab/runs/designbench/db-e27/dev-qa-resilient/r1/app/page.tsx[0m:7:1]
+ [2m 7[0m | 
+ [2m 8[0m | export default function Component() {
+ [2m 9[0m |   return (
+ [2m10[0m |     <div className="grid grid-cols-3 gap-4 h-screen">
+    : [31;1m     ^^^[0m
+ [2m11[0m |       <div className="border-r border-zinc-200 dark:border-zinc-800 overflow-y-auto">
+ [2m12[0m |         <ul className="divide-y divide-zinc-200 dark:divide-zinc-800">
+ [2m13[0m |           <li className="p-4 hover:bg-zinc-100 dark:hover:bg-zinc-800 cursor-pointer">
+    `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./app/page.tsx
+ ⨯ ./app/page.tsx
+Error: 
+  [31mx[0m Unexpected token `div`. Expected jsx identifier
+    ,-[[36;1;4m/nfs-data2/niuyizhuo/frontend-regression-collab/runs/designbench/db-e27/dev-qa-resilient/r1/app/page.tsx[0m:7:1]
+ [2m 7[0m | 
+ [2m 8[0m | export default function Component() {
+ [2m 9[0m |   return (
+ [2m10[0m |     <div className="grid grid-cols-3 gap-4 h-screen">
+    : [31;1m     ^^^[0m
+ [2m11[0m |       <div className="border-r border-zinc-200 dark:border-zinc-800 overflow-y-auto">
+ [2m12[0m |         <ul className="divide-y divide-zinc-200 dark:divide-zinc-800">
+ [2m13[0m |           <li className="p-4 hover:bg-zinc-100 dark:hover:bg-zinc-800 cursor-pointer">
+    `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./app/page.tsx
+ GET / 500 in 5472ms

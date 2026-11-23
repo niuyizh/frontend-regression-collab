@@ -1,0 +1,117 @@
+{
+  "schema_version": 1,
+  "run_id": "db-e01__dev-qa__r1",
+  "benchmark": "DesignBench-derived React subset",
+  "benchmark_revision": "a1e58d66ecbf1f77848bc5529ee7bbbe33bc25ba",
+  "dataset_revision": "a04022a331a8ad385dbbf26a1da9ca4a26a2628d",
+  "task": {
+    "id": "db-e01",
+    "title": "Split full name into first and last name fields",
+    "kind": "edit",
+    "source_id": 1,
+    "category": "normal-edit",
+    "prompt_file": "prompts/db-e01.md"
+  },
+  "condition": "dev-qa",
+  "repetition": 1,
+  "workflow": "frontend-dev-qa",
+  "budget": 48000,
+  "workspace": "/nfs-data2/niuyizhuo/frontend-regression-collab/runs/designbench/db-e01/dev-qa/r1",
+  "command": [
+    "/home/niuyizhuo/.local/bin/uv",
+    "run",
+    "opencollab",
+    "workflow",
+    "run",
+    "frontend-dev-qa",
+    "--workspace",
+    "/nfs-data2/niuyizhuo/frontend-regression-collab/runs/designbench/db-e01/dev-qa/r1",
+    "--task-file",
+    "/nfs-data2/niuyizhuo/frontend-regression-collab/benchmark/designbench/prompts/db-e01.md",
+    "--args",
+    "{\"allow_unisolated_shell\": true}",
+    "--budget",
+    "48000",
+    "--concurrency",
+    "1",
+    "--task-concurrency",
+    "1",
+    "--isolation",
+    "shared",
+    "--trace",
+    "--save"
+  ],
+  "status": "completed",
+  "agent_run_valid": true,
+  "agent_returncode": 0,
+  "agent_seconds": 17.402,
+  "workflow_result": {
+    "status": "ok",
+    "condition": "dev-qa",
+    "developer": "Change complete and verified.\n\n**Changes in `app/page.tsx`:**\n- Removed the full-name input; added controlled first-name and last-name inputs side by side in a single flex row (`flex gap-2`, each `flex-1`).\n- Added `\"use client\"` and `useState` for the two name fields.\n- The combined first + last name now renders as an `<h1>` title directly under the Upload Photo button (only when non-empty), centered with `text-xl font-semibold`.\n- Preserved the title input, photo/upload button, specialization select, and language chips; each new input keeps an `aria-label` (`Doctor's first name` / `Doctor's last name`).\n\n**Commands run:**\n- `npm run verify:agent` → exit 0, \"render smoke passed: HTTP 200\"\n\n**Remaining risks:** Minor — the upload photo button and title are both inside the centered column, so with long names the title wraps within the centered container; no interaction (click/state transition) test exists beyond the render smoke check.",
+    "developer_outcome": {
+      "status": "completed",
+      "reason": null,
+      "tokens": 17003,
+      "steps": 6,
+      "cleanup_complete": true,
+      "workspace_ready": true
+    },
+    "qa": {
+      "verdict": "PASS",
+      "report": "VERDICT: PASS\n\nThe diff satisfies the stated requirement: the full-name field is removed, first-name and last-name inputs are placed side by side in one flex row, and the combined trimmed name renders as an `<h1>` title directly below the Upload Photo button when non-empty. Unrelated UI elements shown in the diff remain intact.\n\nNo concrete regression is supported by the supplied diff for keyboard/focus, cancellation, persistence, responsive boundaries, or loading/error/empty transitions. The conditional empty-name behavior is appropriate, and the controlled inputs preserve normal typing/focus behavior."
+    },
+    "qa_outcome": {
+      "status": "completed",
+      "reason": null,
+      "tokens": 1753,
+      "steps": 1,
+      "cleanup_complete": true,
+      "workspace_ready": true
+    },
+    "repair": null,
+    "repair_outcome": null,
+    "handoff_recovery": {
+      "developer": false,
+      "repair": false
+    },
+    "tokens_spent": 18756,
+    "diff": "diff --git a/app/page.tsx b/app/page.tsx\nindex 307cc9ec4b74f25bf3af0a34c289e764c67bd8b1..0c54de914889a1145b5bbb8ce31111afd9896ce8 100644\n--- a/app/page.tsx\n+++ b/app/page.tsx\n@@ -3,11 +3,18 @@\n  * @see https://v0.dev/t/y8TgF0NwBKE\n  * Documentation: https://v0.dev/docs#integrating-generated-code-into-your-nextjs-app\n  */\n+\"use client\"\n+\n+import { useState } from \"react\"\n import { Button } from \"@/components/ui/button\"\n import { Input } from \"@/components/ui/input\"\n import { Select, SelectTrigger, SelectValue, SelectContent, SelectGroup, SelectLabel, SelectItem } from \"@/components/ui/select\"\n \n export default function Component() {\n+  const [firstName, setFirstName] = useState(\"\")\n+  const [lastName, setLastName] = useState(\"\")\n+  const fullName = [firstName, lastName].map((name) => name.trim()).filter(Boolean).join(\" \")\n+\n   return (\n     <div className=\"flex flex-col p-8 space-y-4\">\n       <div className=\"flex flex-col items-center\">\n@@ -22,20 +29,29 @@ export default function Component() {\n         <Button variant=\"outline\" className=\"mt-4\">\n           Upload Photo\n         </Button>\n+        {fullName ? (\n+          <h1 className=\"mt-4 text-xl font-semibold text-center\">{fullName}</h1>\n+        ) : null}\n       </div>\n       <Input type=\"text\" aria-label=\"Doctor's title\" placeholder=\"Doctor's title\" className=\"border rounded-md p-2\" />\n-      <Input\n-        type=\"text\"\n-        aria-label=\"Doctor's full name\"\n-        placeholder=\"Doctor's full name\"\n-        className=\"border rounded-md p-2\"\n-      />\n-      <Input\n-        type=\"text\"\n-        aria-label=\"Doctor's last name\"\n-        placeholder=\"Doctor's last name\"\n-        className=\"border rounded-md p-2\"\n-      />\n+      <div className=\"flex gap-2\">\n+        <Input\n+          type=\"text\"\n+          aria-label=\"Doctor's first name\"\n+          placeholder=\"Doctor's first name\"\n+          value={firstName}\n+          onChange={(event) => setFirstName(event.target.value)}\n+          className=\"border rounded-md p-2 flex-1\"\n+        />\n+        <Input\n+          type=\"text\"\n+          aria-label=\"Doctor's last name\"\n+          placeholder=\"Doctor's last name\"\n+          value={lastName}\n+          onChange={(event) => setLastName(event.target.value)}\n+          className=\"border rounded-md p-2 flex-1\"\n+        />\n+      </div>\n       <Select>\n         <SelectTrigger className=\"w-full border rounded-md p-2\">\n           <SelectValue placeholder=\"Select specialization\" />\n",
+    "agent_failures": []
+  },
+  "evaluation": {
+    "schema_version": 1,
+    "task_id": "db-e01",
+    "task_kind": "edit",
+    "workspace": "/nfs-data2/niuyizhuo/frontend-regression-collab/runs/designbench/db-e01/dev-qa/r1",
+    "scoring_role": "candidate",
+    "render_passed": true,
+    "structural_passed": false,
+    "visual_progress": 0.05602725642467286,
+    "minimum_visual_progress": 0.5,
+    "passed": false,
+    "returncode": 0,
+    "duration_seconds": 9.102,
+    "visual": {
+      "schema_version": 1,
+      "workspace": "/nfs-data2/niuyizhuo/frontend-regression-collab/runs/designbench/db-e01/dev-qa/r1",
+      "target": "/nfs-data2/niuyizhuo/frontend-regression-collab/benchmark/designbench/data/edit/react/1/1.png",
+      "screenshot": "/nfs-data2/niuyizhuo/frontend-regression-collab/results/designbench/raw/db-e01__dev-qa__r1/evaluation/candidate.png",
+      "diff": "/nfs-data2/niuyizhuo/frontend-regression-collab/results/designbench/raw/db-e01__dev-qa__r1/evaluation/diff.png",
+      "checks": {
+        "separate_name_fields": true,
+        "name_fields_share_row": true,
+        "title_is_below_photo": false
+      },
+      "structural_passed": false,
+      "width": 3584,
+      "height": 1850,
+      "changed_pixels": 38790,
+      "pixel_similarity": 0.9941496742277992,
+      "normalized_mae": 0.00483869840165796,
+      "mae_similarity": 0.995161301598342
+    }
+  },
+  "task_passed": false,
+  "scoring_status": "render + hidden structural checks + calibrated visual progress"
+}

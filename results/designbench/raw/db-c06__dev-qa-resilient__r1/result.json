@@ -1,0 +1,99 @@
+{
+  "schema_version": 1,
+  "run_id": "db-c06__dev-qa-resilient__r1",
+  "benchmark": "DesignBench-derived React subset",
+  "benchmark_revision": "a1e58d66ecbf1f77848bc5529ee7bbbe33bc25ba",
+  "dataset_revision": "a04022a331a8ad385dbbf26a1da9ca4a26a2628d",
+  "task": {
+    "id": "db-c06",
+    "title": "Repair missing Client Component boundary",
+    "kind": "compile",
+    "source_id": 6,
+    "category": "compile-boundary-negative-control",
+    "prompt_file": "prompts/db-c06.md"
+  },
+  "condition": "dev-qa-resilient",
+  "repetition": 1,
+  "workflow": "frontend-dev-qa-resilient",
+  "budget": 48000,
+  "workspace": "/nfs-data2/niuyizhuo/frontend-regression-collab/runs/designbench/db-c06/dev-qa-resilient/r1",
+  "command": [
+    "/home/niuyizhuo/.local/bin/uv",
+    "run",
+    "opencollab",
+    "workflow",
+    "run",
+    "frontend-dev-qa-resilient",
+    "--workspace",
+    "/nfs-data2/niuyizhuo/frontend-regression-collab/runs/designbench/db-c06/dev-qa-resilient/r1",
+    "--task-file",
+    "/nfs-data2/niuyizhuo/frontend-regression-collab/benchmark/designbench/prompts/db-c06.md",
+    "--args",
+    "{\"allow_unisolated_shell\": true}",
+    "--budget",
+    "48000",
+    "--concurrency",
+    "1",
+    "--task-concurrency",
+    "1",
+    "--isolation",
+    "shared",
+    "--trace",
+    "--save"
+  ],
+  "status": "completed",
+  "agent_run_valid": true,
+  "agent_returncode": 0,
+  "agent_seconds": 12.778,
+  "workflow_result": {
+    "status": "ok",
+    "condition": "dev-qa-resilient",
+    "developer": "**Change**\n\n`app/page.tsx`: added the `\"use client\"` directive as the first line, ahead of the `useState` import. The component was being treated as a Server Component (no parent marked client), so its `useState` hooks were invalid. Nothing else in the component changed — markup, class names, handlers, and the `Checkbox`/`Input`/`Button` usage are untouched.\n\n**Commands actually run**\n\n- `git diff app/page.tsx` (read-only, to confirm the exact edit)\n- `verify_frontend` → runs `npm run verify:agent` (`node .harness/render-smoke.mjs`): exit code 0, `render smoke passed: HTTP 200, 558 bytes`\n\n**Remaining risks**\n\n- The render smoke only proves the page renders and returns HTTP 200; it does not exercise interactivity, so add/toggle behavior is verified by inspection rather than by test.\n- Only `app/page.tsx` was marked as a Client Component. If any of the imported UI components (`components/ui/input`, `checkbox`, `button`) themselves use hooks or browser APIs, they would still need their own boundary — I did not inspect them, as the task scoped the fix to the primary source.\n- Not addressed (out of scope, pre-existing): `handleToggleComplete` takes an untyped `index`, and the list uses array index as `key`.",
+    "developer_outcome": {
+      "status": "completed",
+      "reason": null,
+      "tokens": 11357,
+      "steps": 5,
+      "cleanup_complete": true,
+      "workspace_ready": true
+    },
+    "qa": {
+      "verdict": "PASS",
+      "report": "VERDICT: PASS\n\nThe diff applies the minimal correct boundary fix: `\"use client\";` is the first line of `app/page.tsx`, before the React import and component definition. That makes the component a Client Component, which is required for `useState` to be valid in the Next.js App Router.\n\nNo behavioral, layout, or state-management changes are introduced by the directive itself. Keyboard/focus, cancellation, persistence, responsive layout, and loading/error/empty transitions are unaffected because markup, handlers, class names, and child component usage are unchanged. Imported UI components do not need separate boundaries merely because they are imported by a Client Component; they become part of the client graph unless they are explicitly server-only, and no evidence in the diff suggests that."
+    },
+    "qa_outcome": {
+      "status": "completed",
+      "reason": null,
+      "tokens": 1338,
+      "steps": 1,
+      "cleanup_complete": true,
+      "workspace_ready": true
+    },
+    "repair": null,
+    "repair_outcome": null,
+    "handoff_recovery": {
+      "developer": false,
+      "repair": false
+    },
+    "tokens_spent": 12695,
+    "diff": "diff --git a/app/page.tsx b/app/page.tsx\nindex 9857c5b3a1e587159fe031bc7364aa86ff5f19fa..beac586b089536fad914221ab879d0df9afb0a19 100644\n--- a/app/page.tsx\n+++ b/app/page.tsx\n@@ -1,3 +1,5 @@\n+\"use client\";\n+\n import { useState } from \"react\";\n import { Input } from \"@/components/ui/input\";\n import { Button } from \"@/components/ui/button\";\n",
+    "agent_failures": []
+  },
+  "evaluation": {
+    "schema_version": 1,
+    "task_id": "db-c06",
+    "task_kind": "compile",
+    "workspace": "/nfs-data2/niuyizhuo/frontend-regression-collab/runs/designbench/db-c06/dev-qa-resilient/r1",
+    "scoring_role": "candidate",
+    "render_passed": true,
+    "structural_passed": null,
+    "visual_progress": null,
+    "minimum_visual_progress": null,
+    "passed": true,
+    "returncode": 0,
+    "duration_seconds": 0.402,
+    "visual": null
+  },
+  "task_passed": true,
+  "scoring_status": "render + hidden structural checks + calibrated visual progress"
+}

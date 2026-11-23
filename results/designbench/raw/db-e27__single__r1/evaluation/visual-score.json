@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "workspace": "/nfs-data2/niuyizhuo/frontend-regression-collab/runs/designbench/db-e27/single/r1",
+  "target": "/nfs-data2/niuyizhuo/frontend-regression-collab/benchmark/designbench/data/edit/react/27/2.png",
+  "screenshot": "/nfs-data2/niuyizhuo/frontend-regression-collab/results/designbench/raw/db-e27__single__r1/evaluation/candidate.png",
+  "diff": "/nfs-data2/niuyizhuo/frontend-regression-collab/results/designbench/raw/db-e27__single__r1/evaluation/diff.png",
+  "checks": {
+    "toolbar_is_sticky": true,
+    "toolbar_options_preserved": true,
+    "toolbar_has_bottom_border": true,
+    "toolbar_is_icon_only": true,
+    "search_is_last": true,
+    "date_is_right_of_sender": true
+  },
+  "structural_passed": true,
+  "width": 3584,
+  "height": 1850,
+  "changed_pixels": 39195,
+  "pixel_similarity": 0.9940885919401544,
+  "normalized_mae": 0.009998749865937366,
+  "mae_similarity": 0.9900012501340626
+}

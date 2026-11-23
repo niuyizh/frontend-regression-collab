@@ -1,0 +1,19 @@
+{
+  "workflow": "frontend-dev-qa-resilient",
+  "run_id": "workflow-62848f2e09064ef684fdcc8e412ba83f",
+  "args": {
+    "allow_unisolated_shell": true,
+    "goal": "# DesignBench React Edit 1\n\nPrimary source: `app/page.tsx`\n\nThis task uses DesignBench's text-and-code (`code`) mode. Treat the current\nsource as the starting UI.\n\nImplement this requirement while preserving unrelated UI elements:\n\n> There should be no full-name field. Put first-name and last-name fields on one line. The entered first and last name should appear as a title under the photo upload.\n\nDo not inspect benchmark target files or paths outside this workspace. Run `npm run verify:agent` after editing.\n"
+  },
+  "sessions": 2,
+  "tokens_spent": 18991,
+  "budget_total": 48000,
+  "status": "completed",
+  "reason": null,
+  "failure_type": null,
+  "evidence_complete": true,
+  "trace_enabled": true,
+  "tracer_write_error": null,
+  "tracer_dropped_steps": 0,
+  "tracer_failure": null
+}

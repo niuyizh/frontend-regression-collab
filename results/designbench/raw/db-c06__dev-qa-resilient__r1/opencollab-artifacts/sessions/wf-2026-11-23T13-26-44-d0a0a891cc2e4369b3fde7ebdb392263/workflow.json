@@ -1,0 +1,19 @@
+{
+  "workflow": "frontend-dev-qa-resilient",
+  "run_id": "workflow-0eb119c5482940ecabbb599d1716fd9e",
+  "args": {
+    "allow_unisolated_shell": true,
+    "goal": "# DesignBench React Compile Repair 6\n\nPrimary source: `app/page.tsx`\n\nRepair the following compilation/runtime boundary error with the smallest coherent change:\n\n> A component imports `useState`, but it is treated as a Server Component because neither it nor a parent is marked as a Client Component.\n\nPreserve the component behavior and layout. Do not inspect benchmark repaired targets or paths outside this workspace. Run `npm run verify:agent` after editing.\n"
+  },
+  "sessions": 2,
+  "tokens_spent": 12695,
+  "budget_total": 48000,
+  "status": "completed",
+  "reason": null,
+  "failure_type": null,
+  "evidence_complete": true,
+  "trace_enabled": true,
+  "tracer_write_error": null,
+  "tracer_dropped_steps": 0,
+  "tracer_failure": null
+}

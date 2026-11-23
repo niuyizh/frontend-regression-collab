@@ -32,8 +32,13 @@ def run_one(
 ) -> dict[str, Any]:
     manifest = _manifest()
     task = _task(task_id)
-    if condition not in {"single", "dev-qa"}:
-        raise ValueError("condition must be 'single' or 'dev-qa'")
+    workflows = {
+        "single": "frontend-single",
+        "dev-qa": "frontend-dev-qa",
+        "dev-qa-resilient": "frontend-dev-qa-resilient",
+    }
+    if condition not in workflows:
+        raise ValueError(f"unknown condition: {condition}")
     if repetition < 1:
         raise ValueError("repetition must be positive")
     uv = require_command("uv")
@@ -44,7 +49,7 @@ def run_one(
     workspace = (
         PROJECT_ROOT / "runs" / "designbench" / task_id / condition / f"r{repetition}"
     ).resolve()
-    workflow = "frontend-single" if condition == "single" else "frontend-dev-qa"
+    workflow = workflows[condition]
     prompt = (ADAPTER_ROOT / task["prompt_file"]).resolve()
     command = [
         uv,
@@ -156,7 +161,7 @@ def run_one(
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("task_id")
-    parser.add_argument("condition", choices=("single", "dev-qa"))
+    parser.add_argument("condition", choices=("single", "dev-qa", "dev-qa-resilient"))
     parser.add_argument("--repetition", type=int, default=1)
     parser.add_argument("--opencollab-root", type=Path, default=DEFAULT_OPENCOLLAB_ROOT)
     parser.add_argument("--execute", action="store_true", help="make paid model calls")
