@@ -1,0 +1,157 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>DesignBench db-e30 Agent 轨迹</title>
+  <style>
+    :root { color-scheme:light; --ink:#17211e; --muted:#64716d; --line:#d9e1de; --paper:#f4f7f6; --green:#137052; --red:#a33b32; --blue:#315f88; --amber:#94630c; }
+    * { box-sizing:border-box; }
+    body { margin:0; font:15px/1.6 Inter,ui-sans-serif,system-ui,sans-serif; color:var(--ink); background:var(--paper); }
+    header { padding:52px max(24px,calc((100vw - 1200px)/2)); color:white; background:linear-gradient(125deg,#123b31,#285d50); }
+    header h1 { margin:0 0 10px; font-size:34px; } header p { max-width:900px; margin:0; color:#d8ebe5; }
+    main { width:min(1200px,calc(100% - 36px)); margin:28px auto 72px; }
+    .facts { display:grid; grid-template-columns:repeat(5,1fr); gap:12px; }
+    .fact,.stage,.flow { background:white; border:1px solid var(--line); border-radius:15px; box-shadow:0 8px 28px rgba(20,48,41,.06); }
+    .fact { padding:16px 18px; } .fact strong { display:block; font-size:21px; } .fact span { color:var(--muted); font-size:13px; }
+    .flow { margin:24px 0; padding:22px; } .flow h2 { margin:0 0 16px; font-size:18px; }
+    .flowline { display:grid; grid-template-columns:1fr auto 1fr auto 1fr; align-items:center; gap:10px; }
+    .node { min-height:102px; padding:14px; border:1px solid var(--line); border-radius:12px; } .node b { display:block; color:var(--blue); }
+    .node.fail b { color:var(--red); } .node.pass b { color:var(--green); } .arrow { color:#80908b; font-size:25px; }
+    .stage { margin-top:20px; overflow:hidden; }
+    .stage-head { display:flex; justify-content:space-between; gap:16px; padding:18px 22px; border-bottom:1px solid var(--line); }
+    .stage-head h2 { margin:0; font-size:20px; } .badge { white-space:nowrap; align-self:center; padding:4px 10px; border-radius:999px; color:var(--green); background:#e6f3ee; font-weight:700; }
+    .badge.fail { color:var(--red); background:#f9e9e7; } .badge.base { color:var(--blue); background:#eaf0f6; }
+    .stage-body { display:grid; grid-template-columns:minmax(0,1.45fr) minmax(310px,.55fr); }
+    .visual { padding:18px; background:#edf2f0; } .visual img { display:block; width:100%; border:1px solid #cbd5d1; border-radius:9px; }
+    .zoom { height:190px; margin-bottom:12px; overflow:hidden; border:1px solid #cbd5d1; border-radius:9px; background:#fff; }
+    .zoom img { width:178%; max-width:none; transform:translateX(-43.8%); transform-origin:top left; border:0; border-radius:0; }
+    .notes { padding:20px 22px; } .notes h3 { margin:0 0 8px; } .notes ul { padding-left:20px; }
+    code { padding:2px 5px; border-radius:4px; background:#edf1ef; }
+    details { border-top:1px solid var(--line); } summary { cursor:pointer; padding:14px 22px; font-weight:700; }
+    pre { overflow:auto; max-height:420px; margin:0; padding:18px; color:#e8f1ed; background:#13211d; font:12px/1.55 ui-monospace,monospace; }
+    .qa { white-space:pre-wrap; padding-left:14px; border-left:4px solid var(--red); color:#3d4945; }
+    .readonly { padding:14px 22px; border-bottom:1px solid #eadcb7; background:#fff8e8; } footer { margin-top:25px; color:var(--muted); }
+    @media(max-width:850px) { .facts { grid-template-columns:1fr 1fr; } .flowline { grid-template-columns:1fr; } .arrow { transform:rotate(90deg); text-align:center; } .stage-body { grid-template-columns:1fr; } }
+  </style>
+</head>
+<body>
+<header>
+  <h1>DesignBench db-e30 · 每个 Agent 做了什么</h1>
+  <p>真实运行 <strong>db-e30__dev-qa__r2</strong>。轨迹由 Git 初始提交、QA 实际收到的 Developer diff、OpenCollab session 与最终工作区重建，并非事后虚构示例。</p>
+</header>
+<main>
+  <section class="facts">
+    <div class="fact"><strong>48,000</strong><span>相同实验全局预算</span></div>
+    <div class="fact"><strong>24,532</strong><span>实际总 token</span></div>
+    <div class="fact"><strong>50.83s</strong><span>Agent wall time</span></div>
+    <div class="fact"><strong>3</strong><span>Agent 调用 / 角色阶段</span></div>
+    <div class="fact"><strong>PASS</strong><span>最终外部评分</span></div>
+  </section>
+
+  <section class="flow">
+    <h2>协作轨迹图</h2>
+    <div class="flowline">
+      <div class="node"><b>① Frontend Developer</b>实现无边框、连续按钮；同时把外层 <code>p-4</code> 改成 <code>p-2</code>。</div>
+      <div class="arrow">→</div>
+      <div class="node fail"><b>② Regression QA · FAIL</b>只审 diff，不重复 smoke test；发现外层 padding 是非需求改动。</div>
+      <div class="arrow">→</div>
+      <div class="node pass"><b>③ Repair Developer</b>只恢复 <code>p-4</code>，保留所有需求改动；重新验证后通过。</div>
+    </div>
+  </section>
+
+  <article class="stage">
+    <div class="stage-head"><h2>Stage 0 · DesignBench 初始页面</h2><span class="badge base">基线</span></div>
+    <div class="stage-body"><div class="visual"><div class="zoom"><img src="initial.png" alt="初始工具栏局部"></div><img src="initial.png" alt="初始 DesignBench 页面"></div><div class="notes"><h3>修改前</h3><ul><li>工具栏本来已经 <code>sticky top-0</code>。</li><li>按钮是 <code>outline</code>，组之间有边框和较大空隙。</li><li>外层 padding 为 <code>p-4</code>。</li></ul></div></div>
+  </article>
+
+  <article class="stage">
+    <div class="stage-head"><h2>Stage 1 · Frontend Developer</h2><span class="badge">completed · 10,969 tokens · 4 steps</span></div>
+    <div class="stage-body"><div class="visual"><div class="zoom"><img src="developer.png" alt="Developer 工具栏局部"></div><img src="developer.png" alt="Developer 修改后的页面"></div><div class="notes"><h3>完成了需求主体，也越界改了一处</h3><ul><li>5 个按钮 <code>outline → ghost</code>，去掉边框。</li><li>移除组间 <code>space-x-4</code>、分隔边框和 padding，四个主按钮连续排列。</li><li>保留 Mail、Trash、Reply、Forward、Search。</li><li><strong>非需求改动：</strong>外层 <code>p-4 → p-2</code>，改变整条工具栏高度和边缘留白。</li><li>运行 render smoke，HTTP 200。</li></ul></div></div>
+    <details><summary>查看 Developer 交给 QA 的真实 diff</summary><pre>diff --git a/app/page.tsx b/app/page.tsx
+index 042e5f360cdeeaa551d16f325b894940acefb81c..9e210b3e3fd556e648696d1c60b5f7b3e61711bf 100644
+--- a/app/page.tsx
++++ b/app/page.tsx
+@@ -61,29 +61,29 @@ export default function Component() {
+         &lt;/ul&gt;
+       &lt;/div&gt;
+       &lt;div className=&quot;col-span-2 flex flex-col w-12/20&quot;&gt;
+-        &lt;div className=&quot;flex items-center space-x-4 border-b border-zinc-200 dark:border-zinc-800 p-4 sticky top-0 bg-white dark:bg-zinc-900&quot;&gt;
+-          &lt;div className=&quot;flex border-r border-zinc-200 dark:border-zinc-800 pr-4&quot;&gt;
+-            &lt;Button variant=&quot;outline&quot;&gt;
++        &lt;div className=&quot;flex items-center border-b border-zinc-200 dark:border-zinc-800 p-2 sticky top-0 bg-white dark:bg-zinc-900&quot;&gt;
++          &lt;div className=&quot;flex&quot;&gt;
++            &lt;Button variant=&quot;ghost&quot;&gt;
+               &lt;MailIcon className=&quot;w-5 h-5&quot; /&gt;
+             &lt;/Button&gt;
+           &lt;/div&gt;
+-          &lt;div className=&quot;flex border-r border-zinc-200 dark:border-zinc-800 px-4&quot;&gt;
+-            &lt;Button variant=&quot;outline&quot;&gt;
++          &lt;div className=&quot;flex&quot;&gt;
++            &lt;Button variant=&quot;ghost&quot;&gt;
+               &lt;TrashIcon className=&quot;w-5 h-5&quot; /&gt;
+             &lt;/Button&gt;
+           &lt;/div&gt;
+-          &lt;div className=&quot;flex border-r border-zinc-200 dark:border-zinc-800 px-4&quot;&gt;
+-            &lt;Button variant=&quot;outline&quot;&gt;
++          &lt;div className=&quot;flex&quot;&gt;
++            &lt;Button variant=&quot;ghost&quot;&gt;
+               &lt;ReplyIcon className=&quot;w-5 h-5&quot; /&gt;
+             &lt;/Button&gt;
+           &lt;/div&gt;
+-          &lt;div className=&quot;flex border-r border-zinc-200 dark:border-zinc-800 px-4&quot;&gt;
+-            &lt;Button variant=&quot;outline&quot;&gt;
++          &lt;div className=&quot;flex&quot;&gt;
++            &lt;Button variant=&quot;ghost&quot;&gt;
+               &lt;ForwardIcon className=&quot;w-5 h-5&quot; /&gt;
+             &lt;/Button&gt;
+           &lt;/div&gt;
+           &lt;div className=&quot;ml-auto&quot;&gt;
+-            &lt;Button variant=&quot;outline&quot;&gt;
++            &lt;Button variant=&quot;ghost&quot;&gt;
+               &lt;SearchIcon className=&quot;w-5 h-5&quot; /&gt;
+             &lt;/Button&gt;
+           &lt;/div&gt;
+</pre></details>
+  </article>
+
+  <article class="stage">
+    <div class="stage-head"><h2>Stage 2 · Regression QA</h2><span class="badge fail">FAIL · 2,432 tokens · 1 step</span></div>
+    <div class="readonly"><strong>QA 后为什么没有另一张新页面？</strong> 这个 Agent 被刻意设计成只读 diff reviewer；它不能改代码，产物是诊断与有界修复建议。</div>
+    <div class="stage-body"><div class="visual"><div class="zoom"><img src="developer.png" alt="QA 检查的 Developer 页面"></div><img src="developer.png" alt="QA 阶段页面保持不变"></div><div class="notes"><h3>QA 的实际工作</h3><div class="qa">VERDICT: FAIL
+
+Minor — unmet “nothing else should change” criterion: the toolbar’s outer padding was changed from `p-4` to `p-2`, which is unrelated to removing button borders or inter-button spacing.
+
+Exact diff evidence:
+```diff
+-        &lt;div className=&quot;flex items-center space-x-4 border-b ... p-4 sticky top-0 ...&quot;&gt;
++        &lt;div className=&quot;flex items-center border-b ... p-2 sticky top-0 ...&quot;&gt;
+```
+
+Affected behavior: the entire toolbar now has 8px inset instead of 16px, making it visibly shorter/tighter at the top and side edges even though only button borders and inter-button margins were requested to change.
+
+Reproduction: open the rightmost column and compare the toolbar height/edge inset against the previous UI; the toolbar padding is visibly reduced beyond the requested button-spacing change.
+
+Bounded fix: restore `p-4` on the outer sticky toolbar while keeping the removed `space-x-4`, removed per-group `border-r`/`pr-4`/`px-4`, and `variant=&quot;ghost&quot;` buttons.</div></div></div>
+  </article>
+
+  <article class="stage">
+    <div class="stage-head"><h2>Stage 3 · Repair Developer</h2><span class="badge">completed · 11,131 tokens · 4 steps</span></div>
+    <div class="stage-body"><div class="visual"><div class="zoom"><img src="final.png" alt="Repair 后工具栏局部"></div><img src="final.png" alt="最终 DesignBench 页面"></div><div class="notes"><h3>只修 QA 指出的回归</h3><ul><li>把外层 toolbar padding 恢复为 <code>p-4</code>。</li><li>保留 ghost、无分隔、连续排列和 sticky。</li><li>再次运行 render smoke 并通过。</li><li>外部评分：render、结构检查全部通过；visual progress <strong>0.798</strong>。</li><li>5 项隐藏检查全部为 true。</li></ul></div></div>
+    <details><summary>查看 Repair 相对 Stage 1 的唯一修改</summary><pre>--- a/app/page.tsx
++++ b/app/page.tsx
+@@ -61,7 +61,7 @@
+         &lt;/ul&gt;
+       &lt;/div&gt;
+       &lt;div className=&quot;col-span-2 flex flex-col w-12/20&quot;&gt;
+-        &lt;div className=&quot;flex items-center border-b border-zinc-200 dark:border-zinc-800 p-2 sticky top-0 bg-white dark:bg-zinc-900&quot;&gt;
++        &lt;div className=&quot;flex items-center border-b border-zinc-200 dark:border-zinc-800 p-4 sticky top-0 bg-white dark:bg-zinc-900&quot;&gt;
+           &lt;div className=&quot;flex&quot;&gt;
+             &lt;Button variant=&quot;ghost&quot;&gt;
+               &lt;MailIcon className=&quot;w-5 h-5&quot; /&gt;
+</pre></details>
+  </article>
+  <footer>Provenance: <code>results/designbench/raw/db-e30__dev-qa__r2/</code> · Rebuild: <code>python scripts/build_designbench_db_e30_stage_report.py</code></footer>
+</main>
+</body>
+</html>

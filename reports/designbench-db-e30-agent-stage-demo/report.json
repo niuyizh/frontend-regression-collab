@@ -1,0 +1,53 @@
+{
+  "run_id": "db-e30__dev-qa__r2",
+  "task": {
+    "id": "db-e30",
+    "title": "Compact sticky email toolbar without unrelated changes",
+    "kind": "edit",
+    "source_id": 30,
+    "category": "preservation-sensitive-layout-edit",
+    "prompt_file": "prompts/db-e30.md"
+  },
+  "condition": "dev-qa",
+  "global_budget": 48000,
+  "total_tokens": 24532,
+  "agent_seconds": 50.83,
+  "developer_outcome": {
+    "status": "completed",
+    "reason": null,
+    "tokens": 10969,
+    "steps": 4,
+    "cleanup_complete": true,
+    "workspace_ready": true
+  },
+  "qa_outcome": {
+    "status": "completed",
+    "reason": null,
+    "tokens": 2432,
+    "steps": 1,
+    "cleanup_complete": true,
+    "workspace_ready": true
+  },
+  "repair_outcome": {
+    "status": "completed",
+    "reason": null,
+    "tokens": 11131,
+    "steps": 4,
+    "cleanup_complete": true,
+    "workspace_ready": true
+  },
+  "qa_verdict": "FAIL",
+  "external_evaluation": {
+    "passed": true,
+    "render_passed": true,
+    "structural_passed": true,
+    "visual_progress": 0.797593220817853,
+    "hidden_checks": {
+      "toolbar_is_sticky": true,
+      "toolbar_options_preserved": true,
+      "toolbar_buttons_have_no_border": true,
+      "four_primary_buttons_are_contiguous": true,
+      "unrelated_content_preserved": true
+    }
+  }
+}

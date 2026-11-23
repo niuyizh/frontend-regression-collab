@@ -44,6 +44,5 @@ Oracle 只验证任务可解和测试正确，临时解与结果已清理，不�
 
 ## 发布状态
 
-所有作业要求的本地与公开交付均已完成。项目仓库为
-https://github.com/niuyizh/frontend-regression-collab，框架反馈为
-https://github.com/RISE-X-Lab/OpenCollab/issues/275。
+项目仓库为 https://github.com/niuyizh/frontend-regression-collab。原框架 issue
+已于 2026-11-23 暂时撤回，待补充验证后重新提交。

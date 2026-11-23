@@ -1,0 +1,44 @@
+diff --git a/app/page.tsx b/app/page.tsx
+index 042e5f360cdeeaa551d16f325b894940acefb81c..9e210b3e3fd556e648696d1c60b5f7b3e61711bf 100644
+--- a/app/page.tsx
++++ b/app/page.tsx
+@@ -61,29 +61,29 @@ export default function Component() {
+         </ul>
+       </div>
+       <div className="col-span-2 flex flex-col w-12/20">
+-        <div className="flex items-center space-x-4 border-b border-zinc-200 dark:border-zinc-800 p-4 sticky top-0 bg-white dark:bg-zinc-900">
+-          <div className="flex border-r border-zinc-200 dark:border-zinc-800 pr-4">
+-            <Button variant="outline">
++        <div className="flex items-center border-b border-zinc-200 dark:border-zinc-800 p-2 sticky top-0 bg-white dark:bg-zinc-900">
++          <div className="flex">
++            <Button variant="ghost">
+               <MailIcon className="w-5 h-5" />
+             </Button>
+           </div>
+-          <div className="flex border-r border-zinc-200 dark:border-zinc-800 px-4">
+-            <Button variant="outline">
++          <div className="flex">
++            <Button variant="ghost">
+               <TrashIcon className="w-5 h-5" />
+             </Button>
+           </div>
+-          <div className="flex border-r border-zinc-200 dark:border-zinc-800 px-4">
+-            <Button variant="outline">
++          <div className="flex">
++            <Button variant="ghost">
+               <ReplyIcon className="w-5 h-5" />
+             </Button>
+           </div>
+-          <div className="flex border-r border-zinc-200 dark:border-zinc-800 px-4">
+-            <Button variant="outline">
++          <div className="flex">
++            <Button variant="ghost">
+               <ForwardIcon className="w-5 h-5" />
+             </Button>
+           </div>
+           <div className="ml-auto">
+-            <Button variant="outline">
++            <Button variant="ghost">
+               <SearchIcon className="w-5 h-5" />
+             </Button>
+           </div>

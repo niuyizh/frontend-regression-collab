@@ -1,0 +1,11 @@
+--- a/app/page.tsx
++++ b/app/page.tsx
+@@ -61,7 +61,7 @@
+         </ul>
+       </div>
+       <div className="col-span-2 flex flex-col w-12/20">
+-        <div className="flex items-center border-b border-zinc-200 dark:border-zinc-800 p-2 sticky top-0 bg-white dark:bg-zinc-900">
++        <div className="flex items-center border-b border-zinc-200 dark:border-zinc-800 p-4 sticky top-0 bg-white dark:bg-zinc-900">
+           <div className="flex">
+             <Button variant="ghost">
+               <MailIcon className="w-5 h-5" />

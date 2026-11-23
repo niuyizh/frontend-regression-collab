@@ -11,6 +11,6 @@
 | 改进代码和回归测试 | artifact-first workflow、24 项测试 | 完成 |
 | 相同条件下改进前后比较 | `docs/experiment-results.md` | 完成 |
 | GitHub 项目仓库链接 | https://github.com/niuyizh/frontend-regression-collab | 完成 |
-| OpenCollab issue 链接 | https://github.com/RISE-X-Lab/OpenCollab/issues/275 | 完成 |
+| OpenCollab issue 链接 | 原 issue 已撤回，待补充验证后重新提交 | 暂缓公开 |
 
-全部必需交付项均已完成并公开。
+除公开 issue 暂时撤回外，其余交付项已完成。

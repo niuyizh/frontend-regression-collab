@@ -12,10 +12,15 @@ artifact-first 两种 Developer→Regression QA→Developer 工作流、公开/�
 [GitHub 可直接查看的整页预览](reports/t03-agent-stage-demo/README.md)同时展示初始、
 Developer、只读 QA 和 Repair 四个阶段。
 
+DesignBench 的真实 Agent 分工可查看
+[db-e30 协作轨迹 HTML](reports/designbench-db-e30-agent-stage-demo/index.html)；
+[GitHub 整页预览](reports/designbench-db-e30-agent-stage-demo/README.md)展示 Developer
+实现、Regression QA 定位非需求回归，以及 Repair Developer 有界修复的全过程。
+
 公开交付链接：
 
 - 项目仓库：https://github.com/niuyizh/frontend-regression-collab
-- OpenCollab issue：https://github.com/RISE-X-Lab/OpenCollab/issues/275
+- OpenCollab issue：暂时撤回，待补充验证后重新公开
 
 ## 研究问题
 
@@ -241,8 +246,8 @@ diff 证据的旧状态回归并触发修复。完整波动、成本与局限见
   `deepseek-v4-pro`，没有视觉模型，因此没有纳入依赖图像输入的 Repair 题。
   只有 `db-e30` 进行了正式 Agent 比较，三次固定配对结果为 Single 2/3、Dev-QA
   3/3；其他四题不能计作 Agent 实验结果。
-- 框架 issue、离线最小复现、项目侧状态传播改进和相同条件验证已经完成；
-  issue 记录为 [RISE-X-Lab/OpenCollab#275](https://github.com/RISE-X-Lab/OpenCollab/issues/275)。
+- 框架问题的离线最小复现、项目侧状态传播改进和相同条件验证已经完成；
+  原公开 issue 已暂时撤回，待补充验证后重新提交。
 
 开跑前记录见 [docs/preflight-report.md](docs/preflight-report.md)，研究依据与
 OpenCollab benchmark 适配分析见
