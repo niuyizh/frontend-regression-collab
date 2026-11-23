@@ -1,0 +1,44 @@
+{
+  "run_id": "t03-sync-retry__dev-qa-resilient__r1",
+  "task": "T03 — Recoverable asynchronous error state",
+  "workflow": "frontend-dev-qa-resilient",
+  "global_budget": 48000,
+  "total_tokens": 36812,
+  "agent_seconds": 34.462,
+  "developer_outcome": {
+    "status": "stopped",
+    "reason": "budget exhausted before model call: conservative input reservation requires 9852 of 7772 remaining tokens, leaving no output headroom",
+    "tokens": 22228,
+    "steps": 5,
+    "cleanup_complete": true,
+    "workspace_ready": true
+  },
+  "qa_outcome": {
+    "status": "completed",
+    "reason": null,
+    "tokens": 2378,
+    "steps": 1,
+    "cleanup_complete": true,
+    "workspace_ready": true
+  },
+  "repair_outcome": {
+    "status": "stopped",
+    "reason": "budget exhausted before model call: conservative input reservation requires 7544 of 5794 remaining tokens, leaving no output headroom",
+    "tokens": 12206,
+    "steps": 3,
+    "cleanup_complete": true,
+    "workspace_ready": true
+  },
+  "qa_verdict": "FAIL",
+  "external_evaluation": {
+    "task_complete": true,
+    "build": true,
+    "public_tests": true,
+    "hidden_tests": {
+      "expected": 2,
+      "passed": 2,
+      "failed": 0,
+      "skipped": 0
+    }
+  }
+}

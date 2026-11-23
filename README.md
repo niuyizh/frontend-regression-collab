@@ -7,6 +7,11 @@ artifact-first 两种 Developer→Regression QA→Developer 工作流、公开/�
 批量运行器、27 次正式运行以及 DesignBench 三次配对。原始轨迹、失败案例和统计均已
 提交；实验结论见 [docs/experiment-results.md](docs/experiment-results.md)。
 
+一组真实的逐 Agent 可视化轨迹见
+[T03 Developer→QA→Repair HTML 报告](reports/t03-agent-stage-demo/index.html)；
+[GitHub 可直接查看的整页预览](reports/t03-agent-stage-demo/README.md)同时展示初始、
+Developer、只读 QA 和 Repair 四个阶段。
+
 公开交付链接：
 
 - 项目仓库：https://github.com/niuyizh/frontend-regression-collab
@@ -59,7 +64,7 @@ runs/                 临时任务工作区，不提交 Git
 ```
 
 除自建固定应用外，仓库还接入了一个无需 Docker 的 DesignBench React
-外部验证子集。五题清单与固定上游 revision 位于
+适配/校准子集。五题清单与固定上游 revision 位于
 `benchmark/designbench/manifest.json`，逐题说明位于
 `benchmark/designbench/prompts/`。下载后的题目资源保存在
 `benchmark/designbench/data/`，上游 checkout 当前位于相邻目录
@@ -147,7 +152,12 @@ python scripts/summarize_results.py
 
 每次运行从 `benchmark/base-app` 复制干净仓库，提交初始 Git 快照，保存 OpenCollab transcript/trace、模型输出、代码差异、构建日志、公开测试和隐藏评分。`results/runs.csv` 与 `results/summary.json` 只从真实原始结果生成。
 
-### DesignBench 外部五题
+### DesignBench 五题适配校准与单题 Agent 实验
+
+这里必须区分两个范围：五道题都完成了数据下载、initial/gold 可解性与评分器校准；
+只有 `db-e30` 运行了付费 Agent，并按 Single/Dev-QA 各三次进入比较统计。其余四题
+不属于 Agent 效果数据，它们只验证适配器覆盖不同 Edit/Compile 类型。若要声称
+“DesignBench 五题上的 Agent 结果”，还必须正式运行那四题。
 
 首次下载选定题目并准备依赖：
 
@@ -225,11 +235,12 @@ diff 证据的旧状态回归并触发修复。完整波动、成本与局限见
 - 首次 16k 真实预算校准在实现前停止；失败轨迹已保留于本地，分析见 [docs/failure-cases.md](docs/failure-cases.md)。
 - 48k 最终 smoke：Single 使用 28,218 token、23.6 秒，Dev-QA 使用 29,335 token、37.4 秒；两者构建、6/6 公开测试和 2/2 隐藏测试均通过。该校准任务只证明协议可运行，不计入正式比较。
 - 正式 18-run 原始矩阵和 9-run 改进矩阵已经完成并保留全部原始结果。
-- DesignBench code-mode 五题已下载并接入；四个 Edit 题均完成 initial-fail、
+- DesignBench code-mode 五题已下载并完成适配器校准；四个 Edit 题均完成 initial-fail、
   gold-pass 的结构与视觉校准，Compile 题的 initial 按预期返回 HTTP 500、gold
   返回 HTTP 200。当前 DeepSeek 账户只暴露 `deepseek-flash` 和
   `deepseek-v4-pro`，没有视觉模型，因此没有纳入依赖图像输入的 Repair 题。
-  `db-e30` 三次固定配对已经完成：Single 2/3，Dev-QA 3/3。
+  只有 `db-e30` 进行了正式 Agent 比较，三次固定配对结果为 Single 2/3、Dev-QA
+  3/3；其他四题不能计作 Agent 实验结果。
 - 框架 issue、离线最小复现、项目侧状态传播改进和相同条件验证已经完成；
   issue 记录为 [RISE-X-Lab/OpenCollab#275](https://github.com/RISE-X-Lab/OpenCollab/issues/275)。
 

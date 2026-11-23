@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>T03 Agent 协作轨迹展示</title>
+  <style>
+    :root { color-scheme: light; --ink:#18221f; --muted:#5f6d68; --line:#d9e2de; --paper:#f6f8f7; --green:#176b4d; --red:#9a3e35; --blue:#315f88; }
+    * { box-sizing:border-box; }
+    body { margin:0; font:15px/1.6 Inter, ui-sans-serif, system-ui, sans-serif; color:var(--ink); background:var(--paper); }
+    header { padding:56px max(24px, calc((100vw - 1180px)/2)); color:white; background:#163b31; }
+    header p { max-width:850px; color:#dceae5; }
+    main { width:min(1180px, calc(100% - 40px)); margin:32px auto 72px; }
+    .facts, .stages { display:grid; gap:18px; }
+    .facts { grid-template-columns:repeat(5,1fr); margin-top:-58px; }
+    .fact, .stage { background:white; border:1px solid var(--line); border-radius:16px; box-shadow:0 10px 30px rgba(20,50,42,.07); }
+    .fact { padding:18px; } .fact strong { display:block; font-size:22px; } .fact span { color:var(--muted); font-size:13px; }
+    .stages { margin-top:30px; } .stage { overflow:hidden; }
+    .stage-head { padding:20px 24px; display:flex; justify-content:space-between; gap:16px; border-bottom:1px solid var(--line); }
+    .stage-head h2 { margin:0; font-size:20px; } .badge { white-space:nowrap; padding:4px 10px; border-radius:999px; background:#e7f2ed; color:var(--green); font-weight:700; }
+    .badge.fail { color:var(--red); background:#f9eae8; }
+    .stage-body { display:grid; grid-template-columns:minmax(0,1.35fr) minmax(300px,.65fr); gap:0; }
+    .shot { padding:20px; background:#eef3f1; } .shot img { width:100%; display:block; border:1px solid #cbd7d2; border-radius:10px; }
+    .notes { padding:22px 24px; } .notes h3 { margin-top:0; }
+    code { background:#edf1ef; padding:2px 5px; border-radius:4px; }
+    pre { overflow:auto; max-height:390px; margin:0; padding:18px; color:#e9f2ee; background:#13211d; font:12px/1.55 ui-monospace, monospace; }
+    details { border-top:1px solid var(--line); } summary { cursor:pointer; padding:15px 24px; font-weight:700; }
+    .qa { white-space:pre-wrap; border-left:4px solid var(--red); padding-left:16px; color:#3c4945; }
+    .same { padding:18px 24px; background:#fff8e8; border-top:1px solid #eadcb7; }
+    footer { margin-top:28px; color:var(--muted); }
+    @media (max-width:850px) { .facts { grid-template-columns:1fr 1fr; margin-top:20px; } .stage-body { grid-template-columns:1fr; } }
+  </style>
+</head>
+<body>
+<header>
+  <h1>一组真实的 Agent 协作轨迹</h1>
+  <p><strong>t03-sync-retry__dev-qa-resilient__r1</strong>。页面和数据均从保存的 Git 初始提交、QA 实际收到的 Developer diff、最终工作区和 OpenCollab session 重建。</p>
+</header>
+<main>
+  <section class="facts">
+    <div class="fact"><strong>48,000</strong><span>全局 token 上限</span></div>
+    <div class="fact"><strong>36,812</strong><span>实际总 token</span></div>
+    <div class="fact"><strong>34.462s</strong><span>Agent wall time</span></div>
+    <div class="fact"><strong>6/6 + 2/2</strong><span>公开 + 隐藏测试</span></div>
+    <div class="fact"><strong>PASS</strong><span>最终外部验收</span></div>
+  </section>
+  <section class="stages">
+    <article class="stage">
+      <div class="stage-head"><h2>Stage 0 · 初始前端</h2><span class="badge">基线</span></div>
+      <div class="stage-body"><div class="shot"><img src="initial.png" alt="初始错误状态"></div><div class="notes"><h3>尚无恢复操作</h3><p><code>/?sync=error</code> 显示既有红色错误态，但没有 <code>Retry sync</code> 按钮。</p></div></div>
+    </article>
+    <article class="stage">
+      <div class="stage-head"><h2>Stage 1 · Frontend Developer</h2><span class="badge fail">stopped · 22,228 tokens</span></div>
+      <div class="stage-body"><div class="shot"><img src="developer.png" alt="Developer 修改后的错误状态"></div><div class="notes"><h3>功能加入，但引入旧样式回归</h3><p>Developer 加入 retry 状态机和按钮；同时误删唯一的 <code>.sync-state.error</code> 规则。它在最终文字报告前因子预算停止，但非空 diff 被 artifact-first 交给 QA。</p></div></div>
+      <details><summary>查看 Developer 实际 diff</summary><pre>diff --git a/src/components/AsyncPanel.tsx b/src/components/AsyncPanel.tsx
+index 708aa1a31bb0d2c886acbf86fc167b1f131b1aac..a13b44b916599b9fb246cb9c87a40739fece1278 100644
+--- a/src/components/AsyncPanel.tsx
++++ b/src/components/AsyncPanel.tsx
+@@ -4,14 +4,21 @@ type State = &#x27;loading&#x27; | &#x27;success&#x27; | &#x27;error&#x27;;
+ 
+ export function AsyncPanel() {
+   const [state, setState] = useState&lt;State&gt;(&#x27;loading&#x27;);
++  const [attempt, setAttempt] = useState(0);
+ 
+   useEffect(() =&gt; {
+     const timer = window.setTimeout(() =&gt; {
+       const requested = new URLSearchParams(window.location.search).get(&#x27;sync&#x27;);
+-      setState(requested === &#x27;error&#x27; ? &#x27;error&#x27; : &#x27;success&#x27;);
++      const failed = attempt === 0 &amp;&amp; requested === &#x27;error&#x27;;
++      setState(failed ? &#x27;error&#x27; : &#x27;success&#x27;);
+     }, 120);
+     return () =&gt; window.clearTimeout(timer);
+-  }, []);
++  }, [attempt]);
++
++  const retry = () =&gt; {
++    setState(&#x27;loading&#x27;);
++    setAttempt((current) =&gt; current + 1);
++  };
+ 
+   return (
+     &lt;section className=&quot;card sync-card&quot; aria-live=&quot;polite&quot;&gt;
+@@ -22,9 +29,11 @@ export function AsyncPanel() {
+         &lt;div className=&quot;sync-state error&quot; role=&quot;alert&quot;&gt;
+           &lt;strong&gt;Sync failed&lt;/strong&gt;
+           &lt;span&gt;Check your connection and try again later.&lt;/span&gt;
++          &lt;button type=&quot;button&quot; className=&quot;sync-retry&quot; onClick={retry}&gt;
++            Retry sync
++          &lt;/button&gt;
+         &lt;/div&gt;
+       )}
+     &lt;/section&gt;
+   );
+ }
+-
+diff --git a/src/styles.css b/src/styles.css
+index 17928fd06abbf9ed36008b4d78ad257249d04540..bd182d9a5032fc5b9c09d10e86809e01efd2bcff 100644
+--- a/src/styles.css
++++ b/src/styles.css
+@@ -46,7 +46,6 @@ dl div { display: flex; justify-content: space-between; gap: 20px; }
+ dt { color: #66736e; } dd { margin: 0; font-weight: 700; }
+ .sync-state { margin: 0; color: #5d6b66; }
+ .sync-state.success { color: #1d6d4d; }
+-.sync-state.error { display: grid; gap: 4px; color: #9a3e35; }
+ 
+ form, .modal { display: grid; gap: 14px; }
+ label { display: grid; gap: 7px; font-size: .9rem; font-weight: 700; }
+</pre></details>
+    </article>
+    <article class="stage">
+      <div class="stage-head"><h2>Stage 2 · Regression QA</h2><span class="badge fail">FAIL · 2,378 tokens</span></div>
+      <div class="same"><strong>页面为什么没变？</strong> QA 是只读 Agent，没有写文件工具；它的产物是可复现诊断，而不是第二份前端。</div>
+      <div class="stage-body"><div class="shot"><img src="developer.png" alt="QA 后页面与 Developer 阶段相同"></div><div class="notes"><h3>QA 的真实报告</h3><div class="qa">VERDICT: FAIL
+
+- **Severity:** Medium
+- **Affected behavior:** The existing `/?sync=error` error-state presentation regresses. The diff deletes the only existing `.sync-state.error` styling and does not replace it.
+- **Exact diff evidence:**
+  ```diff
+  -.sync-state.error { display: grid; gap: 4px; color: #9a3e35; }
+  ```
+  No subsequent `.sync-state.error` or `.sync-retry` rule is added.
+- **Reproduction:** Load `/?sync=error`; after the simulated delay the error state renders without the prior grid layout/gap and without the prior error color. The newly added `Retry sync` button is also unstyled by this diff.
+- **Bounded fix:** Restore the existing `.sync-state.error` rule and add the intended retry-button styling, e.g. keep `display: grid; gap: 4px; color: #9a3e35;` and style `.sync-retry` using the existing button conventions in `src/styles.css`.</div></div></div>
+    </article>
+    <article class="stage">
+      <div class="stage-head"><h2>Stage 3 · Repair Developer</h2><span class="badge">recovered · 12,206 tokens</span></div>
+      <div class="stage-body"><div class="shot"><img src="final.png" alt="Repair 后最终错误状态"></div><div class="notes"><h3>恢复旧样式并保留新功能</h3><p>Repair 恢复错误态的 grid、间距和红色，并为 retry 按钮增加局部布局。最终 build、6 个公开测试和 2 个隐藏测试全部通过。</p></div></div>
+      <details><summary>查看 Repair 相对 Stage 1 的修改</summary><pre>--- a/src/styles.css
++++ b/src/styles.css
+@@ -46,6 +46,8 @@
+ dt { color: #66736e; } dd { margin: 0; font-weight: 700; }
+ .sync-state { margin: 0; color: #5d6b66; }
+ .sync-state.success { color: #1d6d4d; }
++.sync-state.error { display: grid; gap: 4px; justify-items: start; color: #9a3e35; }
++.sync-retry { justify-self: start; margin-top: 2px; }
+ 
+ form, .modal { display: grid; gap: 14px; }
+ label { display: grid; gap: 7px; font-size: .9rem; font-weight: 700; }
+</pre></details>
+    </article>
+  </section>
+  <footer>Provenance: <code>results/raw/t03-sync-retry__dev-qa-resilient__r1/</code> · 生成脚本 <code>scripts/build_t03_stage_report.py</code></footer>
+</main>
+</body>
+</html>

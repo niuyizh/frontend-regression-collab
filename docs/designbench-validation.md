@@ -11,6 +11,10 @@ task. The screenshot-dependent Repair task was removed.
 
 ## Frozen tasks
 
+All five tasks below were used to calibrate initial/gold behavior and the
+external scorer. Only `db-e30` received paid Agent runs; the other four are
+adapter-calibration cases and are not counted as Agent evaluation results.
+
 | Task | Scenario | Primary external signal |
 |---|---|---|
 | `db-e01` | Split a profile name field | DOM structure + visual progress |
